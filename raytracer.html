@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<head>
+  <title>Dave's RayTracer</title>
+
+</head>
+<body style="background-color: #aabbcc; font-family: Arial; font-size: 13px;">
+<canvas id="canvas" width="500" height="281" style="border:1px solid #000000; float: right;"></canvas>
+<p style="float: left;">
+Welcome to Dave's RayTracer.<br/>
+<br/>
+
+
+<script src="rt.p+e.js"></script>
+<script src="rt.pattern.js"></script>
+<script src="rt.math.js"></script>
+<script src="rt.matrix-transform.js"></script>
+<script src="rt.matrix.js"></script>
+
+<script src="rt.tests.js"></script>
+<script src="rt.ray.js"></script>
+<script src="rt.light.js"></script>
+<script src="rt.material.js"></script>
+<script src="rt.world.js"></script>
+<script src="rt.shade.js"></script>
+<script src="rt.core.js"></script>
+<script src="raytracer.js"></script>
+<script src="rt.examples.js"></script>
+
+<script>
+init();
+</script>
+</p>
+<select id="os" name="options" onchange="optionSelected(); return false;">
+  <option value="small">150,100</option>
+  <option value="large">500,281.25</option>
+  <option value="vlarge">900,550</option>
+</select>
+<input type="button" value="test" onClick="ch14(); return false;">
+</body>
+</html>
