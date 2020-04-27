@@ -1,4 +1,5 @@
-function shade_hit(w, comps, remaining)	{
+function shade_hit(w, comps, obj, remaining)	{
+	//console.log("shade::shade_hit()::remaining = " + remaining);
 	
 	var material = comps.object.material
 	
@@ -6,7 +7,7 @@ function shade_hit(w, comps, remaining)	{
 	
 	var s = lighting(comps.object.material, w.light, comps.object, comps.over_point, comps.eyev, comps.normalv, is)
 	//console.log("shade_hit(): s = r:"+s.x+", g:" + s.y + ", b:"+s.z+"\n");
-	var reflected = reflected_color(w, comps, remaining)
+	var reflected = reflected_color(w, comps, remaining-1)
 	//console.log("shade_hit(): reflected = r:"+reflected.x+", g:" + reflected.y + ", b:"+reflected.z+"\n");
 	var refracted = refracted_color(w, comps, remaining)
 	//console.log("shade_hit(): refracted = r:"+refracted.x+", g:" + refracted.y + ", b:"+refracted.z+"\n");
@@ -31,6 +32,11 @@ function shade_hit(w, comps, remaining)	{
 
 function color_at(w, r, remaining)	{
 	
+	//console.log("shade::color_at()::remaining = " + remaining);
+	
+	if (remaining <= 0)
+		return colour(0,0,0)
+	
 	if (r == undefined)
 		console.log("shade::color_at() has an undefined ray.\n");
 	
@@ -44,7 +50,7 @@ function color_at(w, r, remaining)	{
 	
 	//debugger;
 	
-	return shade_hit(w, comps, h.object, remaining)
+	return shade_hit(w, comps, h.object, remaining-1)
 }
 
 function is_shadowed(w, p)	{
@@ -56,6 +62,15 @@ function is_shadowed(w, p)	{
 	var r = new ray(p, dir)
 	
 	var i = intersect_world(w, r)
+	// i contains [] of objects intersected with. If i.object.casts_shadow == false, remove entry from i
+	
+	for (var a = 0; a < i.length; a++)
+		if (i[a].object.casts_shadow == false)	{
+			
+			i.splice(a, 1)
+			--a;
+		}
+	
 	var h = hit(i)
 	
 	if (h && (h.t < dist))
@@ -69,7 +84,7 @@ function refracted_color(w, comps, remaining)	{
 	if (comps.object.material.transparency == 0)
 		return colour(0,0,0)
 	
-	if (remaining==0)
+	if (remaining<=0)
 		return colour(0,0,0)
 	
 	var n_ratio = comps.n1 / comps.n2

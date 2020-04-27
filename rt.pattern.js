@@ -16,8 +16,8 @@ function Pattern()	{
 	
 	this.color_at_object = function(obj, wp)	{ // p132
 		
-		var op = multiply_tuple_by_matrix(inverse(obj.transform), wp)
-		var pp = multiply_tuple_by_matrix(inverse(this.transform), op)
+		var op = multiply_matrix_by_tuple(inverse(obj.transform), wp)
+		var pp = multiply_matrix_by_tuple(inverse(this.transform), op)
 		
 		return this.color_at(pp)
 	};

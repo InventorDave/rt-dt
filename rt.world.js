@@ -13,9 +13,14 @@ function world_to_object(s, p)	{
 	return mul(s.transform, p)
 }
 
+
+var ntw_ic = [];
 function normal_to_world(s, n)	{
 	
-	n = mul(transpose(inverse(s.transform)), n)
+	if(!ntw_ic[s.id])
+		ntw_ic[s.id] = transpose(inverse(s.transform))
+	
+	n = mul(ntw_ic[s.id], n)
 	n.w = 0
 	n = normalize(n)
 	
@@ -94,9 +99,16 @@ function camera(hsize, vsize, fov)	{
 	this.fov = fov;
 	this.transform = identity_matrix();
 	
+	this.it_c = inverse(this.transform); // NOTE: MUST update this every time this.transform is set
+	
+	this.setCTransform = function(m)	{
+	
+		this.transform = m
+		this.it_c = inverse(m)
+	};
+	
 	this.half_view = Math.tan(this.fov/2);
 	this.aspect = hsize / vsize;
-	
 	
 	if (this.aspect >= 1)	{
 		
@@ -121,15 +133,15 @@ function camera(hsize, vsize, fov)	{
 		var world_x = this.half_width - xoffset;
 		var world_y = this.half_height - yoffset;
 		
-		var input1 = inverse(this.transform);
+		var input1 = this.it_c; //inverse(this.transform);
 		var input2 = point(world_x, world_y, -1);
 		
 		//debugger;
 		
-		var pixel = multiply_tuple_by_matrix(input1, input2);
-		var origin = multiply_tuple_by_matrix(inverse(this.transform), point(0,0,0));
+		var pixel = multiply_matrix_by_tuple(input1, input2);
+		var origin = multiply_matrix_by_tuple(input1/*inverse(this.transform)*/, point(0,0,0));
 		
-		if (origin == undefined)
+		if (origin === undefined)
 			console.log("Origin Undefined!\n");
 		
 		var direction = normalize(subtract(pixel, origin));

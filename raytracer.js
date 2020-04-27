@@ -1,5 +1,60 @@
+var OBJFILECONTENTS = "";
+
+function readSingleFile(e) {
+  var file = e.target.files[0];
+  if (!file) {
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    OBJFILECONTENTS = e.target.result;
+    displayContents(OBJFILECONTENTS);
+	parse_obj_file()
+  };
+  reader.readAsText(file);
+}
+
+function displayContents(contents) {
+  var element = document.getElementById('file-content');
+  element.textContent = contents;
+}
+
+document.getElementById('file-input')
+  .addEventListener('change', readSingleFile, false);
+
+var ofData = {
+				f: [],
+				v: [],
+				vn: [],
+				g: [], // [] of ofd_g objects
+				o: {},
+				cache: {}
+};
+
+function ofd_g()	{
+	
+	this.name = "";
+	this.lines = [{ type: "f", // ofData["f"][indice]
+					indice: 0
+	}];
+}
+	
+	
+var ofDataR = {
+				x_min: Infinity,
+				x_max: -Infinity,
+				y_min: Infinity,
+				y_max: -Infinity,
+				z_min: Infinity,
+				z_max: -Infinity,
+				
+				f_begins: 0,
+				v_begins: 0,
+				vn_begins: 0
+};
+
 var WIDTH = 150;
-var HEIGHT = Math.round(150*(9/16))
+var HEIGHT = 84; /*Math.round(150*(9/16));*/
 
 function optionSelected()	{
 	
@@ -226,85 +281,12 @@ function tick(proj)	{
 	return new projectile(proj.id, position, proj.velocity)
 }
 
-var c = 1;
-var c2 = 1; // For debugging after code has completed: c = accumulates for every detected intersection, c2 = accumulates for every instance
-            // of positive-value hit
-function render_old()	{
-	
-	var shape = new sphere();
-	sphere.material = new material();
-	sphere.material.color.x = 1;
-	sphere.material.color.y = 0;
-	sphere.material.color.z = 0;
-	
-	//shape.transform = m_multiply(rotation_z(Math.PI / 4, true), scaling(0.5, 1, 1));
-	
-	var light_position = point(-10,10,-10);
-	var light_color = colour(1,1,1);
-	
-	
-	var light = new point_light(light_position, light_color /* INTENSITY */);
-	
-	var world_y;
-	var world_x;
-	var pos;
-		
-	for (var y = 0; y < canvas_pixels; y++)	{
-		
-		world_y = half - (pixel_size * y);
-		
-		for (var x = 0; x < canvas_pixels; x++)	{
-			
-			world_x = (-half) + (pixel_size * x);
-			
-			pos = point(world_x, world_y, wall_z);
-			
-			
-			var r = new ray(ray_origin, normalize(subtract(pos, ray_origin)));
-
-			
-			var xs = intersect(shape, r);
-			if (xs.length>0)	{
-				
-				c++;
-			
-				var hit_res = hit(xs);
-				
-				//console.log("intersected ray with sphere!\n");
-				if (hit_res)	{
-					
-					c2++;
-					
-					//r.origin = normalize(r.origin);
-					//r.direction = normalize(r.direction);
-					
-					var _point = _position(r, hit_res.t);
-					var _normal = normal_at(hit_res.object, _point);
-					
-					var eye = invert(r.direction);
-					//var eye = r.direction;
-					
-					var _color = lighting(hit_res.object.material, light, _point, eye, _normal);
-				
-					var col = convert(_color);
-					//console.log(col + "\n");
-					
-					write_pixel(x, y, col);
-					
-					//console.log("writing pixel at " + x + ", " + y + "\n");
-				}
-			}
-		}
-		
-	}
-	
-	//debugger;
-}
 
 var g_c = null, g_w = null, g_r = null, g_x = null, g_y = null;
 
 var to = null; // setTimeout(render2, 0);
 
+/*
 function render(c, w, remaining)	{
 	
 	g_c = c;
@@ -317,7 +299,35 @@ function render(c, w, remaining)	{
 }
 function render2()	{
 	
-	var col;
+	//console.log("g_x = " + g_x);
+	
+	for (var y = 0; y < HEIGHT; y++)	{
+		console.log("Line " + y + " of " + HEIGHT);
+		
+		for (var x = 0; x < WIDTH; x++)	{
+	
+			var r = g_c.ray_for_pixel(x, y);
+			
+			ctx.fillStyle = convert(color_at(g_w, r, g_r))
+			ctx.fillRect(x,y,1,1)
+		}
+	}
+}
+*/
+
+function render(c, w, remaining)	{
+	
+	g_c = c;
+	g_w = w;
+	g_r = remaining;
+	g_x = 0
+	g_y = 0
+	//to = setTimeout(render2, 1)
+	console.time("render.")
+	render2();
+}
+
+function render2()	{
 
 	var r = g_c.ray_for_pixel(g_x, g_y);
 			
@@ -335,6 +345,7 @@ function render2()	{
 				
 		clearTimeout(to)
 		console.log("COMPLETED.\n")
+		console.timeEnd("render.")
 		return
 	}
 	
@@ -394,40 +405,40 @@ function write_pixel(x, y, color)	{
 
 var ticker = 0;
 var black_indice = 0;
+
 function clock()	{
 	
-	var twelve = point(0,1,0);
-	var r = 0;
-	var res = 0;
-	var face = [];
-	var face_min = [];
-	var face_sec = [];
+	var twelve = point(0,1,0)
+	var r = 0
+	var res = 0
+	var face = []
+	var face_min = []
+	var face_sec = []
 	
-	face[0] = twelve;
-	face_sec[0] = twelve;
-	face_min[0] = twelve;
+	face[0] = twelve
+	face_sec[0] = twelve
+	face_min[0] = twelve
 	
 	for (var b = 1; b < 60; b++)	{
 		
-		r = inverse(rotation_z(b * ((2*Math.PI)/60)));
-		res = mul(r, twelve);
-		res = sn_round(res); // rounds tuple values down to 0, when < EPSILON
+		r = inverse(rotation_z(b * ((2*Math.PI)/60)))
+		res = mul(r, twelve)
+		res = sn_round(res) // rounds tuple values down to 0, when < EPSILON
 		
-		face_sec.push(res);
-		face_min.push(res);
+		face_sec.push(res)
+		face_min.push(res)
 		
 		if ((b % 5)==0)
-			face.push(res);
-		
+			face.push(res)
 	}
 	
-	var clock_radius = CANVAS_HEIGHT * (3/8);
+	var clock_radius = CANVAS_HEIGHT * (3/8)
 
-	ctx.moveTo(0,0);
-	ctx.beginPath();
+	ctx.moveTo(0,0)
+	ctx.beginPath()
 	
-	var x = 0;
-	var y = 0;
+	var x = 0
+	var y = 0
 	
 	for (var a = 0; a < face.length; a++)	{
 	

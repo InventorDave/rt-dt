@@ -8,7 +8,9 @@
 <p style="float: left;">
 Welcome to Dave's RayTracer.<br/>
 <br/>
-
+Select an obj file to parse:<input type="file" id="file-input" /><br />
+<textarea id="file-content"></textarea><br />
+<input type="button" value="render obj!" onclick="renderObjFile(); return false;" />
 
 <script src="rt.p+e.js"></script>
 <script src="rt.pattern.js"></script>
@@ -17,17 +19,19 @@ Welcome to Dave's RayTracer.<br/>
 <script src="rt.matrix.js"></script>
 
 <script src="rt.tests.js"></script>
-<script src="rt.ray.js"></script>
-<script src="rt.light.js"></script>
-<script src="rt.material.js"></script>
 <script src="rt.world.js"></script>
 <script src="rt.shade.js"></script>
 <script src="rt.core.js"></script>
 <script src="raytracer.js"></script>
 <script src="rt.examples.js"></script>
-
+<script src="rt.objfile.js"></script>
+<script src="rt.light.js"></script>
+<script src="rt.material.js"></script>
+<script src="rt.ray.js"></script>
+<script>document.getElementById('file-input').addEventListener('change', readSingleFile, false);</script>
 <script>
 init();
+
 </script>
 </p>
 <select id="os" name="options" onchange="optionSelected(); return false;">
@@ -35,6 +39,6 @@ init();
   <option value="large">500,281.25</option>
   <option value="vlarge">900,550</option>
 </select>
-<input type="button" value="test" onClick="ch14(); return false;">
+<input type="button" value="test" onClick="p211(); return false;">
 </body>
 </html>

@@ -48,7 +48,7 @@ function m_mul_t(m, t)	{ // multiply m, a 4x4 matrix, by t, a tuple   - raytrace
 	
 	return new tuple(res[0][0],res[1][0],res[2][0],res[3][0]);
 }*/
-var m_mul_t = multiply_tuple_by_matrix; // rt.matrix-transform.js
+var m_mul_t = multiply_matrix_by_tuple; // rt.matrix-transform.js
 
 function transpose(m)	{
 	

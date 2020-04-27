@@ -16,9 +16,32 @@ function intersections()	{
 	return xs;
 }
 
+
+var ist = [];
+var indice = -1;
+var i_no = 0, i_yes = 0;
+
 function intersect(shape, ray)	{
 	
-	var local_ray = transform(ray, inverse(shape.transform)); // p119
+	var sh = shape
+	/*
+	while(sh.parent)
+		sh = sh.parent
+	*/
+	
+	if (sh.id != indice)	{
+		//i_no++;
+		indice = sh.id;
+	}
+	//else
+		//i_yes++;
+	
+	if (!ist[indice])
+		ist[indice] = inverse(sh.transform)
+
+
+
+	var local_ray = transform(ray, ist[indice]); // p119
 	
 	//debugger;
 	
@@ -92,10 +115,11 @@ function hit(xs)	{ // xs = [] of intersection objects. Return the lowest nonnega
 
 function transform(r_in, m)	{ // p69
 	
-	var r = copyObj(r_in);
-
-	var res =  multiply_tuple_by_matrix(m, r.origin);
-	var res2 =  multiply_tuple_by_matrix(m, r.direction);
+	//var r = copyObj(r_in);
+	var r = JSON.parse(JSON.stringify(r_in))
+	
+	var res =  multiply_matrix_by_tuple(m, r.origin);
+	var res2 =  multiply_matrix_by_tuple(m, r.direction);
 	
 	r.origin = res;
 	r.direction = res2;
@@ -122,7 +146,7 @@ function normal_at(s, world_point)	{
 }
 
 function reflected_color(w, comps, remaining)	{
-	
+	//console.log("ray::reflected_color()::remaining = " + remaining);
 	if (remaining <= 0)
 		return colour(0,0,0)
 		

@@ -2,7 +2,7 @@
 
 function test1()	{
 	
-	// test a matrix multiplied by a tuple, using function: multiply_tuple_by_matrix(m, t)
+	// test a matrix multiplied by a tuple, using function: multiply_matrix_by_tuple(m, t)
 	var m = createMatrix(4,4);
 	m.m[0][0] = 1, m.m[0][1] = 2, m.m[0][2] = 3, m.m[0][3] = 4;
 	m.m[1][0] = 2, m.m[1][1] = 4, m.m[1][2] = 4, m.m[1][3] = 2;
@@ -11,12 +11,12 @@ function test1()	{
 	
 	var t = new tuple(1,2,3,1);
 	
-	var t2 = multiply_tuple_by_matrix(m, t);
+	var t2 = multiply_matrix_by_tuple(m, t);
 
 	alert("tuple(" + t2.x + ", " + t2.y + ", " + t2.z + ", " + t2.type + ")");
 }
 
-function test2()	{ // p32/33, transposing a matrix using m_transpose()
+function test2()	{ // p32/33, transposing a matrix using m_transpose() -- NB m.transpose() no longer available, as m instanceof Array
 
 	var m = createMatrix(4,4);
 	m.m[0][0] = 0, m.m[0][1] = 9, m.m[0][2] = 3, m.m[0][3] = 0;
@@ -165,7 +165,7 @@ function test8()	{
 	alert(m2[1][1]);
 }
 
-function test9()	{ // the final tet of chapter 3, p41
+function test9()	{ // the final test of chapter 3, p41
 	
 	var a = [[3, -9, 7, 3], 
          [3, -8, 2, -9],
@@ -225,7 +225,7 @@ function test45a()	{
 	var transform = translation(5, -3, 2);
 	var p = point(-3, 4, 5);
 	
-	var p2 = multiply_tuple_by_matrix(transform, p);
+	var p2 = multiply_matrix_by_tuple(transform, p);
 	
 	alert("x = " + p2.x + "\ny = " + p2.y + "\nz = " + p2.z + "\nw = " + p2.w);
 }
@@ -237,7 +237,7 @@ function test45b()	{
 	
 	var p = point(-3, 4, 5);
 	
-	var p2 = multiply_tuple_by_matrix(inv, p);
+	var p2 = multiply_matrix_by_tuple(inv, p);
 	
 	alert("x = " + p2.x + "\ny = " + p2.y + "\nz = " + p2.z + "\nw = " + p2.w);
 }
@@ -247,7 +247,7 @@ function test45c()	{
 	var transform = translation(5, -3, 2);
 	var v = vector(-3, 4, 5);
 	
-	var v2 = multiply_tuple_by_matrix(transform, v);
+	var v2 = multiply_matrix_by_tuple(transform, v);
 	
 	alert("x = " + v2.x + "\ny = " + v2.y + "\nz = " + v2.z + "\nw = " + v2.w);
 }
@@ -257,7 +257,7 @@ function test46a()	{
 	var transform = scaling(2, 3, 4);
 	var p = point(-4, 6, 8);
 	
-	var p2 = multiply_tuple_by_matrix(transform, p);
+	var p2 = multiply_matrix_by_tuple(transform, p);
 
 	alert("x = " + p2.x + "\ny = " + p2.y + "\nz = " + p2.z + "\nw = " + p2.w);	
 }
@@ -267,7 +267,7 @@ function test46b()	{
 	var transform = scaling(2, 3, 4);
 	var v = vector(-4, 6, 8);
 	
-	var v2 = multiply_tuple_by_matrix(transform, v);
+	var v2 = multiply_matrix_by_tuple(transform, v);
 
 	alert("x = " + v2.x + "\ny = " + v2.y + "\nz = " + v2.z + "\nw = " + v2.w);	
 }
@@ -279,7 +279,7 @@ function test46c()	{
 	
 	var v = vector(-4, 6, 8);
 	
-	var res = multiply_tuple_by_matrix(inv, v);
+	var res = multiply_matrix_by_tuple(inv, v);
 	
 	alert("x = " + res.x + "\ny = " + res.y + "\nz = " + res.z + "\nw = " + res.w);	
 }
@@ -300,8 +300,8 @@ function test48()	{
 	var hq = rotation_x(Math.PI / 4, true); // reverse rotation, p49a
 	var fq = rotation_x(Math.PI / 2);
 	
-	var r_hq = multiply_tuple_by_matrix(hq, p);
-	var r_fq = multiply_tuple_by_matrix(fq, p);	
+	var r_hq = multiply_matrix_by_tuple(hq, p);
+	var r_fq = multiply_matrix_by_tuple(fq, p);	
 	
 	r_hq = sn_round(r_hq);
 	
@@ -314,7 +314,7 @@ function test52()	{
 	
 	var p = point(2, 3, 4);
 	
-	var res = multiply_tuple_by_matrix(transform, p);
+	var res = multiply_matrix_by_tuple(transform, p);
 	
 	alert("x = " + res.x + "\ny = " + res.y + "\nz = " + res.z + "\nw = " + res.w);		
 	
@@ -331,7 +331,7 @@ function test54()	{ // PASSED
 	
 	T = m_multiply(B, A);
 	T = m_multiply(C, T);
-	var res = multiply_tuple_by_matrix(T, p);
+	var res = multiply_matrix_by_tuple(T, p);
 	
 	alert("x = " + res.x + "\ny = " + res.y + "\nz = " + res.z + "\nw = " + res.w);		
 	debugger;
@@ -847,7 +847,7 @@ function ch7final107()	{
 	
 	render(c, w, 1);
 	
-	console.log("COMPLETED.\n");
+	//console.log("COMPLETED.\n");
 	//debugger;
 }
 
@@ -975,6 +975,8 @@ function ch9()	{
 	middle.material.specular = 0.7;
 	middle.material.pattern = stripe_pattern(colour(0.5, 0.5, 0.5), colour (0,0,0), 0.5)
 	middle.material.reflective = 0;
+	
+	middle.casts_shadow = false;
 	
 	middle.material.pattern.transform = m_multiply(rotation_z((Math.PI*2)/4), scaling(0.25,0.25,0.25))
 	
@@ -1244,9 +1246,10 @@ function ch12()	{
 	
 	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
 	
-	c.transform = view_transform(point(0,1,-5), // from
+	c.setCTransform(view_transform(point(0,1,-5), // from
 								point(0,1,0),   // to
-								vector(0,1,0)); // up
+								vector(0,1,0))
+					); // up
 							
 
 	
@@ -1254,10 +1257,11 @@ function ch12()	{
 	middle.transform = translation(-0.5, 1, 0.5);
 	middle.material = new material();
 	middle.material.color = colour(0.1, 1, 0.5);
-	middle.material.diffuse = 0.3;
-	middle.material.specular = 0.7;
-	middle.material.pattern = stripe_pattern(colour(0.5, 0.5, 0.5), colour (0,0,0))
-	middle.material.reflective = 0;
+	//middle.material.diffuse = 0.3;
+	//middle.material.specular = 0.7;
+	middle.material.pattern = stripe_pattern(colour(1, 1, 1), colour (1,1,1))
+	//middle.material.reflective = 0.5;
+	middle.material.ambient = 1.0;
 	
 	middle.material.pattern.transform = m_multiply(rotation_z((Math.PI*2)/4), scaling(0.25,0.25,0.25))
 	
@@ -1272,9 +1276,9 @@ function ch12()	{
 	left.transform = m_multiply(translation(-1.5, 0.4, -0.5), scaling(0.4, 0.4, 0.4))
 	left.material = new material()
 	left.material.color = colour(0.45, 0.45, 1)
-	left.material.diffuse = 0.5
-	left.material.specular = 0.7
-	left.material.reflective = 0
+	//left.material.diffuse = 0.5
+	//left.material.specular = 0.7
+	//left.material.reflective = 0.5
 	left.material.pattern = test_pattern()
 	
 	var floor = plane()
@@ -1567,7 +1571,7 @@ function test196()	{
 }
 
 function test198b()	{
-	
+	// PASSED
 	var g1 = group()
 	g1.transform = rotation_y(Math.PI/2)
 	
@@ -1623,4 +1627,105 @@ function ch14()	{
 	
 	render(c,w,1);
 	
+}
+
+function test211c()	{
+	
+	var t = triangle(point(0,1,0), point(-1,0,0), point(1,0,0))
+	var r = new ray(point(0,0.5,-2), vector(0,0,1))
+	
+	var xs = t.local_intersect(r)
+	
+	debugger;
+}
+
+function p211()	{
+	
+	clearInterval(loop);
+	ctx.fillStyle = BG_COLOR;
+	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
+	
+	var c = new camera(WIDTH, HEIGHT, Math.PI/2);
+	var w = new world();
+	
+	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
+	
+	c.transform = view_transform(point(0.8,2,-5), // from
+								point(0,-0.5,0),   // to
+								vector(2,2,2)); // up
+								
+	
+	var py = pyramid()
+	
+	//debugger;
+	w.objects.push(py)
+	
+	render(c,w,1);
+	
+}
+
+function bc_bb_i()	{
+	
+	var box = new BB(point(-1,-1,-1),point(1,1,1))
+	
+	var pv = []
+	
+	pv[0] = [], pv[0].push(point(5, 0.5, 0)), pv[0].push(vector(-1, 0, 0))
+	pv[1] = [], pv[1].push(point(-5, 0.5, 0)), pv[1].push(vector(1, 0, 0))
+	pv[2] = [], pv[2].push(point(0.5, 5, 0) ), pv[2].push(vector(0, -1, 0))
+	pv[3] = [], pv[3].push(point(0.5, -5, 0)), pv[3].push(vector(0, 1, 0) )
+	pv[4] = [], pv[4].push(point(0.5, 0, 5)), pv[4].push(vector(0, 0, -1))
+	pv[5] = [], pv[5].push(point(0.5, 0, -5)), pv[5].push(vector(0, 0, 1))
+	pv[6] = [], pv[6].push(point(0, 0.5, 0)), pv[6].push(vector(0, 0, 1))
+	pv[7] = [], pv[7].push(point(-2, 0, 0)), pv[7].push(vector(2, 4, 6))
+	pv[8] = [], pv[8].push(point(0, -2, 0) ), pv[8].push(vector(6, 2, 4))
+	pv[9] = [], pv[9].push(point(0, 0, -2)), pv[9].push(vector(4, 6, 2))
+	pv[10] = [], pv[10].push(point(2, 0, 2) ), pv[10].push(vector(0, 0, -1) )
+	pv[11] = [], pv[11].push(point(0, 2, 2) ), pv[11].push(vector(0, -1, 0))
+	pv[12] = [], pv[12].push(point(2, 2, 0)), pv[12].push(vector(-1, 0, 0))
+	
+	var res = []
+	for (var i = 0; i<pv.length;i++)	{
+		
+		var dir = normalize(pv[i][1])
+		var r = new ray(pv[i][0], dir)
+		
+		res.push(box.intersects(r))
+		
+	}
+	
+	debugger;
+		/*
+	Scenario Outline: Intersecting a ray with a bounding box at the origin
+  Given box ← bounding_box(min=point(-1, -1, -1) max=point(1, 1, 1))
+    And direction ← normalize(<direction>)
+    And r ← ray(<origin>, direction)
+  Then intersects(box, r) is <result>
+
+  Examples:
+    | origin            | direction        | result |
+    | point(5, 0.5, 0)  | vector(-1, 0, 0) | true   |
+    | point(-5, 0.5, 0) | vector(1, 0, 0)  | true   |
+    | point(0.5, 5, 0)  | vector(0, -1, 0) | true   |
+    | point(0.5, -5, 0) | vector(0, 1, 0)  | true   |
+    | point(0.5, 0, 5)  | vector(0, 0, -1) | true   |
+    | point(0.5, 0, -5) | vector(0, 0, 1)  | true   |
+    | point(0, 0.5, 0)  | vector(0, 0, 1)  | true   |
+    | point(-2, 0, 0)   | vector(2, 4, 6)  | false  |
+    | point(0, -2, 0)   | vector(6, 2, 4)  | false  |
+    | point(0, 0, -2)   | vector(4, 6, 2)  | false  |
+    | point(2, 0, 2)    | vector(0, 0, -1) | false  |
+    | point(0, 2, 2)    | vector(0, -1, 0) | false  |
+    | point(2, 2, 0)    | vector(-1, 0, 0) | false  |
+	*/
+}
+
+function bb_test_1()	{
+	
+	var s = sphere(); s.transform = m_multiply(translation(2,5,-3),scaling(2,2,2)); 
+	var c = cylinder(); c.min = -2; c.max = 2; c.transform = m_multiply(translation(-4,-1,4),scaling(0.5,1,0.5)); 
+	var sh = group(); sh.addChild(s); sh.addChild(c); 
+	var box = sh.bounds_of()
+
+	debugger;
 }

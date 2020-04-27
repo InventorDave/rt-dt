@@ -36,7 +36,7 @@ function reflect_around_axis(p, axis, scale)	{
 	
 	axis == "x" ? x = -x : axis == "y" ? y = -y : axis == "z" ? z = -z : x = -x ;
 	
-	return multiply_tuple_by_matrix(scaling(x, y, z), p)
+	return multiply_matrix_by_tuple(scaling(x, y, z), p)
 }
 
 function rotation_x(r, dir)	{ // r is in radians units, if dir is set to 1/true, reverse direction of rotation
@@ -100,7 +100,7 @@ function shearing(xy, xz, yx, yz, zx, zy)	{ // p53. returns shearing matrix for 
 
 
 
-function multiply_tuple_by_matrix(m, t)	{
+function multiply_matrix_by_tuple(m, t)	{
 	
 	var t2 = point(0,0,0)
 	var prod_arr = []
@@ -123,4 +123,4 @@ function multiply_tuple_by_matrix(m, t)	{
 	return t2
 }
 
-var mul = multiply_tuple_by_matrix;
+var mul = multiply_matrix_by_tuple;

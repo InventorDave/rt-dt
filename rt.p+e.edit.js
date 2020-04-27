@@ -27,12 +27,6 @@ function cone(id2)	{
 	c.max = Infinity
 	c.closed = false
 	
-	c.bounds_of = function()	{
-		
-					var l = max(Math.abs(this.min),Math.abs(this.max))
-					return new BB(point(-l, this.min, -l), point(l,this.max,l))
-	};
-	
 	c.local_intersect = function(r)	{ // r is a local_ray
 		
 		var xs = []
@@ -128,9 +122,9 @@ function cone(id2)	{
 	return c
 }
 
-function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
+function triangle(p1, p2, p3, id2)	{
 	
-	var t = new Shape("triangle", id2 || 0)
+	var t = new Shape("triangle", id2)
 	
 	t.p1 = p1;
 	t.p2 = p2;
@@ -138,13 +132,6 @@ function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	
 	t.e1 = subtract(p2, p1)
 	t.e2 = subtract(p3, p1)
-	
-	t.vn1 = vn1
-	t.vn2 = vn2
-	t.vn3 = vn3
-	
-	t.bbMin = point(Math.min(t.p1.x,t.p2.x,t.p3.x),Math.min(t.p1.y,t.p2.y,t.p3.y),Math.min(t.p1.z,t.p2.z,t.p3.z))
-	t.bbMax = point(Math.max(t.p1.x,t.p2.x,t.p3.x),Math.max(t.p1.y,t.p2.y,t.p3.y),Math.max(t.p1.z,t.p2.z,t.p3.z))
 	
 	t.normal = normalize(cross(t.e2, t.e1))
 	
@@ -215,14 +202,14 @@ function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	return t;
 }
 
-function fan_triangulation(vertices, _vn)	{
+
+function fan_triangulation(vertices)	{
 	
 	var ts = []
 	
 	for (var i = 1; i < vertices.length-1; i++)	{
 		//console.log("1: " + vertices[0] + ", 2: " + vertices[1] +", 3: " + vertices[2]);
-		var t = triangle(vertices[0], vertices[i], vertices[i+1], undefined, _vn[0], _vn[i], _vn[i+1])
-		
+		var t = triangle(vertices[0], vertices[i], vertices[i+1])
 		ts.push(t)
 	}
 	
@@ -236,11 +223,6 @@ function cylinder(id2)	{
 	c.min = -Infinity
 	c.max = Infinity
 	c.closed = false
-	
-	c.bounds_of = function()	{
-		
-		return new BB(point(-1,this.min,-1),point(1,this.max,1))
-	};
 	
 	c.local_intersect = function(r)	{
 		
@@ -268,6 +250,8 @@ function cylinder(id2)	{
 				t1 = t0;
 				t0 = temp;
 			}
+			
+			
 			
 			var y0 = r.origin.y + (t0 * r.direction.y)
 			if(this.min<y0 && this.max>y0)
@@ -316,13 +300,9 @@ function cylinder(id2)	{
 	
 	return c
 }
-
 function sphere(id2)	{
 	
 	var s = new Shape("sphere", id2)
-	
-	s.bbMin = point(-1,-1,-1)
-	s.bbMax = point(1,1,1)
 	
 	s.local_intersect = function(local_ray)	{
 		
@@ -359,9 +339,7 @@ function sphere(id2)	{
 
 function check_axis(origin, direction, tmin_or_tmax, p)	{
 	
-	var t, t_num;
-	
-	// (tmin_or_tmax=="min"?-1:1)
+	var t;
 	
 	if (tmin_or_tmax == "min")	{
 		
@@ -378,9 +356,9 @@ function check_axis(origin, direction, tmin_or_tmax, p)	{
 	else	{ // "max"
 	
 		if(p)
-			t_num = p - origin
+			t_num = (p - origin)
 		else
-			t_num = (1 - origin) 
+			t_num = (1 - origin)
 		
 		if (Math.abs(direction) >= EPSILON)
 			t = t_num / direction
@@ -391,31 +369,38 @@ function check_axis(origin, direction, tmin_or_tmax, p)	{
 	return t;
 }
 
-function max(a)	{
+function max()	{
 	
 	var val = -Infinity;
 	for (var a = 0; a < arguments.length; a++)
-		if (arguments[a] > val)
+		if(arguments[a]<0)
+			if(arguments[a] < val)
+				val = arguments[a]
+			
+		else
+			if (arguments[a] > val)
 				val = arguments[a]
 	
 	return val
 }
 
-function min(a)	{
+function min()	{
 	
 	var val = Infinity;
 	for (var a = 0; a < arguments.length; a++)
-		if (arguments[a] < val)
+		if(arguments[a]<0)
+			if(arguments[a] > val)
+				val = arguments[a]
+			
+		else
+			if (arguments[a] < val)
 				val = arguments[a]
 	
 	return val
 }
 
 function cube(id2)	{
-	var c = new Shape("cube", id2)
-	
-	c.bbMin = point(-1,-1,-1)
-	c.bbMax = point(1,1,1)
+	var c = new Shape("cube", id2 || 0)
 	
 	c.local_intersect = function(r)	{
 		
@@ -464,7 +449,7 @@ function cube(id2)	{
 	
 	c.local_normal_at = function(p)	{
 		
-		var maxc = Math.max(Math.abs(p.x), Math.abs(p.y), Math.abs(p.z))
+		var maxc = max(Math.abs(p.x), Math.abs(p.y), Math.abs(p.z))
 		
 		if (maxc == Math.abs(p.x))
 			return vector(p.x,0,0)
@@ -480,9 +465,6 @@ function cube(id2)	{
 function plane(id2)	{
 	
 	var pl = new Shape("plane", id2)
-	
-	pl.bbMin = point(-Infinity,0,-Infinity)
-	pl.bbMax = point(Infinity,0,Infinity)
 	
 	pl.local_intersect = function(r)	{
 		
@@ -508,40 +490,37 @@ function plane(id2)	{
 function group(id2)	{
 	
 	var g = new Shape("group", id2)
+	// g.type === "group"
 	
 	g.s=[];
 	
 	g.addChild =  function(sh)	{
 		
-		sh.parent = this;
+		
+		
+		sh[0].bounds();
+		
+		sh[0].parent = this;
 		this.s.push(sh);
-	};
-	/*
-	this.bbMin = point(0,0,0)
-	this.bbMax = point(0,0,0)
-	this.bb = new BB()
-	this.hasGenBB = false
-	*/
-	g.bounds_of = function()	{
 		
-		if(!this.hasGenBB)	{
-			
-			var box = new BB()
-			var l = this.s.length
-			for(var i=0;i<l;i++)	{
-				
-				var cbox = this.s[i].parent_space_bounds_of()
-				box.addBB(cbox)
-			}
-			
-			this.bb = box
-			this.hasGenBB = true
-		}
+		if(sh[0].bb.a.x<this.bb.a.x)
+			this.bb.a.x = sh[0].bb.a.x
+		if(sh[0].bb.a.y<this.bb.a.y)
+			this.bb.a.y = sh[0].bb.a.y
+		if(sh[0].bb.a.z<this.bb.a.z)
+			this.bb.a.z = sh[0].bb.a.z
+
+		if(sh[0].bb.b.x>this.bb.b.x)
+			this.bb.b.x = sh[0].bb.b.x
+		if(sh[0].bb.b.y>this.bb.b.y)
+			this.bb.b.y = sh[0].bb.b.y
+		if(sh[0].bb.b.z>this.bb.b.z)
+			this.bb.b.z = sh[0].bb.b.z		
 		
-		return this.bb
 	};
 	
 	g.local_intersect = function(r)	{
+		
 		
 		var res = [];
 		
@@ -565,162 +544,125 @@ function group(id2)	{
 	
 	return g 
 }
-
-function BB(min,max)	{
+function Shape(type, id2)	{
 	
-	this.min = min || point(Infinity,Infinity,Infinity)
-	this.max = max || point(-Infinity,-Infinity,-Infinity)
-	
-	this.setMin = function(min)	{ this.min = min; }
-	this.setMax = function(max) { this.max = max; }
-	
-	this.addP = function(p) {
+	this.id2 = id2;
+	this.id = (Math.floor(Math.random() * 999999)) + 1
+	this.transform = identity_matrix()
+	this.material = new material()
+	this.bb = {
 		
-					if(p.x<this.min.x)
-						this.min.x=p.x
-					else if(p.x>this.max.x)
-						this.max.x=p.x
-					
-					if(p.y<this.min.y)
-						this.min.y=p.y
-					else if(p.y>this.max.y)
-						this.max.y=p.y
-					
-					if(p.x<this.min.z)
-						this.min.z=p.z
-					else if(p.z>this.max.z)
-						this.max.z=p.z
-	};
-	
-	this.addBB = function(b)	{
-		
-		this.min=point(Math.min(this.min.x,b.min.x), Math.min(this.min.y,b.min.y), Math.min(this.min.z,b.min.z))
-		this.max=point(Math.max(this.max.x,b.max.x), Math.max(this.max.y,b.max.y), Math.max(this.max.z,b.max.z))
-	};
-	
-	this.containsPoint = function(p)	{
-			return (p.x>=this.min.x&&p.x<=this.max.x)&&(p.y>=this.min.y&&p.y<=this.max.y)&&(p.z>=this.min.z&&p.z<=this.max.z);
-	};
-	
-	this.containsBox = function(b2)	{
+		sh: this,
+		a: point(0,0,0),
+		b: point(0,0,0),
+		add: function(b2)	{
+			a = point(max(Math.abs(a.x),Math.abs(b2.a.x)),max(Math.abs(a.y),Math.abs(b2.a.y)),max(Math.abs(a.z),Math.abs(b2.a.z)));
+			b = point(max(Math.abs(b.x),Math.abs(b2.b.x)),max(Math.abs(b.y),Math.abs(b2.b.y)),max(Math.abs(b.z),Math.abs(b2.b.z)));
+		},
+		containsPoint: function(p)	{
+			return (p.x>a.x&&p.x<b.x)&&(p.y>a.y&&p.y<b.y)&&(p.z>a.z&&p.z<b.z);
+		},
+		containsBox: function(b2)	{
 			/*
 			A box lies within another box if both its min and max points lie within that box.
 			*/
 			
-			if(this.containsPoint(b2.min)&&this.containsPoint(b2.max))
+			if(containsPoint(b2.a)&&containsPoint(b2.b))
 				return true
 			
 			return false
-	};
-	
-	this.transform = function(m)	{
-		
-			var p = []
-			p.push(this.min)
-			p.push(point(this.min.x, this.min.y, this.max.z))
-			p.push(point(this.min.x, this.max.y, this.min.z))
-			p.push(point(this.min.x, this.max.y, this.max.z))
-			p.push(point(this.max.x, this.min.y, this.min.z))
-			p.push(point(this.max.x, this.min.y, this.max.z))
-			p.push(point(this.max.x, this.max.y, this.min.z))
-			p.push(this.max)
+		},
+		intersects: function(r)	{
 			
-			var new_bbox = new BB(), res
-
-			for (var i = 0; i < 8 /* p.length */; i++)	{
+			return this.intersect(r, this.a, this.b)
 				
-				res = multiply_matrix_by_tuple(m,p[i])
-				new_bbox.addP(res)
+		},
+		
+		intersect: function(r, a, b)	{
+		
+			var xtmin = 0, xtmax = 0, ytmin = 0, ytmax = 0, ztmin = 0, ztmax = 0;
+			var temp;
+			
+			/*
+			 Bonus Chapter at (http://www.raytracerchallenge.com/bonus/bounding-boxes.html) Args a and b are bounding box min and max.
+			*/
+			xtmin = check_axis(r.origin.x, r.direction.x, "min", a.x)
+			xtmax = check_axis(r.origin.x, r.direction.x, "max", b.x)
+			
+			if (xtmin > xtmax)	{
+			
+				temp = xtmax;
+				xtmax = xtmin;
+				xtmin = temp;
 			}
-
-			return new_bbox
-		
+			
+			ytmin = check_axis(r.origin.y, r.direction.y, "min", a.y)
+			ytmax = check_axis(r.origin.y, r.direction.y, "max", b.y)
+			
+			if (ytmin > ytmax)	{
+			
+				temp = ytmax;
+				ytmax = ytmin;
+				ytmin = temp;
+			}
+			
+			ztmin = check_axis(r.origin.z, r.direction.z, "min", a.z)
+			ztmax = check_axis(r.origin.z, r.direction.z, "max", b.z)
+			
+			if (ztmin > ztmax)	{
+			
+				temp = ztmax;
+				ztmax = ztmin;
+				ztmin = temp;
+			}
+			
+			var tmin = max(xtmin, ytmin, ztmin)
+			var tmax = min(xtmax, ytmax, ztmax)
+			
+			if (tmin > tmax)
+				return false;
+			
+			return intersections(new intersection(this, tmin), new intersection(this, tmax))
+		}
 	};
 	
-	this.intersects = function(r)	{
-	
-		var xtmin = 0, xtmax = 0, ytmin = 0, ytmax = 0, ztmin = 0, ztmax = 0;
-		var temp, a = this.min, b = this.max;
+	this.bounds = function()	{
 		
-		/*
-		 Bonus Chapter at (http://www.raytracerchallenge.com/bonus/bounding-boxes.html) Args a and b are bounding box min and max.
-		*/
-		xtmin = check_axis(r.origin.x, r.direction.x, "min", a.x)
-		xtmax = check_axis(r.origin.x, r.direction.x, "max", b.x)
-		
-		if (xtmin > xtmax)	{
-		
-			temp = xtmax;
-			xtmax = xtmin;
-			xtmin = temp;
+		if(this.type==="plane")	{
+			this.bb.a = point(-Infinity,0,-Infinity), this.bb.b=point(Infinity,0,Infinity)
+			return this.bb
+		}
+		if(this.type==="cube"||this.type==="sphere")	{
+			this.bb.a = point(-1,-1,-1), this.bb.b = point(1,1,1)
+			return this.bb
+		}
+		if(this.type==="cylinder")	{
+			this.bb.a = point(-1,this.min,-1), this.bb.b = point(1, this.max, 1)
+			return this.bb
+		}
+		if(this.type==="cone")	{
+			let a = Math.abs(this.min), b = Math.abs(this.max)
+			let limit = max(a,b)
+			
+			
+			this.bb.a = point(-limit,this.min,-limit), this.bb.b = point(limit,this.max,limit)
+			return this.bb
+		}
+		if(this.type==="triangle")	{
+			this.bb.a = point(min(this.p1.x,this.p2.x,this.p3.x),min(this.p1.y,this.p2.y,this.p3.y),min(this.p1.z,this.p2.z,this.p3.z))
+			this.bb.b = point(max(this.p1.x,this.p2.x,this.p3.x),max(this.p1.y,this.p2.y,this.p3.y),max(this.p1.z,this.p2.z,this.p3.z))
+			return this.bb
 		}
 		
-		ytmin = check_axis(r.origin.y, r.direction.y, "min", a.y)
-		ytmax = check_axis(r.origin.y, r.direction.y, "max", b.y)
-		
-		if (ytmin > ytmax)	{
-		
-			temp = ytmax;
-			ytmax = ytmin;
-			ytmin = temp;
-		}
-		
-		ztmin = check_axis(r.origin.z, r.direction.z, "min", a.z)
-		ztmax = check_axis(r.origin.z, r.direction.z, "max", b.z)
-		
-		if (ztmin > ztmax)	{
-		
-			temp = ztmax;
-			ztmax = ztmin;
-			ztmin = temp;
-		}
-		
-		var tmin = Math.max(xtmin, ytmin, ztmin)
-		var tmax = Math.min(xtmax, ytmax, ztmax)
-		
-		if (tmin > tmax)
-			return false;
-		
-		return intersections(new intersection(this, tmin), new intersection(this, tmax))
+		console.log("Shape.bounds() couldn't identify shape type for shape: " + this.id + ", this.id2");
+		return this.bb
 	};
-
-					
-}
-
-var shi = 0;
-function Shape(type, id2)	{
-	
-	this.id2 = id2 || 0;
-	this.id = shi++/*(Math.floor(Math.random() * 999999)) + 1*/
-	this.transform = identity_matrix()
-	this.material = new material()
 	
 	this.type = type // "sphere", "plane", etc
 	
-	this.parent = false;
+	this.parent = undefined;
 	
 	this.local_intersect = function(local_ray)	{ /*default impl.*/ this.saved_ray = local_ray; return []; };
-	
-	
-	this.bbMin = point(0,0,0)
-	this.bbMax = point(0,0,0)
-	this.bb = new BB()
-	this.hasGenBB = false
-	this.bounds_of = function()	{ // REDEFINE FOR GROUP (AND CSG) !!
-						
-						if(!this.hasGenBB)	{
-							
-							this.bb = new BB(this.bbMin,this.bbMax)
-							this.hasGenBB = true
-						}
-						
-						return this.bb
-	};
-	
-	this.parent_space_bounds_of = function()	{
-	
-		return this.bounds_of().transform(this.transform)
-	};
 	
 	this.saved_ray = undefined;
 	
