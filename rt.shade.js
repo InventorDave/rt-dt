@@ -124,11 +124,11 @@ function schlick(comps)	{
 		var n = comps.n1 / comps.n2
 		var sin2_t = n**2 * (1.0 - cos**2)
 		
-		console.log("shade.js::schlick(...): sin2_t = " + sin2_t + "\n");
+		//console.log("shade.js::schlick(...): sin2_t = " + sin2_t + "\n");
 		if (sin2_t > 1.0)
 			return 1.0
 	
-		// compute cosine of theta_t using rig identity
+		// compute cosine of theta_t using trig identity
 		var cos_t = Math.sqrt(1.0 - sin2_t)
 	
 		// when n1 > n2, use cos(theta_t) instead

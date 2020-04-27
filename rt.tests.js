@@ -1650,10 +1650,10 @@ function p211()	{
 	
 	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
 	
-	c.transform = view_transform(point(0.8,2,-5), // from
+	c.setCTransform(view_transform(point(0.8,2,-5), // from
 								point(0,-0.5,0),   // to
-								vector(2,2,2)); // up
-								
+								vector(2,2,2)) // up
+					);
 	
 	var py = pyramid()
 	
@@ -1727,5 +1727,56 @@ function bb_test_1()	{
 	var sh = group(); sh.addChild(s); sh.addChild(c); 
 	var box = sh.bounds_of()
 
+	debugger;
+}
+
+function bc_bb_o()	{
+	
+	// intersect(shape, ray)
+	
+	var child = test_shape()
+	
+	var sh = group()
+	sh.addChild(child)
+	sh.bounds_of()
+	
+	var r = new ray(point(0,0,-5), vector(0,1,0))
+	
+	var xs = intersect(sh, r)
+	var res = []
+	
+	if(child.saved_ray!=undefined)
+		res.push("set")
+	else
+		res.push("unset")
+	
+	child = test_shape("test")
+	sh = group()
+	sh.addChild(child)
+	sh.bounds_of()
+	
+	r = new ray(point(0,0,-5), vector(0,0,1))
+	xs = intersect(sh, r)
+	
+	if(child.saved_ray!=undefined)
+		res.push("set")
+	else
+		res.push("unset")
+	
+	debugger; 	
+}
+
+function bb_bvh_split_1()	{
+	
+	var res = []
+	
+	// scenario: splitting a perfect cube
+	var box = new BB(point(-1,-4,-5), point(9,6,5))
+	var pair = box.split_bounds()
+	
+	var _ = { left: {min: pair.left.min, max: pair.left.max}, right: {min: pair.right.min, max: pair.right.max} }
+	res.push(_)
+	
+	
 	debugger;
 }

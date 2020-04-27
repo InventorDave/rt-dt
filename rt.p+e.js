@@ -27,7 +27,7 @@ function cone(id2)	{
 	c.max = Infinity
 	c.closed = false
 	
-	c.bounds_of = function()	{
+	c.bounds_of = function()	{ // See comments in cylinder() implementation
 		
 					var l = max(Math.abs(this.min),Math.abs(this.max))
 					return new BB(point(-l, this.min, -l), point(l,this.max,l))
@@ -237,9 +237,16 @@ function cylinder(id2)	{
 	c.max = Infinity
 	c.closed = false
 	
-	c.bounds_of = function()	{
+	c.bounds_of = function()	{ // for some shapes, eg those with settable min and max, we need a custom .bounds_of() function,
+								  // until I implement setters/getters which will wrap the generating of a BB()
 		
-		return new BB(point(-1,this.min,-1),point(1,this.max,1))
+		if(!this.hasGenBB)	{
+			
+			this.bb = new BB(point(-1,this.min,-1),point(1,this.max,1))
+			this.hasGenBB = true
+		}
+		
+		return this.bb
 	};
 	
 	c.local_intersect = function(r)	{
@@ -505,11 +512,126 @@ function plane(id2)	{
 	return pl
 }
 
+var flag18 = false
 function group(id2)	{
 	
 	var g = new Shape("group", id2)
 	
+	ofData.g[g.id] = g
+	
 	g.s=[];
+	
+	g.left = []
+	g.right = []
+	
+	g.partition_children = function()	{
+		
+		var left = [], right = []
+		/*
+		 To see if a child (this.s[i]) fits into either
+		 left or right, check if it's BB fits into
+		 either this.left or this.right.
+		 
+		*/
+		 
+		this.bounds_of()
+		var _bb = this.bb.split_bounds()
+		
+		var ch_b, child;
+		//var L = this.s.length;
+		
+		for (var i = 0; i<this.s.length; i++)	{
+			
+			var child = this.s[i]
+			ch_b = child.bounds_of()
+			
+			/*
+			If so, remove the child
+			from this.s and add to 'left', or 'right'.			
+			*/
+			//debugger;
+			if (_bb.left.containsBox(ch_b))	{
+				
+				// child BB fits into this.left
+				var _ = this.s.splice(i, 1);
+				
+				if ((_ instanceof Array)||(_ instanceof []))
+					//console.log("WEIRD!")
+				_ = _[0]
+				
+				left.push(_)
+				//console.log("Adding to left partition.")
+				i--
+			}			
+			
+			else if (_bb.right.containsBox(ch_b))	{
+				
+				// child BB fits into this.right
+				var _ = this.s.splice(i, 1);
+				
+				if ((_ instanceof Array)||(_ instanceof []))
+					//console.log("GOTCHA!")
+					_ = _[0]
+					
+				right.push(_)
+				//console.log("Adding to right partition.")
+				i--
+			}
+		}
+		
+		/*
+		 Once all children have been processed, store
+		 'left' in this.left, 'right' in this.right,and
+		 return { left: left, right: right }
+		*/
+		
+		this.left = left, this.right = right
+		return { left: left, right: right }
+	};
+	
+	g.make_subgroup = function(partition)	{
+		
+		var g = group()
+		var L = partition.length
+		
+		if(flag18)
+			debugger;
+		
+		for (var i = 0; i < L; i++)	{
+			g.addChild(partition[i])
+		}
+		
+		if(flag18)
+			debugger;
+		
+		this.s.push(g)
+		this.hasGenBB = false
+	};
+	
+	g.divide = function(t)	{
+		
+		if(t<=this.s.length)	{
+			
+			var l_r = this.partition_children()
+			if(l_r.left)	{
+				
+				//console.log("l_r.left contains children.")
+				this.make_subgroup(l_r.left)
+			}
+			if(l_r.right)	{
+				
+				//console.log("l_r.right contains children.")
+				this.make_subgroup(l_r.right)
+			}
+		}
+		
+		var l = this.s.length
+		for(var i = 0; i<l; i++)	{
+		
+			//console.log("Calling divide on children of group " + this.id +", l = " + l + ", i = " + i);
+			this.s[i].divide(t)
+		}
+	};
 	
 	g.addChild =  function(sh)	{
 		
@@ -543,19 +665,24 @@ function group(id2)	{
 	
 	g.local_intersect = function(r)	{
 		
-		var res = [];
+		if(this.bounds_of().intersects(r))	{
 		
-		for (var i = 0; i<this.s.length;i++)	{
+			var res = [];
+		
+			for (var i = 0; i<this.s.length;i++)	{
 			
-			var xs = intersect(this.s[i], r);
+				var xs = intersect(this.s[i], r);
 			
-			for (var j=0;j<xs.length;j++)
+				for (var j=0;j<xs.length;j++)
 				res.push(xs[j])
+			}
+		
+			res = order(res);
+		
+			return res;
 		}
 		
-		res = order(res);
-		
-		return res;
+		return [];
 	};
 	
 	g.local_normal_at = function(p)	{
@@ -574,6 +701,9 @@ function BB(min,max)	{
 	this.setMin = function(min)	{ this.min = min; }
 	this.setMax = function(max) { this.max = max; }
 	
+	this.left = undefined
+	this.right = undefined
+	
 	this.addP = function(p) {
 		
 					if(p.x<this.min.x)
@@ -586,7 +716,7 @@ function BB(min,max)	{
 					else if(p.y>this.max.y)
 						this.max.y=p.y
 					
-					if(p.x<this.min.z)
+					if(p.z<this.min.z)
 						this.min.z=p.z
 					else if(p.z>this.max.z)
 						this.max.z=p.z
@@ -684,7 +814,45 @@ function BB(min,max)	{
 		return intersections(new intersection(this, tmin), new intersection(this, tmax))
 	};
 
-					
+	this.split_bounds = function()	{
+
+		var dx = this.max.x - this.min.x
+		var dy = this.max.y - this.min.y
+		var dz = this.max.z - this.min.z
+		
+		var greatest = Math.max(dx,dy,dz)
+		
+		var x0 = this.min.x, y0 = this.min.y, z0 = this.min.z
+		var x1 = this.max.x, y1 = this.max.y, z1 = this.max.z
+		
+		if(greatest==dx)
+			x0 = x1 = x0 + dx / 2.0
+		else if(greatest==dy)
+			y0 = y1 = y0 + dy / 2.0
+		else
+			z0 = z1 = z0 + dz / 2.0
+		
+		var mid_min = point(x0,y0,z0)
+		var mid_max = point(x1,y1,z1)
+		
+		var left = new BB(this.min, mid_max)
+		var right = new BB(mid_min, this.max)
+		
+		this.left = left
+		this.right = right
+		
+		return { left: left, right: right }
+
+	};		
+}
+
+function test_shape()	{
+	
+	var ts = new Shape("test")
+	ts.bbMin = point(-1,-1,-1)
+	ts.bbMax = point(1,1,1)
+	
+	return ts;
 }
 
 var shi = 0;
@@ -701,6 +869,10 @@ function Shape(type, id2)	{
 	
 	this.local_intersect = function(local_ray)	{ /*default impl.*/ this.saved_ray = local_ray; return []; };
 	
+	this.divide = function()	{
+		
+		//console.log("Shape.divide called on " + this.type + ": " + this.id + ", " + this.id2 + ".")
+	};
 	
 	this.bbMin = point(0,0,0)
 	this.bbMax = point(0,0,0)

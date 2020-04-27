@@ -74,6 +74,8 @@ function pyramid()	{
 	pyramid.addChild(side3)
 	
 	var side4 = triangle(point(0,0,0), point(-1, -1, 1), point(1, -1, -1)) // back
+	side4.material.color = colour(1,1,0)
+	pyramid.addChild(side4)
 	
 	return pyramid
 }

@@ -14,11 +14,15 @@ function renderObjFile()	{
 		
 		for (var j = 0; j < s.length; j++)	{
 			
-			o.addChild(s[j]);
+			if(s[j])
+				o.addChild(s[j]);
 		}
 	
 	}
-		
+	
+	o.divide(1000)
+	debugger;
+	
 	clearInterval(loop);
 	ctx.fillStyle = "#cc2222";
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
