@@ -1,5 +1,3 @@
-
-
 function material()	{
 	
 	this.color = colour(1, 1, 1);

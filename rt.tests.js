@@ -795,9 +795,10 @@ function ch7final107()	{
 	
 	w.light = new point_light(point(-10, 10, -10), colour(0.65,0.65,0.65));
 	
-	c.transform = view_transform(point(0,1.5,-5),
+	c.setCTransform(view_transform(point(0,1.5,-5),
 								point(0,1,0),
-								vector(0,1,0));
+								vector(0,1,0))
+					);
 								
 	var middle = new sphere();
 	middle.transform = translation(-0.5, 1, 0.5);
@@ -1602,9 +1603,9 @@ function ch14()	{
 	
 	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
 	
-	c.transform = view_transform(point(0,2,-5), // from
+	c.setCTransform(view_transform(point(0,2,-5), // from
 								point(0,0,0),   // to
-								vector(0,1,1)); // up
+								vector(0,1,1))); // up
 								
 	var g1 = group("g1")
 	
@@ -1780,3 +1781,146 @@ function bb_bvh_split_1()	{
 	
 	debugger;
 }
+
+// TEXTURE MAPPING TESTS
+function tm_sm()	{
+	// PASSED
+	var x = []
+	x.push(point(0, 0, -1))
+	x.push(point(1, 0, 0))
+	x.push(point(0, 0, 1))
+	x.push(point(-1, 0, 0))
+	x.push(point(0, 1, 0))
+	x.push(point(0, -1, 0))
+	x.push(point(Math.sqrt(2)/2, Math.sqrt(2)/2, 0))
+	
+	var p, res = [];
+	
+	for(var i = 0; i<x.length; i++)	{
+		
+		p = x[i]
+		res.push(spherical_map(p))
+	}
+	
+	debugger;
+		/*
+  Given p ← <point>
+  When (u, v) ← spherical_map(p)
+  Then u = <u>
+    And v = <v>
+
+  Examples:
+    | point                | u    | v    |
+    | point(0, 0, -1)      | 0.0  | 0.5  |
+    | point(1, 0, 0)       | 0.25 | 0.5  |
+    | point(0, 0, 1)       | 0.5  | 0.5  |
+    | point(-1, 0, 0)      | 0.75 | 0.5  |
+    | point(0, 1, 0)       | 0.5  | 1.0  |
+    | point(0, -1, 0)      | 0.5  | 0.0  |
+    | point(√2/2, √2/2, 0) | 0.25 | 0.75 |
+	*/
+}
+
+function tm_s()	{
+	
+	clearInterval(loop);
+	ctx.fillStyle = BG_COLOR;
+	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
+	
+	var cam = new camera(WIDTH, HEIGHT, Math.PI/2);
+	var w = new world();
+	
+	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
+	
+	cam.setCTransform(view_transform(point(0,5,-10), // from
+								point(0,0,0),   // to
+								vector(0,1,0)) // up
+					);
+	
+	
+	
+	var checkers = uv_checkers(8, 4, colour(0,0,1), colour(1,0,0))
+	var pattern = texture_map(checkers, spherical_map /* fn */)
+	var s = sphere()
+	s.material.pattern = my_pattern( pattern )
+	s.transform = scaling(2,2,2)
+	
+	checkers = uv_checkers(8, 4, colour(0,0,1), colour(1,0,0))
+	pattern = texture_map(checkers, cylindrical_map /* fn */)
+	var c = cylinder()
+	c.min = -2, c.max = 2
+	c.material.pattern = my_pattern( pattern )
+	c.transform = translation(3,0,0)
+	
+	checkers = uv_checkers(8, 4, colour(0,0,1), colour(1,0,0))
+	pattern = texture_map(checkers, spherical_map /* fn */)
+	var cb = cube()
+	cb.material.pattern = my_pattern( pattern )
+	cb.transform = translation(-4, 1, 0)
+	
+	checkers = uv_checkers(2, 2, colour(0.5,0.5,0.5), colour(1,1,1))
+	pattern = texture_map(checkers, planar_map /* fn */)
+	var pl = plane()
+	pl.material.pattern = my_pattern( pattern )
+	pl.transform = translation(0,-2,0)
+	
+	var o = group()
+	o.addChild(s)
+	o.addChild(c)
+	o.addChild(cb)
+	
+	o.divide(1)
+	
+	//debugger;
+	w.objects.push(o)
+	w.objects.push(pl)
+	
+	render(cam,w,1);
+	
+}
+
+function tm_sm_2()	{
+	// PASSED
+	var checkers = uv_checkers(16, 8, colour(0,0,0), colour(1,1,1))
+	var pattern = texture_map(checkers, spherical_map /* fn */)
+	
+	var _p = [], res = []
+	_p.push(point(0.4315, 0.4670, 0.7719))
+	_p.push(point(-0.9654, 0.2552, -0.0534))
+	_p.push(point(0.1039, 0.7090, 0.6975))
+	_p.push(point(-0.4986, -0.7856, -0.3663))
+	_p.push(point(-0.0317, -0.9395, 0.3411))
+	_p.push(point(0.4809, -0.7721, 0.4154))
+	_p.push(point(0.0285, -0.9612, -0.2745))
+	_p.push(point(-0.5734, -0.2162, -0.7903))
+	_p.push(point(0.7688, -0.1470, 0.6223))
+	_p.push(point(-0.7652, 0.2175, 0.6060))
+	
+	for(var i = 0; i<_p.length; i++)	{
+		
+		res.push(pattern_at(pattern, _p[i]))
+	}
+	
+	debugger;
+	
+	/*
+	Scenario Outline: Using a texture map pattern with a spherical map
+  Given checkers ← uv_checkers(16, 8, black, white)
+    And pattern ← texture_map(checkers, spherical_map)
+  Then pattern_at(pattern, <point>) = <color>
+
+  Examples:
+    | point                            | color |
+    | point(0.4315, 0.4670, 0.7719)    | white |
+    | point(-0.9654, 0.2552, -0.0534)  | black |
+    | point(0.1039, 0.7090, 0.6975)    | white |
+    | point(-0.4986, -0.7856, -0.3663) | black |
+    | point(-0.0317, -0.9395, 0.3411)  | black |
+    | point(0.4809, -0.7721, 0.4154)   | black |
+    | point(0.0285, -0.9612, -0.2745)  | black |
+    | point(-0.5734, -0.2162, -0.7903) | white |
+    | point(0.7688, -0.1470, 0.6223)   | black |
+    | point(-0.7652, 0.2175, 0.6060)   | black |
+	*/
+}
+

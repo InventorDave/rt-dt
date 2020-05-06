@@ -11,7 +11,6 @@ function colour(r, g, b)	{
 	return new tuple(r, g, b, 2);
 }
 
-
 function lighting(_material, _light, obj, _point, eyev, normalv, in_shadow, f)	{
 	
 	var clr;

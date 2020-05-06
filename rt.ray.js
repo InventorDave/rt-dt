@@ -51,11 +51,11 @@ function intersect(shape, ray)	{
 	// Which one? local_ray, or the ray passed to intersect?? Apparently, local_ray....
 }
 
-
 function order(arr)	{
 	
 	return arr.sort(function(a,b)	{ return a.t - b.t })
 }
+
 function order_old(arr)	{
 	
 	if (arr.length <= 1) 
@@ -115,12 +115,10 @@ function hit(xs)	{ // xs = [] of intersection objects. Return the lowest nonnega
 
 function transform(r_in, m)	{ // p69
 	
-	//var r = copyObj(r_in);
-	var r = JSON.parse(JSON.stringify(r_in))
+	var res =  multiply_matrix_by_tuple(m, r_in.origin);
+	var res2 =  multiply_matrix_by_tuple(m, r_in.direction);
 	
-	var res =  multiply_matrix_by_tuple(m, r.origin);
-	var res2 =  multiply_matrix_by_tuple(m, r.direction);
-	
+	var r = new ray(res, res2)
 	r.origin = res;
 	r.direction = res2;
 	

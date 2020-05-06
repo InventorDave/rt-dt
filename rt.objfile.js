@@ -20,8 +20,11 @@ function renderObjFile()	{
 	
 	}
 	
-	o.divide(1000)
-	debugger;
+	console.log("Object mesh parsed.")
+	
+	o.divide(100)
+	console.log("\nBVH generated. Engaging renderer.\n")
+	//debugger;
 	
 	clearInterval(loop);
 	ctx.fillStyle = "#cc2222";
@@ -32,7 +35,7 @@ function renderObjFile()	{
 	
 	w.light = new point_light(point(-20, 20, 40), colour(1,1,1));
 	
-	c.setCTransform(view_transform(point(25,0, 25), // from
+	c.setCTransform(view_transform(point(25,0, 50), // from
 								point(0,0,0),   // to
 								vector(0,1,0)) // up
 					); 

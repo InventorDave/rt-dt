@@ -2,6 +2,29 @@
 
 var EPSILON = 0.00001;
 
+function modulusA(a,b)	{
+    
+    while((a -= b) >= b)
+        ;
+    
+    console.log("Result: " + a)
+}
+
+function modulusB(a,b)	{
+	
+	var q = Math.floor(a/b)
+	
+	var r = q * b
+	
+	var result = a - r
+	
+	console.log("Result: " + result)
+	
+	// result = a - (Math.floor(a/b) * b)
+	
+	// Source for method: https://www.omnicalculator.com/math/modulo
+}
+
 function equal(a, b)	{ // checks 2 numbers are equal
 	
 	if (Math.abs(a - b) < EPSILON)

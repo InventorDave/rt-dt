@@ -101,7 +101,7 @@ function camera(hsize, vsize, fov)	{
 	
 	this.it_c = inverse(this.transform); // NOTE: MUST update this every time this.transform is set
 	
-	this.setCTransform = function(m)	{
+	this.setCTransform = function(m)	{ // Pass output from view_transform (above) as argument 'm'
 	
 		this.transform = m
 		this.it_c = inverse(m)
@@ -117,7 +117,7 @@ function camera(hsize, vsize, fov)	{
 	}
 	else	{
 		
-		this.half_width = this.half_view / this.aspect;
+		this.half_width = this.half_view * this.aspect;
 		this.half_height = this.half_view;
 	}
 	

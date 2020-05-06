@@ -398,24 +398,31 @@ function check_axis(origin, direction, tmin_or_tmax, p)	{
 	return t;
 }
 
-function max(a)	{
+function check_axis2(origin, direction, p)	{
 	
-	var val = -Infinity;
-	for (var a = 0; a < arguments.length; a++)
-		if (arguments[a] > val)
-				val = arguments[a]
+	var t, t2, t_num;
 	
-	return val
-}
+	if(p)
+		t_num = p - origin
+	else
+		t_num = (-1 - origin)
+	
+	if (Math.abs(direction) >= EPSILON)
+		t = t_num / direction
+	else
+		t = t_num * Infinity
 
-function min(a)	{
+	if(p)
+		t_num = p - origin
+	else
+		t_num = (1 - origin) 
 	
-	var val = Infinity;
-	for (var a = 0; a < arguments.length; a++)
-		if (arguments[a] < val)
-				val = arguments[a]
-	
-	return val
+	if (Math.abs(direction) >= EPSILON)
+		t2 = t_num / direction
+	else
+		t2 = t_num * Infinity
+
+	return { min: t, max: t2 }
 }
 
 function cube(id2)	{
@@ -427,13 +434,16 @@ function cube(id2)	{
 	c.local_intersect = function(r)	{
 		
 		var xtmin = 0, xtmax = 0, ytmin = 0, ytmax = 0, ztmin = 0, ztmax = 0;
+		// var xt, yt, zt
 		var temp;
 		
 		xtmin = check_axis(r.origin.x, r.direction.x, "min")
 		xtmax = check_axis(r.origin.x, r.direction.x, "max")
+		// xt = check_axis2(r.origin.x, r.direction.x)
+		
 		
 		if (xtmin > xtmax)	{
-		
+		//if (xt.min > xt.max)	{
 			temp = xtmax;
 			xtmax = xtmin;
 			xtmin = temp;
@@ -441,8 +451,10 @@ function cube(id2)	{
 		
 		ytmin = check_axis(r.origin.y, r.direction.y, "min")
 		ytmax = check_axis(r.origin.y, r.direction.y, "max")
+		// yt = check_axis2(r.origin.y, r.direction.y)
 		
 		if (ytmin > ytmax)	{
+		// if (yt.min > yt.max)	{
 		
 			temp = ytmax;
 			ytmax = ytmin;
@@ -451,16 +463,17 @@ function cube(id2)	{
 		
 		ztmin = check_axis(r.origin.z, r.direction.z, "min")
 		ztmax = check_axis(r.origin.z, r.direction.z, "max")
+		// zt = check_axis2(r.origin.z, r.direction.z)
 		
 		if (ztmin > ztmax)	{
-		
+		// if (zt.min > zt.max)	{
 			temp = ztmax;
 			ztmax = ztmin;
 			ztmin = temp;
 		}
 		
-		var tmin = max(xtmin, ytmin, ztmin)
-		var tmax = min(xtmax, ytmax, ztmax)
+		var tmin = Math.max(xtmin, ytmin, ztmin)
+		var tmax = Math.min(xtmax, ytmax, ztmax)
 		
 		if (tmin > tmax)
 			return []
@@ -512,7 +525,7 @@ function plane(id2)	{
 	return pl
 }
 
-var flag18 = false
+
 function group(id2)	{
 	
 	var g = new Shape("group", id2)
@@ -530,8 +543,7 @@ function group(id2)	{
 		/*
 		 To see if a child (this.s[i]) fits into either
 		 left or right, check if it's BB fits into
-		 either this.left or this.right.
-		 
+		 either this.bb.left or this.bb.right.
 		*/
 		 
 		this.bounds_of()
@@ -550,33 +562,16 @@ function group(id2)	{
 			from this.s and add to 'left', or 'right'.			
 			*/
 			//debugger;
-			if (_bb.left.containsBox(ch_b))	{
-				
+			if (_bb.left.containsBox(ch_b))
 				// child BB fits into this.left
-				var _ = this.s.splice(i, 1);
-				
-				if ((_ instanceof Array)||(_ instanceof []))
-					//console.log("WEIRD!")
-				_ = _[0]
-				
-				left.push(_)
+				left.push(this.s.splice(i--, 1)[0])
 				//console.log("Adding to left partition.")
-				i--
-			}			
 			
-			else if (_bb.right.containsBox(ch_b))	{
-				
+			else if (_bb.right.containsBox(ch_b))
 				// child BB fits into this.right
-				var _ = this.s.splice(i, 1);
-				
-				if ((_ instanceof Array)||(_ instanceof []))
-					//console.log("GOTCHA!")
-					_ = _[0]
-					
-				right.push(_)
+				right.push(this.s.splice(i--, 1)[0])
 				//console.log("Adding to right partition.")
-				i--
-			}
+
 		}
 		
 		/*
@@ -594,15 +589,8 @@ function group(id2)	{
 		var g = group()
 		var L = partition.length
 		
-		if(flag18)
-			debugger;
-		
-		for (var i = 0; i < L; i++)	{
+		for (var i = 0; i < L; i++)
 			g.addChild(partition[i])
-		}
-		
-		if(flag18)
-			debugger;
 		
 		this.s.push(g)
 		this.hasGenBB = false
@@ -613,24 +601,20 @@ function group(id2)	{
 		if(t<=this.s.length)	{
 			
 			var l_r = this.partition_children()
-			if(l_r.left)	{
-				
+			if(l_r.left)
 				//console.log("l_r.left contains children.")
 				this.make_subgroup(l_r.left)
-			}
-			if(l_r.right)	{
 				
+			if(l_r.right)
 				//console.log("l_r.right contains children.")
 				this.make_subgroup(l_r.right)
-			}
 		}
 		
 		var l = this.s.length
-		for(var i = 0; i<l; i++)	{
-		
+		for(var i = 0; i<l; i++)
 			//console.log("Calling divide on children of group " + this.id +", l = " + l + ", i = " + i);
 			this.s[i].divide(t)
-		}
+
 	};
 	
 	g.addChild =  function(sh)	{
@@ -638,12 +622,7 @@ function group(id2)	{
 		sh.parent = this;
 		this.s.push(sh);
 	};
-	/*
-	this.bbMin = point(0,0,0)
-	this.bbMax = point(0,0,0)
-	this.bb = new BB()
-	this.hasGenBB = false
-	*/
+	
 	g.bounds_of = function()	{
 		
 		if(!this.hasGenBB)	{
@@ -736,7 +715,6 @@ function BB(min,max)	{
 			/*
 			A box lies within another box if both its min and max points lie within that box.
 			*/
-			
 			if(this.containsPoint(b2.min)&&this.containsPoint(b2.max))
 				return true
 			
@@ -811,7 +789,8 @@ function BB(min,max)	{
 		if (tmin > tmax)
 			return false;
 		
-		return intersections(new intersection(this, tmin), new intersection(this, tmax))
+		//return intersections(new intersection(this, tmin), new intersection(this, tmax))
+		return [{object:this,t:tmin},{object:this,t:tmax}]
 	};
 
 	this.split_bounds = function()	{

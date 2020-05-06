@@ -120,6 +120,10 @@ function prepare_computations(i, r, xs)	{
 		xs = [i]
 	*/
 	var containers = []
+	
+	if (xs.length>1)
+		console.log("In prepare_computations(), length of arg 3 ([]) is > 1.")
+	
 	for (var a = 0; a < xs.length; a++)	{
 		
 		var curr_i = xs[a];

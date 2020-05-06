@@ -299,7 +299,7 @@ function render(c, w, remaining)	{
 }
 function render2()	{
 	
-	//console.log("g_x = " + g_x);
+	console.time("render.")	
 	
 	for (var y = 0; y < HEIGHT; y++)	{
 		console.log("Line " + y + " of " + HEIGHT);
@@ -312,8 +312,12 @@ function render2()	{
 			ctx.fillRect(x,y,1,1)
 		}
 	}
+	
+	console.log("COMPLETED.\n")
+	console.timeEnd("render.")
 }
 */
+
 
 function render(c, w, remaining)	{
 	
@@ -351,6 +355,7 @@ function render2()	{
 	
 	to = setTimeout(render2, 0)	
 }
+
 
 function convert(c)	{
 	
