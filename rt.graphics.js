@@ -52,15 +52,8 @@ function lengthP(p1, p2)	{
 	
 	var a, b, res
 	
-	if(p2.x > p1.x)
-		a = p2.x - p1.x
-	else
-		a = p1.x - p2.x
-	
-	if(p2.y > p1.y)
-		b = p2.y - p1.y
-	else
-		b = p1.y - p2.y
+	a = Math.abs(p1.x - p2.x)
+	b = Math.abs(p1.y - p2.y)
 	
 	a = a ** 2
 	b = b ** 2
