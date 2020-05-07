@@ -26,6 +26,7 @@ var ofData = {
 				f: [],
 				v: [],
 				vn: [],
+				vt: [],
 				g: [], // [] of ofd_g objects
 				o: {},
 				cache: {}
@@ -34,7 +35,7 @@ var ofData = {
 function ofd_g()	{
 	
 	this.name = "";
-	this.lines = [{ type: "f", // ofData["f"][indice]
+	this.entries = [{ type: "f", // ofData["f"][indice]
 					indice: 0
 	}];
 }
@@ -50,7 +51,8 @@ var ofDataR = {
 				
 				f_begins: 0,
 				v_begins: 0,
-				vn_begins: 0
+				vn_begins: 0,
+				vt_begins: 0
 };
 
 var WIDTH = 150;
@@ -327,7 +329,7 @@ function render(c, w, remaining)	{
 	g_x = 0
 	g_y = 0
 	//to = setTimeout(render2, 1)
-	console.time("render.")
+	console.time("render")
 	render2();
 }
 
@@ -339,17 +341,17 @@ function render2()	{
 	ctx.fillRect(g_x,g_y,1,1)
 			
 	g_x++;
-	if (g_x >= WIDTH)	{
+	if (g_x === WIDTH)	{
 				
 		g_x = 0
 		g_y++
 	}
 			
-	if (g_y >= HEIGHT)	{
+	if (g_y === HEIGHT)	{
 				
 		clearTimeout(to)
 		console.log("COMPLETED.\n")
-		console.timeEnd("render.")
+		console.timeEnd("render")
 		return
 	}
 	
@@ -483,7 +485,7 @@ function clock()	{
 		*/
 	}
 	
-	if (ticker>1000)
+	if (ticker==1001)
 		ticker = 1;
 
 	var now = new Date();

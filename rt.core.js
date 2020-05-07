@@ -39,12 +39,15 @@ function vector(x, y, z)	{
 function magnitude(vector)	{ // calc the magnitude of an input vector (a tuple with tuple.w == VECTOR)
 
 	if (!(vector instanceof tuple))
-		throw Error ("Input to core::magnitude() not a tuple (VECTOR)!");
+		throw new Error ("Input to core::magnitude() not a tuple (VECTOR)!");
 	
 	return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z + vector.w * vector.w);
 }
 
 function normalize(v)	{
+	
+	if(!magnitude(v))
+		return v
 	
 	return new tuple(	v.x / magnitude(v),
 						v.y / magnitude(v),
@@ -66,6 +69,13 @@ function cross(a, b)	{ // THE ORDER OF THE OPERANDS MATTERS
 					a.z * b.x - a.x * b.z,
 					a.x * b.y - a.y * b.x);
 }
+
+var UID = 1
+function GetUID()	{
+
+		return UID++
+}
+
 
 /* */
 function compsds()	{

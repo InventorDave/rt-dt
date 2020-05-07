@@ -21,7 +21,7 @@ function ray(origin, direction)	{
 
 function cone(id2)	{
 	
-	var c = new Shape("cone", id2)
+	var c = new Shape("cone", id2 || 0)
 	
 	c.min = -Infinity
 	c.max = Infinity
@@ -208,8 +208,8 @@ function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 				  this.e2.y * origin_cross_e1_Y +
 				  this.e2.z * origin_cross_e1_Z);
 		
-		
-		return [new intersection(this, t)]
+		return [{ object: this, t: t }]
+		//return [new intersection(this, t)]
 	};
 	
 	return t;
@@ -834,11 +834,10 @@ function test_shape()	{
 	return ts;
 }
 
-var shi = 0;
 function Shape(type, id2)	{
 	
 	this.id2 = id2 || 0;
-	this.id = shi++/*(Math.floor(Math.random() * 999999)) + 1*/
+	this.id = GetUID()/*(Math.floor(Math.random() * 999999)) + 1*/
 	this.transform = identity_matrix()
 	this.material = new material()
 	

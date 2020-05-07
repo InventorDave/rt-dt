@@ -33,7 +33,18 @@ function equal(a, b)	{ // checks 2 numbers are equal
 	return false;
 }
 
-function sn_round(t)	{ // round the x, y, and z entries of a tuple down to 0 when < EPSILON.
+function round(n)	{ // unlike Math.round(), only rounds n if dist(n,floor/ceil(n)) < EPSILON
+	
+	if(equal(n,Math.floor(n)))
+		return Math.floor(n)
+	
+	if(equal(n,Math.ceil(n)))
+		return Math.ceil(n)
+	
+	return n
+}
+
+function sn_round(t)	{ // round the x, y, or z entries of a tuple down to 0 when < EPSILON.
 	
 	if (equal(t.x,0))
 		t.x = 0;
@@ -50,7 +61,7 @@ function sn_round(t)	{ // round the x, y, and z entries of a tuple down to 0 whe
 function cmp(a, b)	{ // compares 2 tuples for equality
 	
 	if (!(a instanceof tuple) || !(b instanceof tuple))
-		throw Error("Input to math::cmp() not 2 tuples!");
+		throw new Error("Input to math::cmp() not 2 tuples!");
 		
 	if(equal(a.x,b.x)&&equal(a.y,b.y)&&equal(a.z,b.z)&&(a.w==b.w))
 		return true;
@@ -61,7 +72,7 @@ function cmp(a, b)	{ // compares 2 tuples for equality
 function add(a, b)	{	// add 2 tuples together
 
 	if (!(a instanceof tuple) || !(b instanceof tuple))
-		throw Error("Input to math::add() not 2 tuples!");
+		throw new Error("Input to math::add() not 2 tuples!");
 	
 	return new tuple(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 }
@@ -69,16 +80,15 @@ function add(a, b)	{	// add 2 tuples together
 function subtract(a, b)	{	// subtract 2 tuples, a - b
 
 	if (!(a instanceof tuple) || !(b instanceof tuple))
-		throw Error("Input to math::subtract() not 2 tuples!");
+		throw new Error("Input to math::subtract() not 2 tuples!");
 	
 	return new tuple(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
 }
 
 function multiply(a, b)	{	// multiply 2 tuples
 
-	
 	if (!(a instanceof tuple) || !(b instanceof tuple))
-		throw Error("Input to math::multiply() not 2 tuples!");
+		throw new Error("Input to math::multiply() not 2 tuples!");
 	
 	return new tuple(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
 }
@@ -98,7 +108,7 @@ function multiplyInt(_tuple, int)	{
 function divide(a, b)	{	// divide 2 tuples, a / b
 
 	if (!(a instanceof tuple) || !(b instanceof tuple))
-		throw Error("Input to math::divide() not 2 tuples!");
+		throw new Error("Input to math::divide() not 2 tuples!");
 	
 	return new tuple(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
 }
@@ -118,4 +128,9 @@ function negate(t)	{
 function radians(deg)	{
 	
 	return (deg/180) * Math.PI;
+}
+
+function deg(radians)	{
+	
+	return (radians / Math.PI) * 180
 }

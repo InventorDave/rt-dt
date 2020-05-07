@@ -23,20 +23,20 @@ function renderObjFile()	{
 	console.log("Object mesh parsed.")
 	
 	o.divide(100)
-	console.log("\nBVH generated. Engaging renderer.\n")
+	console.log("BVH generated.\nEngaging renderer.")
 	//debugger;
 	
 	clearInterval(loop);
-	ctx.fillStyle = "#cc2222";
+	ctx.fillStyle = "#2222cc";
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
 	
-	var c = new camera(WIDTH, HEIGHT, Math.PI/2);
+	var c = new camera(WIDTH, HEIGHT, 0.5 * (Math.PI/2));
 	var w = new world();
 	
-	w.light = new point_light(point(-20, 20, 40), colour(1,1,1));
+	w.light = new point_light(point(-20, 20, 40), colour(0.5,0.1,0.5));
 	
 	c.setCTransform(view_transform(point(25,0, 50), // from
-								point(0,0,0),   // to
+								point(0,15,0),   // to
 								vector(0,1,0)) // up
 					); 
 								
@@ -99,7 +99,7 @@ function convert3(vertices)	{
 	for (var i = 0; i < ts.length; i++)
 		if (ts[i])	{
 			
-			ts[i].material.color = colour(0,0,1);
+			ts[i].material.color = colour(1,0,0)//colour(255,105,180); // #FFB6C1
 			obj.push(ts[i])
 		}
 	
@@ -146,6 +146,12 @@ function parse_obj_file()	{
 			curr_e = "vn";
 			if(!ofDataR.vn_begins)
 				ofDataR.vn_begins = l;
+		}
+		else if (str=="vt")	{
+			
+			curr_e = "vt"
+			if(!ofDataR.vt_begins)
+				ofDataR.vt_begins = l;
 		}
 		else	{
 		
