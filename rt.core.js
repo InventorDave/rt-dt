@@ -46,13 +46,16 @@ function magnitude(vector)	{ // calc the magnitude of an input vector (a tuple w
 
 function normalize(v)	{
 	
-	if(!magnitude(v))
+	var mv
+	
+	if(!(mv = magnitude(v)))
 		return v
 	
-	return new tuple(	v.x / magnitude(v),
-						v.y / magnitude(v),
-						v.z / magnitude(v),
-						v.w / magnitude(v));
+	var mv 
+	return new tuple(	v.x / mv,
+						v.y / mv,
+						v.z / mv,
+						0);
 }
 
 function dot(a, b)	{
@@ -130,9 +133,6 @@ function prepare_computations(i, r, xs)	{
 		xs = [i]
 	*/
 	var containers = []
-	
-	if (xs.length>1)
-		console.log("In prepare_computations(), length of arg 3 ([]) is > 1.")
 	
 	for (var a = 0; a < xs.length; a++)	{
 		

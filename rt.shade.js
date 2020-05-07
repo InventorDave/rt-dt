@@ -5,7 +5,7 @@ function shade_hit(w, comps, obj, remaining)	{
 	
 	var is = is_shadowed(w, comps.over_point)
 	
-	var s = lighting(comps.object.material, w.light, comps.object, comps.over_point, comps.eyev, comps.normalv, is)
+	var s = lighting(comps.object.material, w.light, comps.object, comps.over_point, comps.eyev, comps.normalv, is, 0)
 	//console.log("shade_hit(): s = r:"+s.x+", g:" + s.y + ", b:"+s.z+"\n");
 	var reflected = reflected_color(w, comps, remaining-1)
 	//console.log("shade_hit(): reflected = r:"+reflected.x+", g:" + reflected.y + ", b:"+reflected.z+"\n");
@@ -40,15 +40,12 @@ function color_at(w, r, remaining)	{
 	if (r == undefined)
 		console.log("shade::color_at() has an undefined ray.\n");
 	
-	var h = hit(intersect_world(w, r))
-	
+	var intersections = intersect_world(w, r)
+	var h = hit(intersections)
 	if (!h)
 		return colour(0,0,0)
 
-	//console.log(h);
-	var comps = prepare_computations(h, r, [h])
-	
-	//debugger;
+	var comps = prepare_computations(h, r, intersections)
 	
 	return shade_hit(w, comps, h.object, remaining-1)
 }
@@ -62,10 +59,10 @@ function is_shadowed(w, p)	{
 	var r = new ray(p, dir)
 	
 	var i = intersect_world(w, r)
-	// i contains [] of objects intersected with. If i.object.casts_shadow == false, remove entry from i
+	// i contains [] of objects intersected with. If i.object.material.casts_shadow == false, remove entry from i
 	
 	for (var a = 0; a < i.length; a++)
-		if (i[a].object.casts_shadow == false)	{
+		if (!i[a].object.material.casts_shadow)	{
 			
 			i.splice(a, 1)
 			--a;

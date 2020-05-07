@@ -9,5 +9,7 @@ function material()	{
 	this.transparency = 0.0;
 	this.refractive_index = 1.0;
 	
+	this.casts_shadow = true;
+	
 	this.pattern = undefined;
 }

@@ -2,15 +2,300 @@
 <head>
   <title>Dave's RayTracer</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+
+<style>
+
+.selectButton {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.buttonCamera	{
+
+	background-color: #008CBA;
+}
+
+.buttonLights	{
+
+	background-color: #f44336;
+}
+
+.buttonScene	{
+
+	background-color: #555555;
+}
+
+.selectButton:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  font-family: 'Fredoka One', cursive;
+  /* font-weight: bold; */
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+	cursor: pointer;
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  cursor: pointer;
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
+  background-color: red;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.show {
+  display: block;
+}
+</style>
+
 </head>
 <body style="background-color: #aabbcc; font-family: Arial; font-size: 13px;">
-<canvas id="canvas" width="500" height="281" style="border:1px solid #000000; float: right;"></canvas>
+
+<div class="navbar">
+  <div class="dropdown">
+  <button class="dropbtn" onclick="myFunction(1)">File
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-content" id="myDropdownFile">
+    <a onclick="option('open-proj'); return false;">Open Project</a>
+    <a onclick="option('save-proj'); return false;">Save Project</a>
+	<a onclick="option('load-file'); return false;">Load File</a>
+	<a onclick="option('close-proj'); return false;">Close Project</a>
+  </div>
+  </div> 
+  
+    <div class="dropdown">
+  <button class="dropbtn" onclick="myFunction(2)">Render
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-content" id="myDropdownRender">
+    <a onclick="option('gen-bvh'); return false;">Generate BVH</a>
+    <a onclick="option('gen-divide'); return false;">Set BVH divide()</a>
+    <a onclick="option('render'); return false;">Render!</a>
+  </div>
+  </div>
+  
+  <div class="dropdown" style="float: right;">
+  <button class="dropbtn" onclick="myFunction(3)">Help
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-content" style="right: 0px;" id="myDropdownHelp">
+    <a onclick="option('report-bug'); return false;">Report a Bug</a>
+    <a onclick="option('toc'); return false;">Table of Contents</a>
+    <a onclick="option('selec-elem'); return false;">Select Element</a>
+  </div>
+  </div>
+  
+</div>
+<script>
+function option(opt)	{
+
+	console.log(opt)
+	
+	if (opt=="render")
+		renderImage()
+		
+	if (opt=="gen-bvh")	{
+	
+		modal.style.display = "block";
+		doDivide();
+	}
+}
+</script>
+<script>
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction(i) {
+
+	var el = ""
+	var nel = ""
+	switch(i)	{
+	
+		case 1:
+			el = "myDropdownFile"
+			nel = "myDropdownRender"
+			break;
+			
+		case 2:
+			el = "myDropdownRender"
+			nel = "myDropdownFile"
+			break;
+			
+		case 3:
+			el = "myDropdownHelp"
+			nel = "myDropdownRender"
+			break;
+			
+	}
+	
+  document.getElementById(el).classList.toggle("show");
+  document.getElementById(nel).classList.remove('show');
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(e) {
+  if (!e.target.matches('.dropbtn')) {
+
+  var myDropdown = document.getElementById("myDropdownFile");
+    if (myDropdown.classList.contains('show')) {
+      myDropdown.classList.remove('show');
+    }
+
+  myDropdown = document.getElementById("myDropdownRender");
+    if (myDropdown.classList.contains('show')) {
+      myDropdown.classList.remove('show');
+    }
+
+   myDropdown = document.getElementById("myDropdownHelp");
+    if (myDropdown.classList.contains('show')) {
+      myDropdown.classList.remove('show');
+    }
+	
+	if (e.target == modal) {
+		modal.style.display = "none";
+	}
+  }
+
+}
+</script>
+<br />
+<br>
+<div style="text-align: center; font-size: 25px; font-family: 'Fredoka One';"><b>rt/dt</b></div>
+<br>
+<div style="text-align: center;">
+<canvas id="canvas" width="500" height="281" style="border:1px solid #000000;"></canvas>
+</div>
 <p style="float: left;">
-Welcome to Dave's RayTracer.<br/>
 <br/>
-Select an obj file to parse:<input type="file" id="file-input" /><br />
+
+
+<div style="text-align: center;">Select a mesh or scene file to parse:<br><input type="file" id="file-input" /></div>
+
+<div style="text-align: center;">
+<select id="os" name="options" onchange="optionSelected(); return false;">
+  <option value="small">Preview  (150,100)</option>
+  <option value="large">Viewport (500,281.25)</option>
+  <!-- <option value="vlarge">900,550</option> -->
+</select>
+</div>
+<br><br>
+<div style="text-align: center;">
+
+<button class="selectButton buttonCamera">Camera</button>
+<button class="selectButton buttonLights">Lights</button>
+<button class="selectButton buttonScene">Scene</button>
+</div>
+<!--
 <textarea id="file-content"></textarea><br />
-<input type="button" value="render obj!" onclick="renderObjFile(); return false;" />
+-->
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>
+	Called ofData.o.divide()</p>
+  </div>
+
+</div>
 
 <script src="rt.p+e.js"></script>
 <script src="rt.pattern.js"></script>
@@ -22,10 +307,11 @@ Select an obj file to parse:<input type="file" id="file-input" /><br />
 <script src="rt.world.js"></script>
 <script src="rt.shade.js"></script>
 <script src="rt.core.js"></script>
+<script src="rt.light.js"></script>
 <script src="raytracer.js"></script>
 <script src="rt.examples.js"></script>
 <script src="rt.objfile.js"></script>
-<script src="rt.light.js"></script>
+
 <script src="rt.material.js"></script>
 <script src="rt.ray.js"></script>
 
@@ -34,13 +320,38 @@ Select an obj file to parse:<input type="file" id="file-input" /><br />
 <script>
 init();
 
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+// var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+/*
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+*/
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+function doDivide()	{
+	
+	ofData.o.divide(ofDataR.divideValue)
+	console.log("Scene divided into BVH.")
+}
+
 </script>
 </p>
-<select id="os" name="options" onchange="optionSelected(); return false;">
-  <option value="small">150,100</option>
-  <option value="large">500,281.25</option>
-  <option value="vlarge">900,550</option>
-</select>
+
+<!--
 <input type="button" value="test" onClick="p211(); return false;">
+-->
+
 </body>
 </html>

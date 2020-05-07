@@ -1098,7 +1098,7 @@ function test159()	{ // SUCCESS
 	
 	var w = default_world()
 	var floor = plane()
-	floor.transform = translation(0,-1,0)
+	floor.transform = m().translation(0,-1,0)
 	floor.material.transparency = 0.5
 	floor.material.refractive_index = 1.5
 	w.objects.push(floor)
@@ -1106,7 +1106,7 @@ function test159()	{ // SUCCESS
 	var ball = sphere()
 	ball.material.color = colour(1,0,0)
 	ball.material.ambient = 0.5
-	ball.transform = translation(0,-3.5,-0.5)
+	ball.transform = m().translation(0,-3.5,-0.5)
 	w.objects.push(ball)
 	
 	var r = new ray(point(0,0,-3), vector(0, -(Math.sqrt(2)/2), Math.sqrt(2)/2))
@@ -1832,7 +1832,7 @@ function tm_s()	{
 	
 	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
 	
-	cam.setCTransform(view_transform(point(0,5,-10), // from
+	cam.setCTransform(view_transform(point(0,0,-10), // from
 								point(0,0,0),   // to
 								vector(0,1,0)) // up
 					);
@@ -1843,37 +1843,38 @@ function tm_s()	{
 	var pattern = texture_map(checkers, spherical_map /* fn */)
 	var s = sphere()
 	s.material.pattern = my_pattern( pattern )
-	s.transform = scaling(2,2,2)
+	s.transform = m().scaling(2,2,2)
 	
 	checkers = uv_checkers(8, 4, colour(0,0,1), colour(1,0,0))
 	pattern = texture_map(checkers, cylindrical_map /* fn */)
 	var c = cylinder()
 	c.min = -2, c.max = 2
 	c.material.pattern = my_pattern( pattern )
-	c.transform = translation(3,0,0)
+	c.transform = m().translation(7,0,-1).rotation_z(Math.PI/2)
 	
 	checkers = uv_checkers(8, 4, colour(0,0,1), colour(1,0,0))
 	pattern = texture_map(checkers, spherical_map /* fn */)
 	var cb = cube()
 	cb.material.pattern = my_pattern( pattern )
-	cb.transform = translation(-4, 1, 0)
+	cb.transform = m().translation(-4, 1, 0).rotation_z(Math.PI/4)
 	
+	/*
 	checkers = uv_checkers(2, 2, colour(0.5,0.5,0.5), colour(1,1,1))
-	pattern = texture_map(checkers, planar_map /* fn */)
+	pattern = texture_map(checkers, planar_map)
 	var pl = plane()
 	pl.material.pattern = my_pattern( pattern )
-	pl.transform = translation(0,-2,0)
-	
+	pl.transform = m().translation(0,-2,0)
+	*/
 	var o = group()
 	o.addChild(s)
 	o.addChild(c)
 	o.addChild(cb)
 	
-	o.divide(1)
+	//o.divide(1)
 	
 	//debugger;
 	w.objects.push(o)
-	w.objects.push(pl)
+	//w.objects.push(pl)
 	
 	render(cam,w,1);
 	
@@ -1924,3 +1925,53 @@ function tm_sm_2()	{
 	*/
 }
 
+function test_refraction()	{
+	
+	clearInterval(loop);
+	ctx.fillStyle = BG_COLOR;
+	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
+	
+	var cam = new camera(WIDTH, HEIGHT, Math.PI/2);
+	var w = new world();
+	
+	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
+	
+	cam.setCTransform(view_transform(point(0,0,-5), // from
+								point(0,0,0),   // to
+								vector(0,1,0)) // up
+					);
+			
+		
+	var A = glass_sphere()
+	A.transform = m().scaling(2, 2, 2)
+	A.material.color = colour(1,0,0)
+	A.material.refractive_index = 1.0
+	A.material.transparency = 0.5
+	//A.id = "A"
+	
+	var B = glass_sphere()
+	B.transform = m().translation(-0.25,0,0)
+	B.material.color = colour(0,1,0)
+	B.material.refractive_index = 1.5
+	B.material.transparency = 0.75
+	//B.id = "B"
+	
+	var C = glass_sphere()
+	C.transform = m().translation(0.25,0,0)
+	C.material.color = colour(0,0,1)
+	C.material.refractive_index = 2.5
+	C.material.transparency = 0.75
+	
+	var o = group()
+	o.addChild(A )
+	o.addChild(B)
+	o.addChild(C)
+	
+	//o.divide(1)
+	
+	//debugger;
+	w.objects.push(o)
+	//w.objects.push(pl)
+	
+	render(cam,w,5);
+}

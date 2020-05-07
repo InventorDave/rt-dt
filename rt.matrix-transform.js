@@ -1,5 +1,17 @@
 "use strict";
 
+Array.prototype.translation = function(x, y, z)	{
+	
+	var m = identity_matrix();
+	
+	m[0][3] = x;
+	m[1][3] = y;
+	m[2][3] = z;
+	
+	return m_multiply(this, m)
+}
+
+
 function translation(x, y, z)	{
 	
 	var m = identity_matrix();
@@ -9,6 +21,17 @@ function translation(x, y, z)	{
 	m[2][3] = z;
 	
 	return m;
+}
+
+Array.prototype.scaling = function(x, y, z)	{
+	
+	var m = identity_matrix();
+	
+	m[0][0] = x;
+	m[1][1] = y;
+	m[2][2] = z;
+	
+	return m_multiply(this, m)
 }
 
 function scaling(x, y, z)	{
@@ -39,6 +62,23 @@ function reflect_around_axis(p, axis, scale)	{
 	return multiply_matrix_by_tuple(scaling(x, y, z), p)
 }
 
+Array.prototype.rotation_x = function(r, dir)	{
+	
+	var m = identity_matrix()
+	var cos = Math.cos(r)
+	var sin = Math.sin(r)
+	
+	m[1][1] = cos
+	m[1][2] = -sin
+	m[2][1] = sin
+	m[2][2] = cos
+	
+	if (dir)
+		m = inverse(m)
+
+	return m_multiply(this, m)	
+}
+
 function rotation_x(r, dir)	{ // r is in radians units, if dir is set to 1/true, reverse direction of rotation
 
 	var m = identity_matrix()
@@ -56,6 +96,23 @@ function rotation_x(r, dir)	{ // r is in radians units, if dir is set to 1/true,
 	return m // returns rotation matrix, which must be multiplied with original point to get translated/rotated co-ords
 }
 
+Array.prototype.rotation_y = function(r, dir)	{
+	
+	var m = identity_matrix()
+	var cos = Math.cos(r)
+	var sin = Math.sin(r)
+	
+	m[0][0] = cos
+	m[0][2] = sin
+	m[2][0] = -sin
+	m[2][2] = cos
+	
+	if (dir)
+		m = inverse(m)
+	
+	return m_multiply(this, m)
+}
+
 function rotation_y(r, dir)	{ // r is in radians units, if dir is set to 1/true, reverse direction of rotation
 
 	var m = identity_matrix()
@@ -71,6 +128,20 @@ function rotation_y(r, dir)	{ // r is in radians units, if dir is set to 1/true,
 		m = inverse(m)
 	
 	return m // returns rotation matrix, which must be multiplied with original point to get translated/rotated co-ords
+}
+
+Array.prototype.rotation_z = function(r, dir)	{
+	
+	var m = identity_matrix()
+	m[0][0] = Math.cos(r)
+	m[0][1] = -Math.sin(r)
+	m[1][0] = Math.sin(r)
+	m[1][1] = Math.cos(r)
+	
+	if (dir)
+		m = inverse(m)
+	
+	return m_multiply(this, m)	
 }
 
 function rotation_z(r, dir)	{ // r is in radians units, if dir is set to 1/true, reverse direction of rotation

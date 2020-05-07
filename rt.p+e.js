@@ -598,7 +598,7 @@ function group(id2)	{
 	
 	g.divide = function(t)	{
 		
-		if(t<=this.s.length)	{
+		if(t<this.s.length)	{
 			
 			var l_r = this.partition_children()
 			if(l_r.left)

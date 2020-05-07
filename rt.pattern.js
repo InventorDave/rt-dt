@@ -58,7 +58,7 @@ function cylindrical_map(p)	{
   var u = 1 - (raw_u + 0.5)
 
   // let v go from 0 to 1 between whole units of y
-  var v = Math.floor(p.y)
+  var v = p.y - Math.floor(p.y)
 
   return { u: u, v: v }
 }

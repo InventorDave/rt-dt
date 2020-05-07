@@ -1,7 +1,7 @@
 // HEXAGON
 function hexagon_corner()	{
 
-	var corner = sphere()
+	var corner = sphere("corner_" + GetUID())
 	corner.transform = m_multiply(translation(0,0,-1), scaling(0.25, 0.25, 0.25))
 	corner.material.color = colour(1,0,0)
 	return corner
@@ -9,7 +9,7 @@ function hexagon_corner()	{
 
 function hexagon_edge()	{
 	
-	var edge = cylinder()
+	var edge = cylinder("edge_" + GetUID())
 	edge.material.color = colour(0,1,1)
 	edge.min = 0
 	edge.max = 1
@@ -29,7 +29,7 @@ function hexagon_edge()	{
 
 function hexagon_side()	{
 	
-	var side = group()
+	var side = group("side_" + GetUID())
 	
 	side.addChild(hexagon_corner())
 	side.addChild(hexagon_edge())
@@ -40,7 +40,7 @@ function hexagon_side()	{
 
 function hexagon()	{
 	
-	var hex = group()
+	var hex = group("hex")
 	
 	for (var n = 0; n<6;n++)	{
 		
@@ -55,11 +55,10 @@ function hexagon()	{
 
 // w.objects.push(hexagon())
 
-// TRIANGLES
 
 function pyramid()	{
 	
-	var pyramid = group()
+	var pyramid = group("pyramid")
 		
 	var side = triangle(point(0,0,0), point(-1, -1, -1), point(1, -1, -1)) // front
 	side.material.color = colour(1,0,0)

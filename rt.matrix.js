@@ -72,6 +72,7 @@ function identity_matrix()	{ // returns the "identity matrix"
 	return m;
 }
 
+var m = identity_matrix;
 
 function getCofactor(mat, temp, p, q, n){ 
     var i = 0, j = 0;
@@ -117,13 +118,7 @@ function determinant(mat, n) {
         // Getting Cofactor of mat[0][f] 
         getCofactor(mat, temp, 0, f, n); 
 		
-		// TRY ALERT() ON TEMP[][] HERE, SEE IF GET COFACTORS OF ROW 0 OF 4X4 INPUT MATRIX
-		// IF SO, EASY TO EXRACT [Y(0)][X(F)] ENTRY FOR ALL COFACTORS FOR 4X4 MATRIX
-		//var debugstr = temp[0][0] + ", ";
-		//debugstr += temp[0][1];
-		//alert(debugstr += " [" + n + "]");
-		
-        D += sign * mat[0][f] * determinant(temp, n - 1); 
+		D += sign * mat[0][f] * determinant(temp, n - 1); 
 
         // terms are to be added with alternate sign 
         sign = -sign; 

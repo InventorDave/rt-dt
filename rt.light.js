@@ -78,9 +78,7 @@ function lighting(_material, _light, obj, _point, eyev, normalv, in_shadow, f)	{
 		}
 	}
 	
-	var res = colour(0,0,0);
-	
-	res = add(diffuse, specular);
+	var res = add(diffuse, specular);
 	res = add(ambient, res);
 	
 	if (f)

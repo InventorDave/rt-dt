@@ -2,15 +2,22 @@ var OBJFILECONTENTS = "";
 
 function readSingleFile(e) {
   var file = e.target.files[0];
+  
   if (!file) {
     return;
   }
   var reader = new FileReader();
   reader.onload = function(e) {
     OBJFILECONTENTS = e.target.result;
-    displayContents(OBJFILECONTENTS);
+    //displayContents(OBJFILECONTENTS);
 	parse_obj_file()
   };
+  
+  //alert(file.name)
+  var patt = /\.obj^/
+  if(patt.test(file.name))
+	alert(file.name)  
+  
   reader.readAsText(file);
 }
 
@@ -22,6 +29,9 @@ function displayContents(contents) {
 document.getElementById('file-input')
   .addEventListener('change', readSingleFile, false);
 
+var WIDTH = 150;
+var HEIGHT = 84; /*Math.round(150*(9/16));*/
+
 var ofData = {
 				f: [],
 				v: [],
@@ -29,7 +39,9 @@ var ofData = {
 				vt: [],
 				g: [], // [] of ofd_g objects
 				o: {},
-				cache: {}
+				cache: {},
+				c: new camera(WIDTH, HEIGHT, (Math.PI/4)),
+				l: new point_light(point(-20, 20, 40), colour(1,1,1))
 };
 
 function ofd_g()	{
@@ -52,11 +64,32 @@ var ofDataR = {
 				f_begins: 0,
 				v_begins: 0,
 				vn_begins: 0,
-				vt_begins: 0
+				vt_begins: 0,
+				
+				divideValue: 100
 };
 
-var WIDTH = 150;
-var HEIGHT = 84; /*Math.round(150*(9/16));*/
+function renderImage()	{
+
+	if(loop)
+		clearInterval(loop);
+	
+	ctx.fillStyle = "#2222cc";
+	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
+	
+	var c = ofData.c //new camera(WIDTH, HEIGHT, (Math.PI/4));
+	var w = new world();
+	
+	w.light = ofData.l //new point_light(point(-20, 20, 40), colour(0.5,0.1,0.5))
+	
+
+								
+	
+	
+	//debugger;
+	w.objects = [ofData.o]
+	render(c,w,5);
+}
 
 function optionSelected()	{
 	
@@ -82,6 +115,8 @@ function optionSelected()	{
 			
 		default:
 	}
+	
+	ofData.c = new camera(WIDTH, HEIGHT, (Math.PI/4))
 }
 
 var c = document.getElementById("canvas");
@@ -169,6 +204,11 @@ var CURR_BG_COLOR = BG_COLOR;
 loop = setInterval(init, 50);
 
 function init()	{
+
+	ofData.c.setCTransform(view_transform(point(25,0, 25), // from
+								point(0,0,0),   // to
+								vector(0,1,0)) // up
+					); 
 
 	ctx.fillStyle = CURR_BG_COLOR;
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -337,8 +377,22 @@ function render2()	{
 
 	var r = g_c.ray_for_pixel(g_x, g_y);
 			
-	ctx.fillStyle = convert(color_at(g_w, r, g_r))
-	ctx.fillRect(g_x,g_y,1,1)
+	var c = color_at(g_w, r, g_r)
+	
+	if ((c.x==0)&&(c.y==0)&&(c.z==0))	{
+	
+		c.x = 100/255 //240/255
+		c.y = 100/255 //234/255
+		c.z = 100/255 //214/255
+	}
+	
+	c = convert(c)
+	ctx.fillStyle = "#" + c.x + c.y + c.z
+	
+	var x = g_x + ((CANVAS_WIDTH/2) - WIDTH/2)
+	var y = g_y + ((CANVAS_HEIGHT/2) - HEIGHT/2)
+	
+	ctx.fillRect(x,y,1,1)
 			
 	g_x++;
 	if (g_x === WIDTH)	{
@@ -350,7 +404,7 @@ function render2()	{
 	if (g_y === HEIGHT)	{
 				
 		clearTimeout(to)
-		console.log("COMPLETED.\n")
+		console.log("COMPLETED RENDER.")
 		console.timeEnd("render")
 		return
 	}
@@ -391,8 +445,11 @@ function convert(c)	{
 	blue = rgbToHex(blue);
 	green = rgbToHex(green);
 	
+	return { x: red, y: green, z: blue }
+	/*
 	var res = "#" + red + blue + green;
 	return res;
+	*/
 }
 
 function rgbToHex(rgb) { 

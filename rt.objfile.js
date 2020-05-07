@@ -1,53 +1,4 @@
-function renderObjFile()	{
 
-	var o = group()
-	
-	for (var i = 0; i < ofData.f.length; i++)	{
-	
-		var f = [];
-		
-		for (var j = 0; j < ofData["f"][i].length; j++) { // for teapot, vertice refs only, no n//n structure
-			f.push([ofData["f"][i][j].split("/")[0], ofData["f"][i][j].split("/")[2]])
-		}	
-	
-		var s = convert3(f); // if from teapot, last entry in f is not invalid, it is in man mesh file
-		
-		for (var j = 0; j < s.length; j++)	{
-			
-			if(s[j])
-				o.addChild(s[j]);
-		}
-	
-	}
-	
-	console.log("Object mesh parsed.")
-	
-	o.divide(100)
-	console.log("BVH generated.\nEngaging renderer.")
-	//debugger;
-	
-	clearInterval(loop);
-	ctx.fillStyle = "#2222cc";
-	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
-	
-	var c = new camera(WIDTH, HEIGHT, 0.5 * (Math.PI/2));
-	var w = new world();
-	
-	w.light = new point_light(point(-20, 20, 40), colour(0.5,0.1,0.5));
-	
-	c.setCTransform(view_transform(point(25,0, 50), // from
-								point(0,15,0),   // to
-								vector(0,1,0)) // up
-					); 
-								
-	
-	
-	//debugger;
-	w.objects.push(o)
-	ofData.o = o; // make mesh available to the global "ofData" object (for debugging)
-	//debugger;
-	render(c,w,1);
-}
 
 var flag17 = false;
 function convert3(vertices)	{
@@ -200,4 +151,28 @@ function parse_obj_file()	{
 		}
 	}
 	console.log("Parsed Object File: " + (lines.length-ignored_lines) + " lines of data.")
+	
+	
+	var o = group()
+	
+	for (var i = 0; i < ofData.f.length; i++)	{
+	
+		var f = [];
+		
+		for (var j = 0; j < ofData["f"][i].length; j++) { // for teapot, vertice refs only, no n//n structure
+			f.push([ofData["f"][i][j].split("/")[0], ofData["f"][i][j].split("/")[2]])
+		}	
+	
+		var s = convert3(f); // if from teapot, last entry in f is not invalid, it is in man mesh file
+		
+		for (var j = 0; j < s.length; j++)	{
+			
+			if(s[j])
+				o.addChild(s[j]);
+		}
+	
+	}
+	ofData.o = o
+	
+	console.log("Generated triangle mesh.")
 }
