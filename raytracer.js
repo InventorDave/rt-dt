@@ -1,65 +1,11 @@
-var OBJFILECONTENTS = "";
-var FILECONTENTS = "";
-
-function readObjectFile(e) {
-  var file = e.target.files[0];
-  
-  if (!file) {
-    return;
-  }
-  
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    OBJFILECONTENTS = e.target.result;
-    //displayContents(OBJFILECONTENTS);
-	parse_obj_file()
-  }; 
-  
-  reader.readAsText(file);
-}
-
-function readFile(e)	{
-	
-	var file = e.target.files[0]
-	
-	if (!file)	{
-		alert("No File identified!")
-		return
-	}
-	
-	var reader = new FileReader()
-	
-	reader.onload = function(e)	{
-		
-		FILECONTENTS = e.target.result
-		parseFileContents()
-	}
-	
-	reader.readAsText(file)
-}
-
-function parseFileContents()	{
-	
-	alert(FILECONTENTS)
-}
-/*
-function displayContents(contents) {
-  var element = document.getElementById('file-content');
-  element.textContent = contents;
-}
-*/
-
-
-document.getElementById('file-input')
-  .addEventListener('change', readObjectFile, false);
-
-document.getElementById('file-input2')
-  .addEventListener('change', readFile, false);
-  
-
 
 var WIDTH = 150;
-var HEIGHT = 84; /*Math.round(150*(9/16));*/
+var HEIGHT = 84; /*Math.round(WIDTH*(9/16));*/
+var FGCOLOR = "#2222cc";
+var BGCOLOR = "#000000";
+var RENDER_BG_COLOR = colour(0,0,0)
+
+/** GLOBAL OBJECTS */
 
 var ofData = {
 				f: [],
@@ -75,13 +21,6 @@ var ofData = {
 				presets: { camera: [], lights: [], scenes: [] }
 };
 
-ofData.presets.camera.push(view_transform(point(0,0,20),point(0,0,0),vector(0,1,0)))
-ofData.presets.camera.push(view_transform(point(0,5,8),point(0,1,0),vector(0,1,0)))
-ofData.presets.camera.push(view_transform(point(25,0, 25), // from
-								point(0,10,0),   // to
-								vector(0,1,0)))
-	
-	
 var ofDataR = {
 				x_min: Infinity,
 				x_max: -Infinity,
@@ -98,33 +37,18 @@ var ofDataR = {
 				divideValue: 100
 };
 
-function renderImage()	{
+ofData.presets.camera.push(view_transform(point(0,0,20),point(0,0,0),vector(0,1,0)))
+ofData.presets.camera.push(view_transform(point(0,5,8),point(0,1,0),vector(0,1,0)))
+ofData.presets.camera.push(view_transform(point(25,0, 25), // from
+								point(0,10,0),   // to
+								vector(0,1,0)))
 
-	clearInterval(loop);
-	
-	ctx.fillStyle = "#2222cc";
-	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
-	
-	var c = ofData.c //new camera(WIDTH, HEIGHT, (Math.PI/4));
-	var w = new world();
-	
-	w.light = ofData.l //new point_light(point(-20, 20, 40), colour(0.5,0.1,0.5))
-	
+/** END GLOBAL OBJECTS */
 
-								
-	
-	
-	//debugger;
-	w.objects = [ofData.o]
-	render(c,w,5);
-}
 
 function optionSelected()	{
 	
-	var v = document.getElementById("os");
-	//alert(v.selectedIndex);
-	
-	switch(v.selectedIndex)	{
+	switch(document.getElementById("os").selectedIndex)	{
 		
 		case 0:
 			WIDTH = 150;
@@ -153,88 +77,23 @@ function camPresetSelected()	{
 	console.log("Set Camera to preset " + (v.selectedIndex+1) + ".")
 }
 
+function doDivide()	{
+	
+	try	{
+		
+		ofData.o.divide(ofDataR.divideValue)
+		return true
+	} catch(e)	{
+		
+		return false
+	}
+}
+
+/** INIT */
+
 var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
 var loop;
-
-// // WIDTH = 500, HEIGHT = Math.round(500*(9/16))
- 
-var ray_origin = point(0,0,-5); //0,0,5
-var wall_z = 10.0;
-var wall_size = 3.5;
-
-var canvas_pixels = 281.25;
-var pixel_size = wall_size / canvas_pixels;
-
-var half = wall_size / 2;
-
-var color = "#ff0000";
-
-var colors = [];
-colors[0] = "#00eeee";
-colors[1] = "#aa0000";
-colors[2] = "#000088";
-colors[3] = "#333333";
-
-colors[4] = "pink";
-colors[5] = "white";
-colors[6] = "black";
-colors[7] = "purple";
-
-	var colours = []; // for clock symbols
-	colours[0] = "black";
-	colours[1] = "white";
-	colours[2] = "red";
-	colours[3] = "#33ff33";
-	colours[4] = "yellow";
-	colours[5] = "brown";
-	colours[6] = "pink";
-	colours[7] = "crimson";
-	colours[8] = "DarkGoldenRod";
-	colours[9] = "#213454";
-	colours[10]= "OliveDrab";
-	colours[11]= "Thistle";
-	
-	var labels = []; // for numbers on clock symbols
-	labels[0] = "12";
-	labels[1] = "1";
-	labels[2] = "2";
-	labels[3] = "3";
-	labels[4] = "4";
-	labels[5] = "5";
-	labels[6] = "6";
-	labels[7] = "7";
-	labels[8] = "8";
-	labels[9] = "9";
-	labels[10] = "10";
-	labels[11] = "11";
-
-var p = new projectile("p", point(10,10,0), vector(10,18,0));
-var p2 = new projectile("p2", point(20,10,0), vector(8,15,0));
-var p3 = new projectile("p3", point(5,7,0), vector(9,17,0));
-var p4 = new projectile("p4", point(10,7,0), vector(5,5,0));
-
-var p5 = new projectile("p5", point(1,1,0), vector(11,13,0));
-var p6 = new projectile("p6", point(10,5,0), vector(18,8,0));
-var p7 = new projectile("p7", point(4,9,0), vector(12,17,0));
-var p8 = new projectile("p8", point(9,4,0), vector(1,15,0));
-
-var collision = false;
-
-var PROJ_R = 2;
-
-var CANVAS_WIDTH = 500, CANVAS_HEIGHT = 281.25;
-
-function hand(color, length, thickness)	{
-	
-	this.color = color;
-	this.length = length;
-	this.thickness = thickness;
-}
-
-var BG_COLOR = "#1a1717";
-var CURR_BG_COLOR = BG_COLOR;
-
 
 function init()	{
 
@@ -243,157 +102,16 @@ function init()	{
 								vector(0,1,0)) // up
 					); 
 
-
-	
-	loop = setTimeout(init2, 50);
-
+	loop = setTimeout(runDemo, 50);
 }
 
-function init2()	{
-
-	ctx.fillStyle = CURR_BG_COLOR;
-	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-	
-	clock();
-	moveBall();	
-	
-	loop = setTimeout(init2, 100);
-}
+/** END OF INIT */
 
 
-function moveBall()	{ 
-	
-	p = tick(p);
-	p2 = tick(p2);
-	p3 = tick(p3);
-	p4 = tick(p4);
-	p5 = tick(p5);
-	p6 = tick(p6);
-	p7 = tick(p7);
-	p8 = tick(p8);
-	
-	detectCollision(p, p2, p3, p4, p5, p6, p7, p8)
-	
-	Paint(p, p2, p3, p4, p5, p6, p7, p8)
-}
+/** RAYTRACER CODE */
 
-function Paint()	{
-	
-	for (a = 0; a < arguments.length; a++)
-		paintBall(arguments[a], colors[a]);
-}
-
-function detectCollision()	{
-	
-	var flag = false;
-	for (var i = 0; i < arguments.length-1; i++)	{
-		
-		var p = arguments[i];
-	
-		for (var j = i+1; j < arguments.length; j++)	{
-			
-			var p2 = arguments[j];
-	
-			var dx = Math.abs(p.position.x - p2.position.x);
-			var dy = Math.abs(p.position.y - p2.position.y);
-			var distance = Math.sqrt(dx * dx + dy * dy);
-
-			if (distance < (2*PROJ_R))
-			// collision detected!
-				flag = true;
-		}
-	}
-	
-	if (flag)
-		CURR_BG_COLOR = "green";
-	else
-		CURR_BG_COLOR = BG_COLOR;
-}
-
-
-function paintBall(p, color)	{
-	
-	ctx.fillStyle = color;
-	ctx.moveTo(0,0);
-	ctx.beginPath();
-	ctx.arc(p.position.x, 281.25 - (p.position.y), PROJ_R, 0, 2 * Math.PI);
-	ctx.strokeStyle = color;
-	ctx.stroke();
-	ctx.fill();
-	
-}
-
-function tick(proj)	{
-	
-	var position = add(proj.position, proj.velocity);
-	
-	// new: velociy updates on collision with walls
-	if (proj.position.x < 0)	{
-		
-		position.x = 20 /* CANVAS_WIDTH - (CANVAS_WIDTH - proj.position.x + 10)*/
-		proj.velocity.x = - proj.velocity.x
-		
-		//debugger;
-	}
-	else if (proj.position.x > CANVAS_WIDTH)	{
-		
-		position.x = CANVAS_WIDTH - 20 /* CANVAS_WIDTH - (CANVAS_WIDTH - proj.position.x + 10)*/
-		proj.velocity.x = - proj.velocity.x
-	}
-	
-	if (proj.position.y < 0)	{
-		
-		position.y = 20;
-		proj.velocity.y = -proj.velocity.y;
-		
-		//debugger;
-	}
-	else if (proj.position.y > CANVAS_HEIGHT)	{
-		
-		position.y = CANVAS_HEIGHT - 20;
-		proj.velocity.y = -proj.velocity.y;	
-	}
-
-	return new projectile(proj.id, position, proj.velocity)
-}
-
-
-var g_c = null, g_w = null, g_r = null, g_x = null, g_y = null;
-
-var to = null; // setTimeout(render2, 0);
-
-/*
-function render(c, w, remaining)	{
-	
-	g_c = c;
-	g_w = w;
-	g_r = remaining;
-	g_x = 0
-	g_y = 0
-	//to = setTimeout(render2, 1)
-	render2();
-}
-function render2()	{
-	
-	console.time("render.")	
-	
-	for (var y = 0; y < HEIGHT; y++)	{
-		console.log("Line " + y + " of " + HEIGHT);
-		
-		for (var x = 0; x < WIDTH; x++)	{
-	
-			var r = g_c.ray_for_pixel(x, y);
-			
-			ctx.fillStyle = convert(color_at(g_w, r, g_r))
-			ctx.fillRect(x,y,1,1)
-		}
-	}
-	
-	console.log("COMPLETED.\n")
-	console.timeEnd("render.")
-}
-*/
-
+var g_c = null, g_w = null, g_r = null, g_x = null, g_y = null
+var to = null
 
 function render(c, w, remaining)	{
 
@@ -416,9 +134,12 @@ function render2()	{
 	
 	if ((c.x==0)&&(c.y==0)&&(c.z==0))	{
 	
+		/*
 		c.x = 100/255 //240/255
 		c.y = 100/255 //234/255
 		c.z = 100/255 //214/255
+		*/
+		c = RENDER_BG_COLOR
 	}
 	
 	c = convert(c)
@@ -500,6 +221,267 @@ function write_pixel(x, y, color)	{
 	// ctx.fill
 	ctx.fillStyle = color
 	ctx.fillRect( x, y, 1, 1 )
+}
+
+/*
+function render(c, w, remaining)	{
+	
+	console.time("render")	
+	
+	for (var y = 0; y < HEIGHT; y++)	{
+		
+		//console.log("Line " + y + " of " + HEIGHT);
+		
+		for (var x = 0; x < WIDTH; x++)	{
+	
+			var r = c.ray_for_pixel(x, y);
+			
+			ctx.fillStyle = convert(color_at(w, r, remaining))
+			ctx.fillRect(x,y,1,1)
+		}
+	}
+	
+	console.log("COMPLETED.\n")
+	console.timeEnd("render")
+}
+*/
+
+/** END OF RAYTRACER CODE */
+
+/* FILE */
+
+var OBJFILECONTENTS = "";
+var FILECONTENTS = "";
+
+function readObjectFile(e) {
+  var file = e.target.files[0];
+  
+  if (!file) {
+    return;
+  }
+  
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    OBJFILECONTENTS = e.target.result;
+    //displayContents(OBJFILECONTENTS);
+	parse_obj_file()
+  }; 
+  
+  reader.readAsText(file);
+}
+
+function readFile(e)	{
+	
+	var file = e.target.files[0]
+	
+	if (!file)	{
+		alert("No File identified!")
+		return
+	}
+	
+	var reader = new FileReader()
+	
+	reader.onload = function(e)	{
+		
+		FILECONTENTS = e.target.result
+		parseFileContents(file.name)
+	}
+	
+	reader.readAsText(file)
+}
+
+var I = {}
+function parseFileContents(fn)	{
+	
+	alert(fn)
+	try	{
+		eval("I = " + FILECONTENTS + ";")
+		//openFileModal
+	} catch(e)	{
+		console.log("Error loading file '" + fn + "'.")
+	}
+}
+
+/* END OF FILE */
+
+/* SPLASH SCREEN FUNCTIONS & VARIABLES */
+ 
+ function hand(color, length, thick)	{
+
+	 this.color = color
+	 this.length = length
+	 this.thickness = thick
+ }
+ 
+var ray_origin = point(0,0,-5); //0,0,5
+var wall_z = 10.0;
+var wall_size = 3.5;
+
+var canvas_pixels = 281.25;
+var pixel_size = wall_size / canvas_pixels;
+
+var half = wall_size / 2;
+
+var colors = [];
+colors[0] = "#00eeee";
+colors[1] = "#aa0000";
+colors[2] = "#000088";
+colors[3] = "#333333";
+
+colors[4] = "pink";
+colors[5] = "white";
+colors[6] = "black";
+colors[7] = "purple";
+
+var colours = []; // for clock symbols
+colours[0] = "black";
+colours[1] = "white";
+colours[2] = "red";
+colours[3] = "#33ff33";
+colours[4] = "yellow";
+colours[5] = "brown";
+colours[6] = "pink";
+colours[7] = "crimson";
+colours[8] = "DarkGoldenRod";
+colours[9] = "#213454";
+colours[10]= "OliveDrab";
+colours[11]= "Thistle";
+
+var labels = []; // for numbers on clock symbols
+labels[0] = "12";
+labels[1] = "1";
+labels[2] = "2";
+labels[3] = "3";
+labels[4] = "4";
+labels[5] = "5";
+labels[6] = "6";
+labels[7] = "7";
+labels[8] = "8";
+labels[9] = "9";
+labels[10] = "10";
+labels[11] = "11";
+
+var p = new projectile("p", point(10,10,0), vector(10,18,0));
+var p2 = new projectile("p2", point(20,10,0), vector(8,15,0));
+var p3 = new projectile("p3", point(5,7,0), vector(9,17,0));
+var p4 = new projectile("p4", point(10,7,0), vector(5,5,0));
+
+var p5 = new projectile("p5", point(1,1,0), vector(11,13,0));
+var p6 = new projectile("p6", point(10,5,0), vector(18,8,0));
+var p7 = new projectile("p7", point(4,9,0), vector(12,17,0));
+var p8 = new projectile("p8", point(9,4,0), vector(1,15,0));
+
+var collision = false;
+var PROJ_R = 2;
+
+var CANVAS_WIDTH = 500, CANVAS_HEIGHT = 281.25;
+var BG_COLOR = "#1a1717";
+var CURR_BG_COLOR = BG_COLOR;
+
+function runDemo()	{
+
+	ctx.fillStyle = CURR_BG_COLOR;
+	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	
+	clock();
+	moveBall();	
+	
+	loop = setTimeout(runDemo, 50);
+}
+
+function moveBall()	{ 
+	
+	p = tick(p);
+	p2 = tick(p2);
+	p3 = tick(p3);
+	p4 = tick(p4);
+	p5 = tick(p5);
+	p6 = tick(p6);
+	p7 = tick(p7);
+	p8 = tick(p8);
+	
+	detectCollision(p, p2, p3, p4, p5, p6, p7, p8)
+	
+	Paint(p, p2, p3, p4, p5, p6, p7, p8)
+}
+
+function Paint()	{
+	
+	for (a = 0; a < arguments.length; a++)
+		paintBall(arguments[a], colors[a]);
+}
+
+function detectCollision()	{
+	
+	var flag = false;
+	for (var i = 0; i < arguments.length-1; i++)	{
+		
+		var p = arguments[i];
+	
+		for (var j = i+1; j < arguments.length; j++)	{
+			
+			var p2 = arguments[j];
+	
+			var dx = Math.abs(p.position.x - p2.position.x);
+			var dy = Math.abs(p.position.y - p2.position.y);
+			var distance = Math.sqrt(dx * dx + dy * dy);
+
+			if (distance < (2*PROJ_R))
+			// collision detected!
+				flag = true;
+		}
+	}
+	
+	if (flag)
+		CURR_BG_COLOR = "green";
+	else
+		CURR_BG_COLOR = BG_COLOR;
+}
+
+function paintBall(p, color)	{
+	
+	ctx.fillStyle = color;
+	ctx.moveTo(0,0);
+	ctx.beginPath();
+	ctx.arc(p.position.x, 281.25 - (p.position.y), PROJ_R, 0, 2 * Math.PI);
+	ctx.strokeStyle = color;
+	ctx.stroke();
+	ctx.fill();
+	
+}
+
+function tick(proj)	{
+	
+	var position = add(proj.position, proj.velocity);
+	
+	// new: velociy updates on collision with walls
+	if (proj.position.x < 0)	{
+		
+		position.x = 20 /* CANVAS_WIDTH - (CANVAS_WIDTH - proj.position.x + 10)*/
+		proj.velocity.x = - proj.velocity.x
+		
+		//debugger;
+	}
+	else if (proj.position.x > CANVAS_WIDTH)	{
+		
+		position.x = CANVAS_WIDTH - 20 /* CANVAS_WIDTH - (CANVAS_WIDTH - proj.position.x + 10)*/
+		proj.velocity.x = - proj.velocity.x
+	}
+	
+	if (proj.position.y < 0)	{
+		
+		position.y = 20;
+		proj.velocity.y = -proj.velocity.y;
+		
+		//debugger;
+	}
+	else if (proj.position.y > CANVAS_HEIGHT)	{
+		
+		position.y = CANVAS_HEIGHT - 20;
+		proj.velocity.y = -proj.velocity.y;	
+	}
+
+	return new projectile(proj.id, position, proj.velocity)
 }
 
 var ticker = 0;
@@ -651,3 +633,5 @@ function clock()	{
 		ctx.stroke();		
 
 }
+
+/* END OF SPLASH SCREEN FUNCTIONS & VARIABLES */

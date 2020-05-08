@@ -1975,3 +1975,17 @@ function test_refraction()	{
 	
 	render(cam,w,5);
 }
+
+function linetest1()	{
+	
+	// PASS - Both methods calculate the same length for the line
+	
+	var p1 = point(7,3.2,0)
+	var p2 = point(12.5,5.5,0)
+	
+	var d1 = dist2d(p1, p2)
+	var d2 = new Line2d(p1,p2).length
+	
+	debugger
+	
+}

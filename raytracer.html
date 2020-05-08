@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <head>
-  <title>Dave's RayTracer</title>
+  <title>rt/dt</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
-
+<script src="https://kit.fontawesome.com/504ca65532.js" crossorigin="anonymous"></script>
 <style>
 
 .selectButton {
@@ -56,7 +56,7 @@
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: #fefefe;
+  background-color: #7b68ee;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
@@ -170,6 +170,24 @@
   </div>
   </div>
   
+  <!-- style="position: fixed; right: 150px;" -->
+  <div class="dropdown" id="panel1" >
+    <a href="mailto:leedavidodea@hotmail.co.uk"><i class="fas fa-at" title="Send me an email!"></i></a>
+  </div>
+  <div class="dropdown">
+    <a href="updates.html" target="_new"><i class="fas fa-bell" style="color: #7b68ee;" title="Receive updates."></i></a>
+  </div>
+  <div class="dropdown">
+    <a href="https://github.com/leeodea/rt-dt" target="_new"><i class="fas fa-code-branch" title="View Source Code Repo."></i></a>
+  </div>
+  <div class="dropdown">
+    <a onclick="option('spotify'); return false;"><i class="fas fa-music" style="color: #008000;" title="Check out my Spotiy playlists!"></i></a>
+  </div>
+  <div class="dropdown">
+    <a onclick="option('youtube'); return false;"><i class="fab fa-youtube" style="color: #dc143c;" title="Check out my YouTube playlists!"></i></a>
+  </div>
+  
+  
   <div class="dropdown" style="float: right;">
   <button class="dropbtn" onclick="myFunction(3)">Help
     <i class="fa fa-caret-down"></i>
@@ -178,35 +196,12 @@
     <a onclick="option('report-bug'); return false;">Report a Bug</a>
     <a onclick="option('toc'); return false;">Table of Contents</a>
     <a onclick="option('selec-elem'); return false;">Select Element</a>
+	<a style="color:#cc0000;" onclick="option('jamis'); return false;">Buy Jamis Buck's Book!</a>
   </div>
   </div>
   
 </div>
-<script>
-function option(opt)	{
 
-	console.log(opt)
-	
-	if (opt=="render")
-		renderImage()
-		
-	if (opt=="gen-bvh")	{
-	
-		modal.style.display = "block";
-		doDivide();
-	}
-	
-	if (opt=="cameraOptions")	{
-	
-		camModal.style.display = "block"
-	}
-	
-	if (opt=="open-proj")	{
-	
-		openFileModal.style.display = "block"
-	}
-}
-</script>
 <script>
 /* When the user clicks on the button, 
 toggle between hiding and showing the dropdown content */
@@ -273,10 +268,13 @@ window.onclick = function(e) {
 </script>
 <br />
 <br>
-<div style="text-align: center; font-size: 25px; font-family: 'Fredoka One';"><b>rt/dt</b></div>
+<div style="text-align: center; font-size: 25px; font-family: 'Fredoka One';"><b>rt/dt</b><br>
 <br>
-<div style="text-align: center;">
 <canvas id="canvas" width="500" height="281" style="border:1px solid #000000;"></canvas>
+<textarea id="msg-output" style="position: fixed; left: 25px;" readonly cols="30" rows="30">CONSOLE
+</textarea>
+
+
 </div>
 <p style="float: left;">
 <br/>
@@ -298,9 +296,9 @@ window.onclick = function(e) {
 <button class="selectButton buttonLights">Lights</button>
 <button class="selectButton buttonScene">Scene</button>
 </div>
-<!--
-<textarea id="file-content"></textarea><br />
--->
+<br>
+
+
 
 
 <!-- The Modals -->
@@ -310,7 +308,7 @@ window.onclick = function(e) {
   <div class="modal-content">
     <span class="close">&times;</span>
     <p>
-	divide() has been called on the Scene object.<br>
+	The BVH has been generated.<br>
 	<br>
 	Your Scene has been optimised.
 	</p>
@@ -339,7 +337,6 @@ window.onclick = function(e) {
 
 </div>
 
-
 <div id="myModal_OpenFile" class="modal">
 
   <!-- Modal content -->
@@ -360,7 +357,6 @@ window.onclick = function(e) {
 <script src="rt.math.js"></script>
 <script src="rt.matrix-transform.js"></script>
 <script src="rt.matrix.js"></script>
-
 <script src="rt.tests.js"></script>
 <script src="rt.world.js"></script>
 <script src="rt.shade.js"></script>
@@ -369,19 +365,86 @@ window.onclick = function(e) {
 <script src="raytracer.js"></script>
 <script src="rt.examples.js"></script>
 <script src="rt.objfile.js"></script>
-
 <script src="rt.material.js"></script>
 <script src="rt.ray.js"></script>
 
 <script src="rt.graphics.js"></script>
 
 <script>
-init();
+function renderImage()	{
 
+	clearInterval(loop);
+	
+	ctx.fillStyle = FGCOLOR;
+	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
+	
+	var c = ofData.c
+	var w = new world();
+	
+	w.light = ofData.l
+	
+	//debugger;
+	w.objects = [ofData.o]
+	render(c,w,5);
+}
+
+function option(opt)	{
+
+	//console.log(opt)
+	
+	if (opt=="render")
+		renderImage()
+	
+	if (opt=="jamis")
+		window.open("https://www.amazon.co.uk/Ray-Tracer-Challenge-Test-Driven-Pragmatic-ebook/dp/B07Q84TQ91")
+		
+	if (opt=='spotify')	{
+	
+		window.open("https://open.spotify.com/album/1ost8iDohzxcLEQcT7OpdG?si=AcUeNnplRnSm1OOAtKeoTw")
+	}
+	
+	if (opt=='youtube')	{
+	
+		window.open("https://www.youtube.com/channel/UCF7KG1BdQfnL73JYrl2vDDw/playlists")
+	}
+	
+	if (opt=="gen-bvh")
+		if(doDivide())
+			console.log("Scene divided into BVH.")
+		else
+			console.log("Failed to generate BVH. Have you loaded any objects into the scene?")
+	
+	if (opt=="cameraOptions")	{
+	
+		camModal.style.display = "block"
+	}
+	
+	if (opt=="lightsOptions")	{
+	
+		lightsModal.style.display = "block"
+	}
+	
+	if (opt=="sceneOptions")	{
+	
+		sceneModal.style.display = "block"
+	}
+	
+	if (opt=="open-proj")	{
+	
+		openFileModal.style.display = "block"
+	}
+}
+</script>
+
+<script>
 // Get the modal
-var modal = document.getElementById("myModal");
-var camModal = document.getElementById("myModal_Camera");
-var openFileModal = document.getElementById("myModal_OpenFile");
+var modal = document.getElementById("myModal")
+
+var camModal = document.getElementById("myModal_Camera")
+var lightsModal = document.getElementById("myModal_Lights")
+var sceneModal = document.getElementById("myModal_Scene")
+
+var openFileModal = document.getElementById("myModal_OpenFile")
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
@@ -401,13 +464,17 @@ span_OpenFileModal.onclick = function()	{
 	openFileModal.style.display = "none"
 }
 
-function doDivide()	{
-	
-	ofData.o.divide(ofDataR.divideValue)
-	console.log("Scene divided into BVH.")
+document.getElementById('file-input')
+  .addEventListener('change', readObjectFile, false);
+
+document.getElementById('file-input2')
+  .addEventListener('change', readFile, false);
+
+console.log = function(str)	{
+
+	document.getElementById("msg-output").value = (document.getElementById("msg-output").value + '\n' + str)
 }
-
+init();
 </script>
-
 </body>
 </html>

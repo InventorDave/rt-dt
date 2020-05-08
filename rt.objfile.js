@@ -61,7 +61,7 @@ function parse_obj_file()	{
 	
 	// use global OBJFILECONTENTS
 	if (!OBJFILECONTENTS)
-		throw new Error("No obj file contents available!")
+		throw new Error("No object file contents available!")
 	
 	var ignored_lines = 0;
 	var lines = OBJFILECONTENTS.split("\n")

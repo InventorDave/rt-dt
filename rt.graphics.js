@@ -76,15 +76,16 @@ function calcAngleVectors(vec, vec2, d_or_r)	{
 
 function Line2d(p1, p2, id2)	{
 	
-	p1.z = 0
-	p2.z = 0
-	
 	this.id = GetUID()
 	this.id2 = id2 || 0
 	
 	this.p1 = p1
 	this.p2 = p2
-	this.v = createVector(p1, p2)
+	
+	this.p1.z = 0
+	this.p2.z = 0
+	
+	this.v = createVector(this.p1, this.p2)
 	this.length = magnitude(this.v)
 	
 	this.gradDividend = 0
@@ -139,7 +140,7 @@ function Line2d(p1, p2, id2)	{
 	
 	this.midPoint = function()	{
 		
-		return point((0.5*(this.p1.x+this.p2.x)), (0.5*(this.p1.y+this.p2.y)), (0.5*(this.p1.z+this.p2.z)))
+		return point((0.5*(this.p1.x+this.p2.x)), (0.5*(this.p1.y+this.p2.y)), 0)
 	}
 }
 
