@@ -66,6 +66,18 @@ function parse_obj_file()	{
 	var ignored_lines = 0;
 	var lines = OBJFILECONTENTS.split("\n")
 	
+	ofDataR.f_begins = 0
+	ofDataR.v_begins = 0
+	ofDataR.vn_begins = 0
+	ofDataR.vt_begins = 0
+	
+	ofDataR.x_min = 0
+	ofDataR.x_max = 0
+	ofDataR.y_min = 0
+	ofDataR.y_max = 0
+	ofDataR.z_min = 0
+	ofDataR.z_max = 0
+	
 	for (var l = 0; l<lines.length;l++)	{
 		
 		var line = lines[l]
@@ -76,8 +88,11 @@ function parse_obj_file()	{
 		if (str=="f ")	{
 			
 			curr_e = "f";
-			if(!ofDataR.f_begins)
+			if(!ofDataR.f_begins)	{
+			
+				ofData["f"] = []
 				ofDataR.f_begins = l;
+			}
 			
 		}
 		else if (str=="g ")	{
@@ -87,22 +102,31 @@ function parse_obj_file()	{
 		}
 		else if (str=="v ")	{
 		
-			if(!ofDataR.v_begins)
+			if(!ofDataR.v_begins)	{
+			
+				ofData["v"] = []
 				ofDataR.v_begins = l;
+			}
 			
 			curr_e = "v";
 		}
 		else if (str=="vn")	{
 		
 			curr_e = "vn";
-			if(!ofDataR.vn_begins)
+			if(!ofDataR.vn_begins)	{
+				
+				ofData["vn"] = []
 				ofDataR.vn_begins = l;
+			}
 		}
 		else if (str=="vt")	{
 			
 			curr_e = "vt"
-			if(!ofDataR.vt_begins)
+			if(!ofDataR.vt_begins)	{
+				
+				ofData["vt"] = []
 				ofDataR.vt_begins = l;
+			}
 		}
 		else	{
 		

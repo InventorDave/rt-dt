@@ -195,6 +195,16 @@ function option(opt)	{
 		modal.style.display = "block";
 		doDivide();
 	}
+	
+	if (opt=="cameraOptions")	{
+	
+		camModal.style.display = "block"
+	}
+	
+	if (opt=="open-proj")	{
+	
+		openFileModal.style.display = "block"
+	}
 }
 </script>
 <script>
@@ -249,6 +259,14 @@ window.onclick = function(e) {
 	if (e.target == modal) {
 		modal.style.display = "none";
 	}
+	
+	if (e.target == camModal)	{
+		camModal.style.display = "none";
+	}
+	
+	if (e.target == openFileModal)	{
+		openFileModal.style.display = "none"
+	}
   }
 
 }
@@ -276,7 +294,7 @@ window.onclick = function(e) {
 <br><br>
 <div style="text-align: center;">
 
-<button class="selectButton buttonCamera">Camera</button>
+<button class="selectButton buttonCamera"onclick="option('cameraOptions'); return false;">Camera</button>
 <button class="selectButton buttonLights">Lights</button>
 <button class="selectButton buttonScene">Scene</button>
 </div>
@@ -285,14 +303,54 @@ window.onclick = function(e) {
 -->
 
 
-<!-- The Modal -->
+<!-- The Modals -->
 <div id="myModal" class="modal">
 
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
     <p>
-	Called ofData.o.divide()</p>
+	divide() has been called on the Scene object.<br>
+	<br>
+	Your Scene has been optimised.
+	</p>
+  </div>
+
+</div>
+
+<div id="myModal_Camera" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>
+	Enter Field-of-view:&nbsp;<input type="text" id="cam-fov"><br>
+	Enter From vector:&nbsp;<input type="text" id="cam-from"><br>
+	
+	<label for="campresets">Select a Camera:</label>
+
+<select id="campresets" name="camoptions" onchange="camPresetSelected(); return false;">
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+</select>
+	</p>
+  </div>
+
+</div>
+
+
+<div id="myModal_OpenFile" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>
+	Select a file:
+      <div>
+      <input id="file-input2" type="file" name="files">
+    </div>
+	</p>
   </div>
 
 </div>
@@ -316,28 +374,31 @@ window.onclick = function(e) {
 <script src="rt.ray.js"></script>
 
 <script src="rt.graphics.js"></script>
-<script>document.getElementById('file-input').addEventListener('change', readSingleFile, false);</script>
+
 <script>
 init();
 
 // Get the modal
 var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-// var btn = document.getElementById("myBtn");
+var camModal = document.getElementById("myModal_Camera");
+var openFileModal = document.getElementById("myModal_OpenFile");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
+var span_CameraModal = document.getElementsByClassName("close")[1]; 
+var span_OpenFileModal = document.getElementsByClassName("close")[2];
 
-// When the user clicks on the button, open the modal
-/*
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-*/
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
+}
+
+span_CameraModal.onclick = function()	{
+	camModal.style.display = "none"
+}
+
+span_OpenFileModal.onclick = function()	{
+	openFileModal.style.display = "none"
 }
 
 function doDivide()	{
@@ -347,11 +408,6 @@ function doDivide()	{
 }
 
 </script>
-</p>
-
-<!--
-<input type="button" value="test" onClick="p211(); return false;">
--->
 
 </body>
 </html>

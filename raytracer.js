@@ -1,33 +1,62 @@
 var OBJFILECONTENTS = "";
+var FILECONTENTS = "";
 
-function readSingleFile(e) {
+function readObjectFile(e) {
   var file = e.target.files[0];
   
   if (!file) {
     return;
   }
+  
   var reader = new FileReader();
   reader.onload = function(e) {
     OBJFILECONTENTS = e.target.result;
     //displayContents(OBJFILECONTENTS);
 	parse_obj_file()
-  };
-  
-  //alert(file.name)
-  var patt = /\.obj^/
-  if(patt.test(file.name))
-	alert(file.name)  
+  }; 
   
   reader.readAsText(file);
 }
 
+function readFile(e)	{
+	
+	var file = e.target.files[0]
+	
+	if (!file)	{
+		alert("No File identified!")
+		return
+	}
+	
+	var reader = new FileReader()
+	
+	reader.onload = function(e)	{
+		
+		FILECONTENTS = e.target.result
+		parseFileContents()
+	}
+	
+	reader.readAsText(file)
+}
+
+function parseFileContents()	{
+	
+	alert(FILECONTENTS)
+}
+/*
 function displayContents(contents) {
   var element = document.getElementById('file-content');
   element.textContent = contents;
 }
+*/
+
 
 document.getElementById('file-input')
-  .addEventListener('change', readSingleFile, false);
+  .addEventListener('change', readObjectFile, false);
+
+document.getElementById('file-input2')
+  .addEventListener('change', readFile, false);
+  
+
 
 var WIDTH = 150;
 var HEIGHT = 84; /*Math.round(150*(9/16));*/
@@ -37,20 +66,20 @@ var ofData = {
 				v: [],
 				vn: [],
 				vt: [],
-				g: [], // [] of ofd_g objects
+				g: [], // not currently used
 				o: {},
 				cache: {},
 				c: new camera(WIDTH, HEIGHT, (Math.PI/4)),
-				l: new point_light(point(-20, 20, 40), colour(1,1,1))
+				l: new point_light(point(-20, 20, 40), colour(1,1,1)),
+				
+				presets: { camera: [], lights: [], scenes: [] }
 };
 
-function ofd_g()	{
-	
-	this.name = "";
-	this.entries = [{ type: "f", // ofData["f"][indice]
-					indice: 0
-	}];
-}
+ofData.presets.camera.push(view_transform(point(0,0,20),point(0,0,0),vector(0,1,0)))
+ofData.presets.camera.push(view_transform(point(0,5,8),point(0,1,0),vector(0,1,0)))
+ofData.presets.camera.push(view_transform(point(25,0, 25), // from
+								point(0,10,0),   // to
+								vector(0,1,0)))
 	
 	
 var ofDataR = {
@@ -71,8 +100,7 @@ var ofDataR = {
 
 function renderImage()	{
 
-	if(loop)
-		clearInterval(loop);
+	clearInterval(loop);
 	
 	ctx.fillStyle = "#2222cc";
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
@@ -115,8 +143,14 @@ function optionSelected()	{
 			
 		default:
 	}
+}
+
+function camPresetSelected()	{
 	
-	ofData.c = new camera(WIDTH, HEIGHT, (Math.PI/4))
+	var v = document.getElementById("campresets")
+	
+	ofData.c.setCTransform(ofData.presets.camera[v.selectedIndex])
+	console.log("Set Camera to preset " + (v.selectedIndex+1) + ".")
 }
 
 var c = document.getElementById("canvas");
@@ -201,7 +235,6 @@ function hand(color, length, thickness)	{
 var BG_COLOR = "#1a1717";
 var CURR_BG_COLOR = BG_COLOR;
 
-loop = setInterval(init, 50);
 
 function init()	{
 
@@ -210,20 +243,21 @@ function init()	{
 								vector(0,1,0)) // up
 					); 
 
-	ctx.fillStyle = CURR_BG_COLOR;
-	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
 	
-	clock();
-	moveBall();
+	loop = setTimeout(init2, 50);
+
 }
 
 function init2()	{
 
-	clearInterval(loop);
-	ctx.fillStyle = BG_COLOR;
-	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
+	ctx.fillStyle = CURR_BG_COLOR;
+	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 	
-	render_old();	
+	clock();
+	moveBall();	
+	
+	loop = setTimeout(init2, 100);
 }
 
 
@@ -362,7 +396,8 @@ function render2()	{
 
 
 function render(c, w, remaining)	{
-	
+
+	clearTimeout(loop)
 	g_c = c;
 	g_w = w;
 	g_r = remaining;
