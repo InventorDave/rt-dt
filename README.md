@@ -1,9 +1,15 @@
 # js-raytracer-challenge
 Javascript implementation of Jamis Buck's Raytracer Challenge.
 
-There are 3 .obj files. Try them out by loading "raytracer.html" and selecting an .obj file by clicking "Choose file". 
-Then click "render obj!" AFTER you see the file contents loaded into the (resizable) text box. 
-Or, download a custom .obj file, but it does not yet support textures or texture normals or vertice normals, or groups, 
-so they are ignored. Just the 'face' and associated 'vertice' data is parsed.
+Once you have downloaded the project files, simply load "raytracer.html" into your browser. This program is a work in progress. Included are some .obj mesh files you can load into the program by selecting the "choose file" button below the canvas window. Then,
 
-Quite fast, though...
+Select "Render->Generate BVH" (unless you want the rendering to take forever - BVH stands for Bounding Volume Heirarchy, and it is an optimisation technique).
+
+The console will indicate when the optimisation pass is complete, but you'll be able to tell because the UI will start responding again.
+
+Then select "Render->Render!" and watch in wonder as the mesh object is rendered....
+
+rt/dt stands for raytracer/distance-tracer because I am developing it as a quasi-rasterisation-and-raytracing app.
+
+Some optimisations have been performed, but the code largely has not been refactored yet.
+
