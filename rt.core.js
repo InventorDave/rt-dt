@@ -113,8 +113,15 @@ function prepare_computations(i, r, xs)	{
 	comps.point = _position(r, comps.t); // HERE, 2ND  CALL TO PREPARE_COMPUTATIONS() ON CALL STACK
 	
 	//console.log("core.js::prepare_computations()::=comps.point.x:"+comps.point.x+", point.y:"+comps.point.y+", point.z:"+comps.point.z+"\n")
-	
-	comps.eyev  = invert(r.direction);
+	/*
+					var point_ = _position(r, h.t)
+				var normal_ = normal_at(h.object, point_)
+			
+				var eye = negate(r.direction)
+			
+				color_ = lighting(h.object.material, l, { id: 'Dave' }, point_, eye, normal_, 0)
+	*/
+	comps.eyev  = negate(r.direction);
 	comps.normalv = normal_at(comps.object, comps.point);
 	comps.reflectv = reflect(r.direction, comps.normalv)
 	

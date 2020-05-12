@@ -44,13 +44,14 @@ function lighting(_material, _light, obj, _point, eyev, normalv, in_shadow, f)	{
 		
 		//diffuse = colour(0,0,0)
 		//specular = colour(0,0,0)
+		//console.log("light_dot_normal < 0 || in_shadow")
 	}
 	else	{
 
+		//console.log("Compute diffuse & specular: obj = " + obj.id)
 		// compute the diffuse contribution
-		var res = _material.diffuse * light_dot_normal;
-		res = multiplyInt(effective_color, res);
-		diffuse = res;
+		diffuse = multiplyInt(effective_color, _material.diffuse * light_dot_normal);
+		
 		
 		/* reflect_dot_eye represents the cosine of the angle between the
 		   reflection vector and the eye vector. A negative number means the
@@ -64,26 +65,22 @@ function lighting(_material, _light, obj, _point, eyev, normalv, in_shadow, f)	{
 		if (reflect_dot_eye <= 0)	{
 			
 			specular = colour(0,0,0)
+			//console.log("specular = 0")
 		}
 		else	{
 			
 			// compute the specular contribution
-			var factor = reflect_dot_eye **  _material.shininess;
+			var factor =  Math.pow(reflect_dot_eye, _material.shininess);
 			
-			var res = _material.specular * factor;
-			specular = multiplyInt(_light.intensity, res);
+			//var res = _material.specular * factor;
+			specular = multiplyInt(_light.intensity, _material.specular);
+			specular = multiplyInt(specular, factor);
 			
-			//console.log("\tspecular:: r: " + specular.x + ", g: " + specular.y + ", b: " + specular.z + "\n");
-			// When the above line is uncommented, the component values for specular printed are very low, negligble (<EPSILON)
+			//console.log("computed specular contribution");
+			// the component values for specular printed are very low, negligble (<EPSILON)
 		}
 	}
 	
-	var res = add(diffuse, specular);
-	res = add(ambient, res);
-	
-	if (f)
-		debugger;
-	
-	return res;
+	return add(ambient, add(diffuse, specular))
 	//return ambient + diffuse + specular;
 }

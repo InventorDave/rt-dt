@@ -5,14 +5,14 @@ function shade_hit(w, comps, obj, remaining)	{
 	
 	var is = is_shadowed(w, comps.over_point)
 	
-	var s = lighting(comps.object.material, w.light, comps.object, comps.over_point, comps.eyev, comps.normalv, is, 0)
-	//console.log("shade_hit(): s = r:"+s.x+", g:" + s.y + ", b:"+s.z+"\n");
+	var s = lighting(comps.object.material, w.light, comps.object, comps.over_point, comps.eyev, comps.normalv, is)
+
 	var reflected = reflected_color(w, comps, remaining-1)
-	//console.log("shade_hit(): reflected = r:"+reflected.x+", g:" + reflected.y + ", b:"+reflected.z+"\n");
+
 	var refracted = refracted_color(w, comps, remaining)
-	//console.log("shade_hit(): refracted = r:"+refracted.x+", g:" + refracted.y + ", b:"+refracted.z+"\n");
-	//var reflected = colour(0,0,0)
-	//var refracted = colour(0,0,0)
+
+	reflected = colour(0,0,0)
+	refracted = colour(0,0,0)
 	
 	if ((material.reflective > 0) && (material.transparency > 0))	{
 		console.log("shade.js::shade_hit(...):Transparent & Reflective.\n")
@@ -26,6 +26,7 @@ function shade_hit(w, comps, obj, remaining)	{
 		
 		return res;
 	}
+
 	
 	return add(s, add(reflected, refracted))
 }
@@ -76,6 +77,21 @@ function is_shadowed(w, p)	{
 	return false
 }
 
+function reflected_color(w, comps, remaining)	{
+	//console.log("ray::reflected_color()::remaining = " + remaining);
+	if (remaining <= 0)
+		return colour(0,0,0)
+		
+	if (comps.object.material.reflective == 0)
+		return colour(0,0,0)
+	
+	
+	var rr = new ray(comps.over_point, comps.reflectv)
+	var col = color_at(w, rr, remaining - 1)
+	
+	return multiplyInt(col, comps.object.material.reflective)
+}
+
 function refracted_color(w, comps, remaining)	{
 	
 	if (comps.object.material.transparency == 0)
@@ -104,10 +120,7 @@ function refracted_color(w, comps, remaining)	{
 	
 	var col = multiplyInt(color_at(w, refracted_ray, remaining-1), comps.object.material.transparency)
 	
-	return col;
-	
-	
-	return colour(1,1,1)
+	return col
 }
 
 function schlick(comps)	{
@@ -134,7 +147,5 @@ function schlick(comps)	{
 	
 	var r0 = ((comps.n1 - comps.n2) / (comps.n1 + comps.n2)) ** 2
 	
-	var res = r0 + (1 - r0) * (1 - cos)**5
-	
-	return res
+	return r0 + (1 - r0) * (1 - cos)**5
 }

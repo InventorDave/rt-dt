@@ -119,9 +119,7 @@ function transform(r_in, m)	{ // p69
 	var res2 =  multiply_matrix_by_tuple(m, r_in.direction);
 	
 	var r = new ray(res, res2)
-	r.origin = res;
-	r.direction = res2;
-	
+
 	return r;
 }
 
@@ -143,20 +141,7 @@ function normal_at(s, world_point)	{
 	return normal_to_world(s, ln)
 }
 
-function reflected_color(w, comps, remaining)	{
-	//console.log("ray::reflected_color()::remaining = " + remaining);
-	if (remaining <= 0)
-		return colour(0,0,0)
-		
-	if (comps.object.material.reflective == 0)
-		return colour(0,0,0)
-	
-	
-	var rr = new ray(comps.over_point, comps.reflectv)
-	var col = color_at(w, rr, remaining - 1)
-	
-	return multiplyInt(col, comps.object.material.reflective)
-}
+
 
 function reflect(_in, normal)	{
 	
@@ -166,23 +151,15 @@ function reflect(_in, normal)	{
 	res = subtract(_in, res);
 	*/
 	
-	var res = 2 * dot(_in, normal);
-	res = multiplyInt(normal, res);
-	res = subtract(_in, res);
-	
-	res = sn_round(res);
-	
-	return res;
+	return sn_round(subtract(_in, multiplyInt(normal, 2 * dot(_in, normal))))
 }
 
 function invert(v)	{
 	
-	var v2 = new tuple(v.x, v.y, v.z, v.w);
+	v.x = -v.x;
+	v.y = -v.y;
+	v.z = -v.z;
+	v.w = -v.w;
 	
-	v2.x = -v2.x;
-	v2.y = -v2.y;
-	v2.z = -v2.z;
-	v2.w = -v2.w;
-	
-	return v2;
+	return v;
 }

@@ -1,389 +1,5 @@
 "use strict";
 
-function test1()	{
-	
-	// test a matrix multiplied by a tuple, using function: multiply_matrix_by_tuple(m, t)
-	var m = createMatrix(4,4);
-	m.m[0][0] = 1, m.m[0][1] = 2, m.m[0][2] = 3, m.m[0][3] = 4;
-	m.m[1][0] = 2, m.m[1][1] = 4, m.m[1][2] = 4, m.m[1][3] = 2;
-	m.m[2][0] = 8, m.m[2][1] = 6, m.m[2][2] = 4, m.m[2][3] = 1;
-	m.m[3][0] = 0, m.m[3][1] = 0, m.m[3][2] = 0, m.m[3][3] = 1;
-	
-	var t = new tuple(1,2,3,1);
-	
-	var t2 = multiply_matrix_by_tuple(m, t);
-
-	alert("tuple(" + t2.x + ", " + t2.y + ", " + t2.z + ", " + t2.type + ")");
-}
-
-function test2()	{ // p32/33, transposing a matrix using m_transpose() -- NB m.transpose() no longer available, as m instanceof Array
-
-	var m = createMatrix(4,4);
-	m.m[0][0] = 0, m.m[0][1] = 9, m.m[0][2] = 3, m.m[0][3] = 0;
-	m.m[1][0] = 9, m.m[1][1] = 8, m.m[1][2] = 0, m.m[1][3] = 8;
-	m.m[2][0] = 1, m.m[2][1] = 8, m.m[2][2] = 5, m.m[2][3] = 3;
-	m.m[3][0] = 0, m.m[3][1] = 0, m.m[3][2] = 5, m.m[3][3] = 8;
-	
-	var m2 = m.transpose();
-	
-	var str = m2.m[0][0] + ", " + m2.m[0][1] + ", " + m2.m[0][2] + ", " + m2.m[0][3] + "\n";
-	str +=    m2.m[1][0] + ", " + m2.m[1][1] + ", " + m2.m[1][2] + ", " + m2.m[1][3] + "\n";
-	str +=    m2.m[2][0] + ", " + m2.m[2][1] + ", " + m2.m[2][2] + ", " + m2.m[2][3] + "\n";
-	str +=    m2.m[3][0] + ", " + m2.m[3][1] + ", " + m2.m[3][2] + ", " + m2.m[3][3] + "\n";
-	
-	alert(str);
-}
-
-function test3()	{ // p35, submatrix()
-
-	var m = createMatrix(4,4);
-	m.m[0][0] = 0, m.m[0][1] = 9, m.m[0][2] = 3, m.m[0][3] = 0;
-	m.m[1][0] = 9, m.m[1][1] = 8, m.m[1][2] = 0, m.m[1][3] = 8;
-	m.m[2][0] = 1, m.m[2][1] = 8, m.m[2][2] = 5, m.m[2][3] = 3;
-	m.m[3][0] = 0, m.m[3][1] = 0, m.m[3][2] = 5, m.m[3][3] = 8;
-	
-	var m2 = m.submatrix(3, 1);
-	
-	var str = m2.m[0][0] + ", " + m2.m[0][1] + ", " + m2.m[0][2] + "\n";
-	str +=    m2.m[1][0] + ", " + m2.m[1][1] + ", " + m2.m[1][2] + "\n";
-	str +=    m2.m[2][0] + ", " + m2.m[2][1] + ", " + m2.m[2][2] + "\n";
-	
-	alert(str); 
-	
-	var m3 = m2.submatrix(1,0);
-	
-	str = 	m3.m[0][0] + ", " + m3.m[0][1] + "\n";
-	str +=    m3.m[1][0] + ", " + m3.m[1][1] + "\n";
-	
-	alert(str); 
-}
-
-function test4()	{ // p35 determinant()
-
-	var m = createMatrix(3,3);
-
-	m.m[0][0] = 3, m.m[0][1] = 5, m.m[0][2] = 0;
-	m.m[1][0] = 2, m.m[1][1] = -1, m.m[1][2] = -7;
-	m.m[2][0] = 6, m.m[2][1] = -1, m.m[2][2] = 5;                                                                                                                                                                                                                                                                                                                                                                                                                                             
-	
-	var result = determinant(m.submatrix(1, 0));
-	alert(result);
-
-}
-
-function test5()	{ // p 36 - PASSED
-	
-	var m = createMatrix(3,3);
-
-	m.m[0][0] = 3, m.m[0][1] = 5, m.m[0][2] = 0;
-	m.m[1][0] = 2, m.m[1][1] = -1, m.m[1][2] = -7;
-	m.m[2][0] = 6, m.m[2][1] = -1, m.m[2][2] = 5;
-	
-	var minor1 = minor(m, 0, 0);
-	var cofactor1 = cofactor(m, 0,0);
-	
-	var minor2 = minor(m, 1,0);
-	var cofactor2 = cofactor(m, 1,0);
-	
-	alert(	"minor1 = " + minor1 + "\n" +
-			"cofactor1 = " + cofactor1 + "\n" +
-			"minor2 = " + minor2 + "\n" +
-			"cofactor2 = " + cofactor2);
-}
-
-function test6()	{ // 1st scenario on p37
-	
-	var m = createMatrix(3,3);
-
-	m.m[0][0] = 1, m.m[0][1] = 2, m.m[0][2] = 6;
-	m.m[1][0] = -5, m.m[1][1] = 8, m.m[1][2] = -4;
-	m.m[2][0] = 2, m.m[2][1] = 6, m.m[2][2] = 4;
-	
-	var _cofactor1 = cofactor2(m,0,0);
-	var _cofactor2 = cofactor2(m,0,1);
-	var _cofactor3 = cofactor2(m,0,2);
-	
-	var _determinant = determinant2(m, 3)
-	
-	alert(	"cofactor1 = " + _cofactor1 + "\n" +
-			"cofactor2 = " + _cofactor2 + "\n" +
-			"cofactor3 = " + _cofactor3 + "\n" +
-			"determinant = " + _determinant);
-}
-
-function test7()	{ // 2nd scenario on p37
-	
-var mat = [[-2, -8, 3, 5], 
-           [-3, 1, 7, 3],
-           [1, 2, -9, 6], 
-           [-6, 7, 7, -9]
-          ];
-
-alert("Determinant of the matrix is : " + 
-determinant(mat, N)); 
-
-}
-
-function test7b()	{
-	
-	var m = [[-2, -8, 3, 5], 
-         [-3, 1, 7, 3],
-         [1, 2, -9, 6], 
-         [-6, 7, 7, -9]
-        ];
-
-		
-	var r = 0;
-	var c = 3;
-	
-	/*
-	var sm = submatrix(m,r,c);
-	
-	var _minor = determinant(sm, sm.length);
-	
-	if (((r + c) % 2) != 0) // convert minor to cofactor
-		_minor = -_minor;
-	
-	alert("cofactor = " + _minor);
-	*/
-	
-	var res = cofactor(m, r, c);
-	
-	alert(res);
-}
-
-function test8()	{
-	
-	var m = [[-5, 2, 6, -8], 
-         [1, -5, 1, 8],
-         [7, 7, -6, -7], 
-         [1, -3, 7, 4]
-        ];
-		
-	var m2 = inverse(m);
-	
-	alert(m2[1][1]);
-}
-
-function test9()	{ // the final test of chapter 3, p41
-	
-	var a = [[3, -9, 7, 3], 
-         [3, -8, 2, -9],
-         [-4, 4, 4, 1], 
-         [-6, 5, -1, 1]
-        ];
-
-	var b = [[8, 2, 2, 2], 
-         [3, -1, 7, 0],
-         [7, 0, 5, 4], 
-         [6, -2, 0, 5]
-        ];
-	
-	var c = m_multiply(a,b);
-	
-	var res = m_multiply(c, inverse(b));
-	
-	alert(res[2][0]);
-	
-	//m_multiply(m1, m2)
-}
-
-
-function test_sm()	{ // SUBMATRIX(...) WORKS
-
-	var m = createMatrix(4,4);
-	
-	m.m[0][0] = -2, m.m[0][1] = -8, m.m[0][2] = 3, m.m[0][3] = 5;
-	m.m[1][0] = -3, m.m[1][1] = 1, m.m[1][2] = 7, m.m[1][3] = 3;
-	m.m[2][0] = 1, m.m[2][1] = 2, m.m[2][2] = -9, m.m[2][3] = 6;
-	m.m[3][0] = 6, m.m[3][1] = 7, m.m[3][2] = 7, m.m[3][3] = -9;
-
-	m = submatrix(m, 1, 1);
-	
-	var str = m.m[0][0] + ", " + m.m[0][1] + ", " + m.m[0][2] + "\n";
-	str +=    m.m[1][0] + ", " + m.m[1][1] + ", " + m.m[1][2] + "\n";
-	str +=    m.m[2][0] + ", " + m.m[2][1] + ", " + m.m[2][2] + "\n";	
-
-	alert(str);
-	
-	m = submatrix(m,1,1);	
-	
-	str = m.m[0][0] + ", " + m.m[0][1] + "\n";
-	str +=    m.m[1][0] + ", " + m.m[1][1] + "\n";
-
-	alert(str);
-}
-
-function quick_mod_test()	{
-	
-	if (((0) % 2) == 0)
-		alert("yeah!");
-}
-
-function test45a()	{
-	
-	var transform = translation(5, -3, 2);
-	var p = point(-3, 4, 5);
-	
-	var p2 = multiply_matrix_by_tuple(transform, p);
-	
-	alert("x = " + p2.x + "\ny = " + p2.y + "\nz = " + p2.z + "\nw = " + p2.w);
-}
-
-function test45b()	{
-	
-	var transform = translation(5, -3, 2);
-	var inv = inverse(transform);
-	
-	var p = point(-3, 4, 5);
-	
-	var p2 = multiply_matrix_by_tuple(inv, p);
-	
-	alert("x = " + p2.x + "\ny = " + p2.y + "\nz = " + p2.z + "\nw = " + p2.w);
-}
-
-function test45c()	{
-	
-	var transform = translation(5, -3, 2);
-	var v = vector(-3, 4, 5);
-	
-	var v2 = multiply_matrix_by_tuple(transform, v);
-	
-	alert("x = " + v2.x + "\ny = " + v2.y + "\nz = " + v2.z + "\nw = " + v2.w);
-}
-
-function test46a()	{
-	
-	var transform = scaling(2, 3, 4);
-	var p = point(-4, 6, 8);
-	
-	var p2 = multiply_matrix_by_tuple(transform, p);
-
-	alert("x = " + p2.x + "\ny = " + p2.y + "\nz = " + p2.z + "\nw = " + p2.w);	
-}
-
-function test46b()	{
-	
-	var transform = scaling(2, 3, 4);
-	var v = vector(-4, 6, 8);
-	
-	var v2 = multiply_matrix_by_tuple(transform, v);
-
-	alert("x = " + v2.x + "\ny = " + v2.y + "\nz = " + v2.z + "\nw = " + v2.w);	
-}
-
-function test46c()	{
-	
-	var transform = scaling(2, 3, 4);
-	var inv = inverse(transform);
-	
-	var v = vector(-4, 6, 8);
-	
-	var res = multiply_matrix_by_tuple(inv, v);
-	
-	alert("x = " + res.x + "\ny = " + res.y + "\nz = " + res.z + "\nw = " + res.w);	
-}
-
-function test47a()	{
-	
-	var p = point(2, 3, 4);
-	
-	var p2 = reflect_around_axis(p, "z");
-	
-	alert(p2.z);	
-}
-
-function test48()	{
-	
-	var p = point(0,1,0);
-	
-	var hq = rotation_x(Math.PI / 4, true); // reverse rotation, p49a
-	var fq = rotation_x(Math.PI / 2);
-	
-	var r_hq = multiply_matrix_by_tuple(hq, p);
-	var r_fq = multiply_matrix_by_tuple(fq, p);	
-	
-	r_hq = sn_round(r_hq);
-	
-	debugger;
-}
-
-function test52()	{
-	
-	var transform = shearing(1,0,0,0,0,0);
-	
-	var p = point(2, 3, 4);
-	
-	var res = multiply_matrix_by_tuple(transform, p);
-	
-	alert("x = " + res.x + "\ny = " + res.y + "\nz = " + res.z + "\nw = " + res.w);		
-	
-}
-
-function test54()	{ // PASSED
-	
-	var p = point(1,0,1);
-	var A = rotation_x(Math.PI / 2);
-	var B = scaling(5, 5, 5);
-	var C = translation(10, 5, 7);
-	
-	var T;
-	
-	T = m_multiply(B, A);
-	T = m_multiply(C, T);
-	var res = multiply_matrix_by_tuple(T, p);
-	
-	alert("x = " + res.x + "\ny = " + res.y + "\nz = " + res.z + "\nw = " + res.w);		
-	debugger;
-}
-
-function showTime()	{
-
-	alert(new Date());
-}
-
-
-
-function test58b()	{
-	
-	var r = new ray(point(2, 3, 4), vector(1, 0, 0));
-	
-	var pos = position(r, 2.5);
-	
-	debugger;
-	
-}
-
-function test60a()	{ // PASSED
-	
-	var r = new ray(point(0,1,-5), vector(0,0,1));
-	var s = new sphere();
-	
-	var xs = intersect(s, r);
-	
-	debugger;
-}
-
-function test60b()	{
-	
-	var r = new ray(point(0,2,-5), vector(0,0,1));
-	var s = new sphere();
-	
-	var xs = intersect(s, r);
-	
-	debugger;
-}
-
-function test61()	{ // PASSED
-	
-	var r = new ray(point(0,0,0), vector(0,0,1));
-	var s = new sphere();
-	
-	var xs = intersect(s, r);
-	
-	debugger;
-}
-
 function test62()	{
 	
 	var r = new ray(point(0,0,5), vector(0,0,1));
@@ -421,52 +37,6 @@ function test65b()	{
 	
 }
 
-function test65c()	{
-	
-	var s = new sphere();
-	var i1 = new intersection(s, -2);
-	var i2 = new intersection(s, -1);
-	
-	var xs = intersections(i2, i1);
-	
-	var i = hit(xs);
-	
-	debugger;
-}
-
-function test66()	{
-	
-	var s = new sphere();
-	var i1 = new intersection(s, 5);
-	var i2 = new intersection(s, 7);
-	var i3 = new intersection(s, -3);
-	var i4 = new intersection(s, 2);
-	
-	var xs = intersections(i1, i2, i4, i3);
-	
-	var i = hit(xs);
-	
-	debugger;
-}
-
-function test68copyObj()	{
-	
-	var r1 = new ray(point(0,0,1), vector(1,2,3));
-	var r2;
-	
-	r2 = copyObj(r1);
-	
-	var msg = 	"r1.direction.z == " + r1.direction.z + "\n" +
-				"r2.direction.z == " + r2.direction.z + "\n" +
-				"\n" + 
-				"r2.direction.z = " + (r2.direction.z = 4) + "\n" +
-				"r1.direction.z == " + r1.direction.z;
-				
-	alert(msg);
-	
-	debugger;
-}
-
 function test69a()	{
 	
 	var r = new ray(point(1,2,3), vector(0,1,0));
@@ -487,15 +57,6 @@ function test69b()	{
 	debugger;
 }
 
-function test69d()	{
-	
-	var s = new sphere();
-	var t = translation(2,3,4);
-	set_transform(s, t);
-	
-	debugger;
-}
-
 function test69e()	{
 
 	var r = new ray(point(0,0,-5), vector(0,0,1));
@@ -503,281 +64,6 @@ function test69e()	{
 	set_transform(s, scaling(2,2,2));
 	
 	var xs = intersect(s, r);
-	
-	debugger;
-}
-
-function test70()	{
-	
-	var r = new ray(point(0,0,-5), vector(0,0,1));
-	var s = new sphere();
-	set_transform(s, translation(5,0,0));
-	
-	var xs = intersect(s, r);
-	
-	debugger;
-}
-
-function test78de()	{
-	
-	var p = Math.sqrt(3);
-	var s = new sphere();
-	var n = normal_at(s, point(p/3, p/3, p/3));
-	
-	debugger;
-}
-
-function test80b()	{
-	
-	var sr2 = Math.sqrt(2);
-	var s = new sphere();
-	
-	var m = m_multiply(scaling(1, 0.5, 1), rotation_z(Math.PI / 5));
-	
-	s.transform  = m;
-	
-	var n = normal_at(s, point(0, sr2/2, (-sr2)/2));
-	
-	debugger;
-}
-
-function test83a()	{
-	
-	var v = vector(1, -1, 0);
-	var n = vector(0, 1, 0);
-	
-	var r = reflect(v, n);
-	
-	debugger;
-}
-
-function test83b()	{
-	
-	var sr2 = Math.sqrt(2);
-	var v = vector(0, -1, 0);
-	var n = vector(sr2/2, sr2/2, 0);
-	
-	var r = reflect(v, n);
-	
-	debugger;
-}
-
-function test86a()	{ // PASS
-	
-	var m = new material();
-	var position = point(0, 0, 0);
-	
-	var eyev = vector(0,0,-1);
-	var normalv = vector(0,0,-1);
-	var _color = colour();
-	_color.x = 1;
-	_color.y = 1;
-	_color.z = 1;
-	
-	var light = new point_light(point(0,0,-10), _color);
-	
-	var res = lighting(m, light, position, eyev, normalv);
-	
-	res = sn_round(res);
-	
-	debugger;
-}
-
-function test86b()	{ // PASS
-	
-	var m = new material();
-	var position = point(0,0,0);
-	
-	var eyev = vector(0, Math.SQRT2/2, Math.SQRT2/2);
-	var normalv = vector(0,0,-1);
-	var _color = colour();
-	_color.x = 1;
-	_color.y = 1;
-	_color.z = 1;
-	
-	var light = new point_light(point(0,0,-10), _color);
-	
-	var res = lighting(m, light, position, eyev, normalv);
-	
-	debugger;
-}
-
-function test87a()	{ // PASS
-	
-	var m = new material();
-	var position = point(0,0,0);
-	
-	var eyev = vector(0,0,-1);
-	var normalv = vector(0,0,-1);
-	var _color = colour();
-	_color.x = 1;
-	_color.y = 1;
-	_color.z = 1;
-	
-	var light = new point_light(point(0,10,-10), _color);
-	
-	var res = lighting(m, light, position, eyev, normalv);
-	
-	debugger;
-}
-
-function test87b()	{
-	
-	var m = new material();
-	var position = point(0,0,0);
-	
-	var eyev = vector(0,-(Math.SQRT2/2),-(Math.SQRT2/2));
-	var normalv = vector(0,0,-1);
-	var _color = colour();
-	_color.x = 1;
-	_color.y = 1;
-	_color.z = 1;
-	
-	var light = new point_light(point(0,10,-10), _color);
-	
-	var res = lighting(m, light, position, eyev, normalv);
-	
-	debugger;
-}
-
-function test88()	{ // TODO
-	
-	var m = new material();
-	var position = point(0,0,0);
-	
-	var eyev = vector(0,0,-1);
-	var normalv = vector(0,0,-1);
-	var _color = colour();
-	_color.x = 1;
-	_color.y = 1;
-	_color.z = 1;
-	
-	var light = new point_light(point(0,0,10), _color);
-	
-	var res = lighting(m, light, position, eyev, normalv);
-	
-	debugger;
-}
-
-function test92c()	{
-	
-	var w = default_world();
-	var r = new ray(point(0,0,-5), vector(0,0,1));
-	
-	var xs = intersect_world(w, r);
-	
-	debugger;
-}
-
-function test93()	{
-	
-	var r = new ray(point(0,0,-5), vector(0,0,1));
-	var shape = new sphere();
-	
-	var i = new intersection(shape, 4);
-	
-	var comps = prepare_computations(i, r);
-	
-	debugger;
-}
-
-function test94()	{
-	
-	var r = new ray(point(0,0,-5), vector(0,0,1));
-	var shape = new sphere();
-	
-	var i = new intersection(shape, 4);
-	
-	var comps = prepare_computations(i, r);
-	
-	debugger;
-}
-
-function test95a()	{
-	
-	var r = new ray(point(0,0,0), vector(0,0,1));
-	var shape = new sphere();
-	
-	var i = new intersection(shape, 1);
-	
-	var comps = prepare_computations(i, r);
-	
-	debugger;
-}
-
-function test95b()	{
-	
-	var w = default_world();
-	
-	
-	var r = new ray(point(0,0,-5), vector(0,0,1));
-	
-	var shape = w.objects[0];
-	
-	var i = new intersection(shape, 4);
-	
-	var comps = prepare_computations(i, r);
-	
-	var c = shade_hit(w, comps)
-	
-	debugger;
-}
-
-function test95c()	{
-	
-	var w = default_world();
-	w.light = new point_light(point(0,0.25,0), colour(1,1,1));
-	
-	var r = new ray(point(0,0,0), vector(0,0,1));
-	var shape = w.objects[1];
-	var i = new intersection(shape, 0.5);
-	
-	var comps = prepare_computations(i, r);
-	
-	var c = shade_hit(w, comps);
-	
-	debugger;
-}
-
-function test96b()	{ // PASSED
-	
-	var w = default_world();
-	var r = new ray(point(0,0,-5), vector(0,0,1));
-	
-	var c = color_at(w, r);
-	
-	debugger;
-}
-
-function test98a()	{ // PASSED
-	
-	var from = point(0,0,0);
-	var to = point(0,0,-1);
-	var up = vector(0,1,0);
-	
-	var t = view_transform(from, to, up);
-	
-	debugger;
-}
-
-function test98b()	{ // PASSED
-	
-	var from = point(0,0,0);
-	var to = point(0,0,1);
-	var up = vector(0,1,0);	
-	
-	var t = view_transform(from, to, up);
-	
-	debugger;
-}
-
-function test99b()	{ // PASSED 
-	
-	var from = point(1,3,2);
-	var to = point(4,-2,8);
-	var up = vector(1,1,0);
-	
-	var t = view_transform(from, to, up);
 	
 	debugger;
 }
@@ -850,104 +136,6 @@ function ch7final107()	{
 	
 	//console.log("COMPLETED.\n");
 	//debugger;
-}
-
-function test110()	{
-	 
-	var m = new material()
-	var position = point(0,0,0)
-	
-	var eyev = vector(0,0,-1)
-	var normalv = vector(0,0,-1);
-	var light = new point_light(point(0,0,-10), colour(1,1,1))
-	
-	//debugger;
-	
-	var in_shadow = true
-	var result = lighting(m, light, position, eyev, normalv, in_shadow)
-	
-	debugger
-	
-}
-
-function test111()	{
-	
-	var w = default_world()
-	var p = point(0,10,0)
-	
-	var res = is_shadowed(w,p)
-	
-	debugger
-}
-
-function test112a()	{
-	
-	var w = default_world()
-	var p = point(10, -10, 10)
-	
-	var res = is_shadowed(w,p)
-	
-	debugger
-}
-
-function test120a()	{
-	
-	var r = new ray(point(0,0,-5), vector(0,0,1))
-	var s = new Shape()
-	
-	set_transform(s, scaling(2,2,2))
-	
-	var xs = intersect(s, r)
-	
-	debugger
-	
-}
-
-function test120b()	{
-	
-	var r = new ray(point(0,0,-5), vector(0,0,1))
-	var s = new Shape()
-	
-	set_transform(s, translation(5,0,0))
-	
-	var xs = intersect(s, r)
-	
-	debugger
-	
-}
-
-function test121b()	{
-	
-	var s = new Shape()
-	var m = m_multiply(scaling(1, 0.5, 1), rotation_z(Math.PI/5))
-	
-	set_transform(s, m)
-	
-	var n = normal_at(s, point(0, Math.sqrt(2)/2, -(Math.sqrt(2)/2)))
-	
-	debugger
-	
-}
-
-function test123a()	{
-	
-	var p = plane()
-	
-	var r = new ray(point(0,0,0), vector(0,0,1))
-	
-	var xs = p.local_intersect(r)
-	
-	debugger
-}
-
-function test123c()	{
-	
-	var p = plane()
-	var r = new ray(point(0,1,0), vector(0,-1,0))
-	
-	var xs = p.local_intersect(r)
-	
-	debugger
 }
 
 function ch9()	{
@@ -1023,218 +211,6 @@ function ch9()	{
 	//debugger;
 }
 
-
-
-function test152()	{ // PASSED
-	
-	var A = glass_sphere()
-	A.transform = scaling(2, 2, 2)
-	A.material.refractive_index = 1.5
-	//A.id = "A"
-	
-	var B = glass_sphere()
-	B.transform = translation(0,0,-0.25)
-	B.material.refractive_index = 2.0
-	//B.id = "B"
-	
-	var C = glass_sphere()
-	C.transform = translation(0,0,0.25)
-	C.material.refractive_index = 2.5
-	//C.id = "C"
-	
-	var r = new ray(point(0,0,-4), vector(0,0,1))
-	
-	var iA = new intersection(A, 2), iB = new intersection(B, 2.75), iC = new intersection(C, 3.25);
-	var iB2 = new intersection(B, 4.75), iC2 = new intersection(C, 5.25), iA2 = new intersection(A, 6);
-	
-	var xs = intersections(iA, iB, iC, iB2, iC2, iA2)
-	
-	
-	var index = 0;
-	
-	while(index<6)	{
-		
-		var comps = prepare_computations(xs[index++], r, xs)
-		console.log("n1 = " +  comps.n1 + ", n2 = " + comps.n2 + "\n"); // at each iteration, check comps.n1 and comps.n2 for correct values
-	}
-
-}
-
-function testArrayClean()	{
-	
-	var arr = [1, 2, "", undefined, null, ,7]
-	arr = removeNullEntries2(arr)
-	console.log(arr)
-}
-
-function test158()	{ // ?PASSED?, z/b component of c is fractionally off
-	
-	var w = default_world()
-	var A = w.objects[0]
-	
-	A.material.ambient = 1.0
-	A.material.pattern = test_pattern()
-	
-	var B = w.objects[1]
-	B.material.transparency = 1.0
-	B.material.refractive_index = 1.5
-	
-	var r = new ray(point(0,0,0.1), vector(0,1,0))
-	
-	var iA = new intersection(A, -0.9899), iB = new intersection(B, -0.4899), iB2 = new intersection(B, 0.4899)
-	var iA2 = new intersection(A, 0.9899)
-	
-	var xs = intersections(iA, iB, iB2, iA2)
-	
-	var comps = prepare_computations(xs[2], r, xs)
-	
-	var c = refracted_color(w, comps, 5)
-	
-	debugger
-	
-}
-
-function test159()	{ // SUCCESS
-	
-	var w = default_world()
-	var floor = plane()
-	floor.transform = m().translation(0,-1,0)
-	floor.material.transparency = 0.5
-	floor.material.refractive_index = 1.5
-	w.objects.push(floor)
-	
-	var ball = sphere()
-	ball.material.color = colour(1,0,0)
-	ball.material.ambient = 0.5
-	ball.transform = m().translation(0,-3.5,-0.5)
-	w.objects.push(ball)
-	
-	var r = new ray(point(0,0,-3), vector(0, -(Math.sqrt(2)/2), Math.sqrt(2)/2))
-	
-	var xs = intersections(new intersection(floor, Math.sqrt(2)))
-	
-	var comps = prepare_computations(xs[0], r, xs)
-	
-	var col = shade_hit(w, comps, 5)
-	
-	debugger;
-}
-
-function test161()	{ // SUCCESS
-	
-	var shape = glass_sphere()
-	var r = new ray(point(0,0,Math.sqrt(2)/2), vector(0,1,0))
-	var xs = intersections(new intersection(shape, -(Math.sqrt(2)/2)), new intersection(shape, Math.sqrt(2)/2))
-	
-	var comps = prepare_computations(xs[1], r, xs)
-	
-	//debugger;
-	
-	var reflectance = schlick(comps)
-	
-	debugger;
-}
-
-function test162()	{ // PASS
-	
-	var shape = glass_sphere()
-	var r = new ray(point(0,0,0), vector(0,1,0))
-	var xs = intersections(new intersection(shape, -1), new intersection(shape, 1))
-	
-	var comps = prepare_computations(xs[1], r, xs)
-	
-	var reflectance = schlick(comps)
-	
-	debugger;
-}
-
-function test163()	{ // PASS
-	
-	var shape = glass_sphere()
-	var r = new ray(point(0,0.99,-2), vector(0,0,1))
-	var xs = intersections(new intersection(shape, 1.8589))
-	
-	var comps = prepare_computations(xs[0], r, xs)
-	var reflectance = schlick(comps)
-	
-	debugger;
-}
-
-// PASSED
-function test164()	{
-	
-	var w = default_world()
-	var r = new ray(point(0,0,-3), vector(0, -Math.sqrt(2)/2, Math.sqrt(2)/2))
-
-	var floor = plane()
-	floor.transform = translation(0,-1,0)
-	floor.material.reflective = 0.5
-	floor.material.transparency = 0.5
-	floor.material.refractive_index = 1.5
-	
-	w.objects.push(floor)
-	
-	var ball = sphere()
-	ball.material.color = colour(1,0,0)
-	ball.material.ambient  = 0.5
-	ball.transform = translation(0, -3.5, -0.5)
-	
-	w.objects.push(ball)
-	
-	var xs = intersections(new intersection(floor, Math.sqrt(2)))
-	var comps = prepare_computations(xs[0], r, xs)
-	
-	//debugger;
-	
-	var c = shade_hit(w, comps, 5)
-	
-	debugger;
-}
-
-// PASSED
-function test168()	{
-	
-	var c = cube();
-	var r = []
-	r.push(new ray(point(5, 0.5, 0), vector(-1,0,0)))
-	r.push(new ray(point(-5, 0.5, 0), vector(1,0,0)))
-	r.push(new ray(point(0.5, 5, 0), vector(0,-1,0)))
-	r.push(new ray(point(0.5, -5, 0), vector(0,1,0)))
-	r.push(new ray(point(0.5, 0, 5), vector(0,0,-1)))
-	r.push(new ray(point(0.5, 0, -5), vector(0,0,1)))
-	r.push(new ray(point(0, 0.5, 0), vector(0,0,1)))
-	
-	for (var i = 0; i<r.length; i++)	{
-		
-		var xs = c.local_intersect(r[i])
-		console.log("t1 = " + xs[0].t + ", t2 = " + xs[1].t + "\n")
-	}
-}
-
-function test173()	{
-	
-	var c = cube()
-	
-	var p = []
-	p.push(point(1,0.5,-0.8))
-	p.push(point(-1,-0.2,0.9))
-	p.push(point(-0.4,1,-0.1))
-	p.push(point(0.3,-1,-0.7))
-	p.push(point(-0.6,0.3,1))
-	p.push(point(0.4,0.4,-1))
-	p.push(point(1,1,1))
-	p.push(point(-1,-1,-1))
-	
-	var v;
-	
-	for (var i = 0; i < p.length; i++)	{
-		
-		v = c.local_normal_at(p[i])
-		
-		console.log(i+". x:" + v.x + ", y: " + v.y + ", z: " + v.z + "\n");
-	}
-}
-
 function ch12()	{
 	
 	
@@ -1305,215 +281,6 @@ function ch12()	{
 	//console.timeEnd('render()');
 }
 
-function test180()	{
-	// PASSED
-	var cyl = cylinder()
-	
-	var vp = []
-	
-	vp[0] = []
-	vp[0].push(point(1,0,-5)); vp[0].push(vector(0,0,1));
-	
-	vp[1] = []
-	vp[1].push(point(0,0,-5)); vp[1].push(vector(0,0,1));
-	
-	vp[2] = []
-	vp[2].push(point(0.5,0,-5)); vp[2].push(vector(0.1,1,1));
-	
-	for (var i = 0; i < vp.length; i++)	{
-		
-		var dir = normalize(vp[i][1])
-		var r = new ray(vp[i][0], dir)
-		
-		var xs = cyl.local_intersect(r)
-		
-		if (xs.length != 2)	{
-			
-			console.log("Error!\n");
-			debugger;
-			return;
-			
-		}
-		
-		console.log("xs[0].t = " + xs[0].t + ", xs[1].t = " + xs[1].t + "\n"); 
-	}
-	
-}
-
-function test181()	{
-	
-	
-}
-
-function test182()	{
-	// PASSED
-	var cyl = cylinder()
-	cyl.min = 1
-	cyl.max = 2
-	
-	var vp = []
-	
-	vp[0] = []
-	vp[0].push(point(0,1.5,0)); vp[0].push(vector(0.1,1,0));
-	vp[1] = []
-	vp[1].push(point(0,3,-5)); vp[1].push(vector(0,0,1));
-	vp[2] = []
-	vp[2].push(point(0,0,-5)); vp[2].push(vector(0,0,1));
-	vp[3] = []
-	vp[3].push(point(0,2,-5)); vp[3].push(vector(0,0,1));
-	vp[4] = []
-	vp[4].push(point(0,1,-5)); vp[4].push(vector(0,0,1));
-	vp[5] = []
-	vp[5].push(point(0,1.5,-2)); vp[5].push(vector(0,0,1));
-	
-	for (var i = 0; i < vp.length; i++)	{
-		
-		var dir = normalize(vp[i][1])
-		var r = new ray(vp[i][0], dir)
-		var xs = cyl.local_intersect(r)
-		
-		console.log("xs.count = " + xs.length + "\n")
-	}
-}
-
-function test185()	{
-	// PASSED
-	
-	var c = cylinder()
-	c.min = 1
-	c.max = 2
-	c.closed = true
-	
-	var pv = []
-	pv[0] = []
-	pv[0].push(point(0,3,0)); pv[0].push(vector(0,-1,0));
-	pv[1] = []
-	pv[1].push(point(0,3,-2)); pv[1].push(vector(0,-1,2));
-	pv[2] = []
-	pv[2].push(point(0,4,-2)); pv[2].push(vector(0,-1,1));
-	pv[3] = []
-	pv[3].push(point(0,0,-2)); pv[3].push(vector(0,1,2));
-	pv[4] = []
-	pv[4].push(point(0,-1,-2)); pv[4].push(vector(0,1,1));
-	
-	for (var i = 0; i < pv.length; i++)	{
-		
-		var dir = normalize(pv[i][1])
-		var r = new ray(pv[i][0], dir)
-		//debugger;
-		var xs = c.local_intersect(r)
-		
-		console.log((i+1) + ": xs.count = " + xs.length + "\n")
-	}
-	
-}
-
-
-function test187()	{
-	// PASSED
-	
-	var cyl = cylinder()
-	cyl.min = 1
-	cyl.max = 2
-	cyl.closed = true
-	
-	var p = []
-	p.push(point(0,1,0))
-	p.push(point(0.5,1,0))
-	p.push(point(0,1,0.5))
-	p.push(point(0,2,0))
-	p.push(point(0.5,2,0))
-	p.push(point(0,2,0.5))
-	
-	for (var i = 0; i < p.length; i++)	{
-		
-		var n = cyl.local_normal_at(p[i])
-		console.log("vector(" + n.x + ", "+n.y + ", "+n.z+")\n")
-		
-	}
-}
-
-function test189()	{
-	// PASSED
-	var s = cone()
-	
-	var pv = []
-	
-	pv[0] = []
-	pv[0].push(point(0,0,-5)); pv[0].push(vector(0,0,1));
-	
-	pv[1] = []
-	pv[1].push(point(0,0,-5)); pv[1].push(vector(1,1,1));	
-	
-	pv[2] = []
-	pv[2].push(point(1,1,-5)); pv[2].push(vector(-0.5,-1,1));
-	
-	for(var i = 0; i < pv.length; i++)	{
-		
-		var dir = normalize(pv[i][1])
-		var r = new ray(pv[i][0], dir)
-		var xs = s.local_intersect(r)
-		
-		console.log("xs.length = " + xs.length + "\n")
-		console.log("xs[0].t = " + xs[0].t + ",\txs[1].t = " + xs[1].t + "\n")	
-	}
-}
-
-function test190a()	{
-	// PASSED
-	var s = cone()
-	var dir = normalize(vector(0,1,1))
-	var r = new ray(point(0,0,-1), dir)
-	var xs = s.local_intersect(r)
-	
-	debugger;
-}
-
-function test190b()	{
-	
-	var s = cone()
-	s.min = -0.5
-	s.max = 0.5
-	s.closed = true
-	
-	var pv = []
-	
-	pv[0] = []
-	pv[0].push(point(0,0,-5)); pv[0].push(vector(0,1,0));
-
-	pv[1] = []
-	pv[1].push(point(0,0,-0.25)); pv[1].push(vector(0,1,1));
-	
-	pv[2] = []
-	pv[2].push(point(0,0,-0.25)); pv[2].push(vector(0,1,0));
-	
-	for (var i = 0; i < pv.length; i++)	{
-		
-		var dir = normalize(pv[i][1])
-		var r = new ray(pv[i][0], dir)
-		
-		var xs = s.local_intersect(r)
-		
-		console.log("xs.count = " + xs.length + "\n");
-	}
-}
-
-function test190c()	{
-	// PASSED
-	
-	var s = cone()
-	var p = []
-	p[0] = point(0,0,0)
-	p[1] = point(1,1,1)
-	p[2] = point(-1,-1,0)
-	
-	var n1 = s.local_normal_at(p[0])
-	var n2 = s.local_normal_at(p[1])
-	var n3 = s.local_normal_at(p[2])
-
-	debugger;
-}
-
 function ch13()	{
 	
 	
@@ -1548,48 +315,6 @@ function ch13()	{
 	w.objects.push(cone1);
 	
 	render(c, w, 1);
-}
-
-function test196()	{
-	// PASSED
-	var g = group()
-	var s1 = sphere("s1")
-	var s2 = sphere("s2")
-	var s3 = sphere("s3")
-	
-	s2.transform = translation(0,0,-3)
-	s3.transform = translation(5,0,0)
-	
-	g.addChild(s1)
-	g.addChild(s2)
-	g.addChild(s3)
-	
-	var r = new ray(point(0,0,-5), vector(0,0,1))
-	
-	var xs = g.local_intersect(r)
-	
-	debugger;
-}
-
-function test198b()	{
-	// PASSED
-	var g1 = group()
-	g1.transform = rotation_y(Math.PI/2)
-	
-	var g2 = group()
-	g2.transform = scaling(1,2,3)
-	
-	g1.addChild(g2)
-	
-	var s = sphere()
-	s.transform = translation(5,0,0)
-	
-	g2.addChild(s)
-	
-	var n = normal_to_world(s, vector(Math.sqrt(3)/3, Math.sqrt(3)/3, Math.sqrt(3)/3))
-	
-	debugger;
-	
 }
 
 function ch14()	{
@@ -1630,16 +355,6 @@ function ch14()	{
 	
 }
 
-function test211c()	{
-	
-	var t = triangle(point(0,1,0), point(-1,0,0), point(1,0,0))
-	var r = new ray(point(0,0.5,-2), vector(0,0,1))
-	
-	var xs = t.local_intersect(r)
-	
-	debugger;
-}
-
 function p211()	{
 	
 	clearInterval(loop);
@@ -1663,162 +378,6 @@ function p211()	{
 	
 	render(c,w,1);
 	
-}
-
-function bc_bb_i()	{
-	
-	var box = new BB(point(-1,-1,-1),point(1,1,1))
-	
-	var pv = []
-	
-	pv[0] = [], pv[0].push(point(5, 0.5, 0)), pv[0].push(vector(-1, 0, 0))
-	pv[1] = [], pv[1].push(point(-5, 0.5, 0)), pv[1].push(vector(1, 0, 0))
-	pv[2] = [], pv[2].push(point(0.5, 5, 0) ), pv[2].push(vector(0, -1, 0))
-	pv[3] = [], pv[3].push(point(0.5, -5, 0)), pv[3].push(vector(0, 1, 0) )
-	pv[4] = [], pv[4].push(point(0.5, 0, 5)), pv[4].push(vector(0, 0, -1))
-	pv[5] = [], pv[5].push(point(0.5, 0, -5)), pv[5].push(vector(0, 0, 1))
-	pv[6] = [], pv[6].push(point(0, 0.5, 0)), pv[6].push(vector(0, 0, 1))
-	pv[7] = [], pv[7].push(point(-2, 0, 0)), pv[7].push(vector(2, 4, 6))
-	pv[8] = [], pv[8].push(point(0, -2, 0) ), pv[8].push(vector(6, 2, 4))
-	pv[9] = [], pv[9].push(point(0, 0, -2)), pv[9].push(vector(4, 6, 2))
-	pv[10] = [], pv[10].push(point(2, 0, 2) ), pv[10].push(vector(0, 0, -1) )
-	pv[11] = [], pv[11].push(point(0, 2, 2) ), pv[11].push(vector(0, -1, 0))
-	pv[12] = [], pv[12].push(point(2, 2, 0)), pv[12].push(vector(-1, 0, 0))
-	
-	var res = []
-	for (var i = 0; i<pv.length;i++)	{
-		
-		var dir = normalize(pv[i][1])
-		var r = new ray(pv[i][0], dir)
-		
-		res.push(box.intersects(r))
-		
-	}
-	
-	debugger;
-		/*
-	Scenario Outline: Intersecting a ray with a bounding box at the origin
-  Given box ← bounding_box(min=point(-1, -1, -1) max=point(1, 1, 1))
-    And direction ← normalize(<direction>)
-    And r ← ray(<origin>, direction)
-  Then intersects(box, r) is <result>
-
-  Examples:
-    | origin            | direction        | result |
-    | point(5, 0.5, 0)  | vector(-1, 0, 0) | true   |
-    | point(-5, 0.5, 0) | vector(1, 0, 0)  | true   |
-    | point(0.5, 5, 0)  | vector(0, -1, 0) | true   |
-    | point(0.5, -5, 0) | vector(0, 1, 0)  | true   |
-    | point(0.5, 0, 5)  | vector(0, 0, -1) | true   |
-    | point(0.5, 0, -5) | vector(0, 0, 1)  | true   |
-    | point(0, 0.5, 0)  | vector(0, 0, 1)  | true   |
-    | point(-2, 0, 0)   | vector(2, 4, 6)  | false  |
-    | point(0, -2, 0)   | vector(6, 2, 4)  | false  |
-    | point(0, 0, -2)   | vector(4, 6, 2)  | false  |
-    | point(2, 0, 2)    | vector(0, 0, -1) | false  |
-    | point(0, 2, 2)    | vector(0, -1, 0) | false  |
-    | point(2, 2, 0)    | vector(-1, 0, 0) | false  |
-	*/
-}
-
-function bb_test_1()	{
-	
-	var s = sphere(); s.transform = m_multiply(translation(2,5,-3),scaling(2,2,2)); 
-	var c = cylinder(); c.min = -2; c.max = 2; c.transform = m_multiply(translation(-4,-1,4),scaling(0.5,1,0.5)); 
-	var sh = group(); sh.addChild(s); sh.addChild(c); 
-	var box = sh.bounds_of()
-
-	debugger;
-}
-
-function bc_bb_o()	{
-	
-	// intersect(shape, ray)
-	
-	var child = test_shape()
-	
-	var sh = group()
-	sh.addChild(child)
-	sh.bounds_of()
-	
-	var r = new ray(point(0,0,-5), vector(0,1,0))
-	
-	var xs = intersect(sh, r)
-	var res = []
-	
-	if(child.saved_ray!=undefined)
-		res.push("set")
-	else
-		res.push("unset")
-	
-	child = test_shape("test")
-	sh = group()
-	sh.addChild(child)
-	sh.bounds_of()
-	
-	r = new ray(point(0,0,-5), vector(0,0,1))
-	xs = intersect(sh, r)
-	
-	if(child.saved_ray!=undefined)
-		res.push("set")
-	else
-		res.push("unset")
-	
-	debugger; 	
-}
-
-function bb_bvh_split_1()	{
-	
-	var res = []
-	
-	// scenario: splitting a perfect cube
-	var box = new BB(point(-1,-4,-5), point(9,6,5))
-	var pair = box.split_bounds()
-	
-	var _ = { left: {min: pair.left.min, max: pair.left.max}, right: {min: pair.right.min, max: pair.right.max} }
-	res.push(_)
-	
-	
-	debugger;
-}
-
-// TEXTURE MAPPING TESTS
-function tm_sm()	{
-	// PASSED
-	var x = []
-	x.push(point(0, 0, -1))
-	x.push(point(1, 0, 0))
-	x.push(point(0, 0, 1))
-	x.push(point(-1, 0, 0))
-	x.push(point(0, 1, 0))
-	x.push(point(0, -1, 0))
-	x.push(point(Math.sqrt(2)/2, Math.sqrt(2)/2, 0))
-	
-	var p, res = [];
-	
-	for(var i = 0; i<x.length; i++)	{
-		
-		p = x[i]
-		res.push(spherical_map(p))
-	}
-	
-	debugger;
-		/*
-  Given p ← <point>
-  When (u, v) ← spherical_map(p)
-  Then u = <u>
-    And v = <v>
-
-  Examples:
-    | point                | u    | v    |
-    | point(0, 0, -1)      | 0.0  | 0.5  |
-    | point(1, 0, 0)       | 0.25 | 0.5  |
-    | point(0, 0, 1)       | 0.5  | 0.5  |
-    | point(-1, 0, 0)      | 0.75 | 0.5  |
-    | point(0, 1, 0)       | 0.5  | 1.0  |
-    | point(0, -1, 0)      | 0.5  | 0.0  |
-    | point(√2/2, √2/2, 0) | 0.25 | 0.75 |
-	*/
 }
 
 function tm_s()	{
@@ -1880,51 +439,6 @@ function tm_s()	{
 	
 }
 
-function tm_sm_2()	{
-	// PASSED
-	var checkers = uv_checkers(16, 8, colour(0,0,0), colour(1,1,1))
-	var pattern = texture_map(checkers, spherical_map /* fn */)
-	
-	var _p = [], res = []
-	_p.push(point(0.4315, 0.4670, 0.7719))
-	_p.push(point(-0.9654, 0.2552, -0.0534))
-	_p.push(point(0.1039, 0.7090, 0.6975))
-	_p.push(point(-0.4986, -0.7856, -0.3663))
-	_p.push(point(-0.0317, -0.9395, 0.3411))
-	_p.push(point(0.4809, -0.7721, 0.4154))
-	_p.push(point(0.0285, -0.9612, -0.2745))
-	_p.push(point(-0.5734, -0.2162, -0.7903))
-	_p.push(point(0.7688, -0.1470, 0.6223))
-	_p.push(point(-0.7652, 0.2175, 0.6060))
-	
-	for(var i = 0; i<_p.length; i++)	{
-		
-		res.push(pattern_at(pattern, _p[i]))
-	}
-	
-	debugger;
-	
-	/*
-	Scenario Outline: Using a texture map pattern with a spherical map
-  Given checkers ← uv_checkers(16, 8, black, white)
-    And pattern ← texture_map(checkers, spherical_map)
-  Then pattern_at(pattern, <point>) = <color>
-
-  Examples:
-    | point                            | color |
-    | point(0.4315, 0.4670, 0.7719)    | white |
-    | point(-0.9654, 0.2552, -0.0534)  | black |
-    | point(0.1039, 0.7090, 0.6975)    | white |
-    | point(-0.4986, -0.7856, -0.3663) | black |
-    | point(-0.0317, -0.9395, 0.3411)  | black |
-    | point(0.4809, -0.7721, 0.4154)   | black |
-    | point(0.0285, -0.9612, -0.2745)  | black |
-    | point(-0.5734, -0.2162, -0.7903) | white |
-    | point(0.7688, -0.1470, 0.6223)   | black |
-    | point(-0.7652, 0.2175, 0.6060)   | black |
-	*/
-}
-
 function test_refraction()	{
 	
 	clearInterval(loop);
@@ -1975,6 +489,180 @@ function test_refraction()	{
 	
 	render(cam,w,5);
 }
+
+/** CURRENT TESTS */
+
+function test86a()	{ // PASSED
+	
+	
+	var m = new material();
+	var position = point(0, 0, 0);
+	
+	var eyev = vector(0,0,-1);
+	var normalv = vector(0,0,-1);
+	var _color = colour(1, 1, 1);
+	
+	var light = new point_light(point(0,0,-10), _color);
+	
+	var res = lighting(m, light, { id: 'Dave' }, position, eyev, normalv, 0);
+	
+	res = sn_round(res);
+	
+	debugger;
+}
+
+function test86b()	{ // PASSED
+	
+	var m = new material();
+	var position = point(0,0,0);
+	
+	var eyev = vector(0, Math.SQRT2/2, Math.SQRT2/2);
+	var normalv = vector(0,0,-1);
+	var _color = colour(1, 1, 1);
+	_color.x = 1;
+	_color.y = 1;
+	_color.z = 1;
+	
+	var light = new point_light(point(0,0,-10), _color);
+	
+	var res = lighting(m, light, { id: 'Dave' }, position, eyev, normalv);
+	
+	debugger;
+}
+
+function test87a()	{ // PASSED
+	
+	var m = new material();
+	var position = point(0,0,0);
+	
+	var eyev = vector(0,0,-1);
+	var normalv = vector(0,0,-1);
+	var _color = colour(1, 1, 1);
+	
+	var light = new point_light(point(0,10,-10), _color);
+	
+	var res = lighting(m, light, { id: 'Dave' }, position, eyev, normalv);
+	
+	debugger;
+}
+
+function test87b()	{
+	
+	var m = new material();
+	var _position = point(0,0,0);
+	
+	var eyev = vector(0,-Math.SQRT2/2,-Math.SQRT2/2);
+	var normalv = vector(0,0,-1);
+	var _color = colour(1, 1, 1);
+	
+	var light = new point_light(point(0,10,-10), _color);
+	
+	var res = lighting(m, light, { id: 'Dave' }, _position, eyev, normalv);
+	
+	debugger;
+}
+
+function test88()	{ // TODO
+	
+	var m = new material();
+	var position = point(0,0,0);
+	
+	var eyev = vector(0,0,-1);
+	var normalv = vector(0,0,-1);
+	var _color = colour(1, 1, 1);
+	
+	var light = new point_light(point(0,0,10), _color);
+	
+	var res = lighting(m, light, { id: 'Dave' }, position, eyev, normalv);
+	
+	debugger;
+}
+
+function eCh5()	{
+	
+	var half = 3.5, wall_z = 10, pixel_size = 7.0 / CANVAS_HEIGHT, ray_origin = point(0,0,-5)
+	
+	var color_ = colour(1,0,0)
+	var s = sphere()
+	
+	for (var y = 0; y < CANVAS_HEIGHT; y++)	{
+		
+		var world_y = half - pixel_size * y
+		
+		for (var x = 0; x < CANVAS_HEIGHT; x++)	{
+			
+			var world_x = (-half) + pixel_size * x
+			
+			var position_ = point(world_x, world_y, wall_z)
+			
+			var r = new ray(ray_origin, normalize(subtract(position_, ray_origin)))
+			var xs = intersect(s, r)
+			
+			if(hit(xs))	{
+				
+				var c = convert(color_)
+				ctx.fillStyle = "#" + c.x + c.y + c.z
+				ctx.fillRect(x,y,1,1)
+			}
+			
+		}
+
+	}
+}
+
+
+function hereWeGo()	{
+
+	var half = 3.5, wall_z = 10, pixel_size = 7.0 / CANVAS_HEIGHT, ray_origin = point(0,0,-5)
+	
+	var l = new point_light(point(-10,10,-10), colour(1, 1, 1))
+	
+	
+	
+	var color_ = colour(1,0,0)
+	var s = sphere()
+	s.material.color = colour(1, 0.2, 1)
+	
+	for (var y = 0; y < CANVAS_HEIGHT; y++)	{
+		
+		var world_y = half - pixel_size * y
+		
+		for (var x = 0; x < CANVAS_HEIGHT; x++)	{
+			
+			var world_x = (-half) + pixel_size * x
+			
+			var position_ = point(world_x, world_y, wall_z)
+			
+			var r = new ray(ray_origin, normalize(subtract(position_, ray_origin)))
+			var xs = intersect(s, r)
+	
+			var h = hit(xs)
+
+			
+			if(h)	{
+				
+				var point_ = _position(r, h.t)
+				var normal_ = normal_at(h.object, point_)
+			
+				var eye = negate(r.direction)
+			
+				color_ = lighting(h.object.material, l, { id: 'Dave' }, point_, eye, normal_, 0)
+				
+				var c = convert(color_)
+				
+				ctx.fillStyle = "#" + c.x + c.y + c.z
+				ctx.fillRect(x,y,1,1)
+			}
+			
+		}
+
+	}
+}
+
+/* */
+
+
+
 
 function linetest1()	{
 	
