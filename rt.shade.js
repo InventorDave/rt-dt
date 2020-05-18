@@ -11,8 +11,8 @@ function shade_hit(w, comps, obj, remaining)	{
 
 	var refracted = refracted_color(w, comps, remaining)
 
-	reflected = colour(0,0,0)
-	refracted = colour(0,0,0)
+	//reflected = colour(0,0,0)
+	//refracted = colour(0,0,0)
 	
 	if ((material.reflective > 0) && (material.transparency > 0))	{
 		console.log("shade.js::shade_hit(...):Transparent & Reflective.\n")

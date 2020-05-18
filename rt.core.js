@@ -110,7 +110,7 @@ function prepare_computations(i, r, xs)	{
 	comps.t = i.t;
 	comps.object = i.object;
 	
-	comps.point = _position(r, comps.t); // HERE, 2ND  CALL TO PREPARE_COMPUTATIONS() ON CALL STACK
+	comps.point = _position(r, comps.t);
 	
 	//console.log("core.js::prepare_computations()::=comps.point.x:"+comps.point.x+", point.y:"+comps.point.y+", point.z:"+comps.point.z+"\n")
 	/*

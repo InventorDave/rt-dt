@@ -47,22 +47,31 @@ ofData.presets.camera.push(view_transform(point(25,0, 25), // from
 
 
 function optionSelected()	{
-	
+	var ct;
 	switch(document.getElementById("os").selectedIndex)	{
 		
 		case 0:
 			WIDTH = 150;
 			HEIGHT = Math.round(150*(9/16));
+			ct = ofData.c.transform;
+			ofData.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
+			ofData.c.setCTransform(ct);
 			break;
 		
 		case 1:
 			WIDTH = 500;
 			HEIGHT = Math.round(500*(9/16));
+			ct = ofData.c.transform;
+			ofData.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
+			ofData.c.setCTransform(ct);
 			break;
 			
 		case 2:
 			WIDTH = 900
 			HEIGHT = 550
+			ct = ofData.c.transform;
+			ofData.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
+			ofData.c.setCTransform(ct);
 			break;
 			
 		default:
@@ -122,6 +131,43 @@ function render(c, w, remaining)	{
 	render2();
 }
 
+
+function render2()	{
+
+	g_x =0;
+	while(g_x != WIDTH) {
+		var r = g_c.ray_for_pixel(g_x, g_y);
+				
+		var c = color_at(g_w, r, g_r)
+		
+		if ((c.x==0)&&(c.y==0)&&(c.z==0))
+			c = RENDER_BG_COLOR
+		
+		c = convert(c)
+		ctx.fillStyle = "#" + c.x + c.y + c.z
+		
+		var x = g_x + ((CANVAS_WIDTH/2) - WIDTH/2)
+		var y = g_y + ((CANVAS_HEIGHT/2) - HEIGHT/2)
+		
+		ctx.fillRect(x,y,1,1)
+				
+		g_x++;
+	}
+
+	g_x = 0
+	g_y++
+			
+	if (g_y === HEIGHT)	{
+				
+		clearTimeout(to)
+		console.log("COMPLETED RENDER.")
+		console.timeEnd("render")
+		return
+	}
+	
+	to = setTimeout(render2, 0)	
+}
+/*
 function render2()	{
 
 	var r = g_c.ray_for_pixel(g_x, g_y);
@@ -156,7 +202,7 @@ function render2()	{
 	
 	to = setTimeout(render2, 0)	
 }
-
+*/
 
 function convert(c)	{
 	

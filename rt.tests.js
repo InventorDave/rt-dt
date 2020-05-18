@@ -659,6 +659,27 @@ function hereWeGo()	{
 	}
 }
 
+
+function fremag()	{
+	
+	ofData.c.setCTransform(view_transform(point(0,0,-10), point(0,0,0), vector(0,1,0)));
+	var l = new point_light(point(-50, 100, -100), colour(1,1,1)) 
+		
+	var s3 = sphere("3")
+	s3.transform = m().translation(1,0,0).scaling(1.5,1.5,1.5)
+	s3.material.color = colour(1,0,0)
+	s3.material.ambient = 0.2
+	s3.material.diffuse = 0.7
+	s3.material.specular = 0.8
+	
+	var o = group()
+	o.addChild(s3)
+	
+	ofData.o = o
+	ofData.l = l
+
+	renderImage()
+}
 /* */
 
 

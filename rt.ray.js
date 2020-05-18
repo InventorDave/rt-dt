@@ -145,13 +145,14 @@ function normal_at(s, world_point)	{
 
 function reflect(_in, normal)	{
 	
-	/*
+	
 	var res = multiplyInt(normal, 2);
 	res = multiplyInt(res, dot(_in, normal));
 	res = subtract(_in, res);
-	*/
 	
-	return sn_round(subtract(_in, multiplyInt(normal, 2 * dot(_in, normal))))
+	return res
+	
+	//return subtract(_in, multiplyInt(normal, 2 * dot(_in, normal)))
 }
 
 function invert(v)	{

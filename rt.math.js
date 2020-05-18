@@ -38,10 +38,22 @@ function round(n)	{ // unlike Math.round(), only rounds n if dist(n,floor/ceil(n
 	if(equal(n,Math.floor(n)))
 		return Math.floor(n)
 	
-	if(equal(n,Math.ceil(n)))
+	else if(equal(n,Math.ceil(n)))
 		return Math.ceil(n)
 	
 	return n
+}
+
+function round_t(t)	{
+	
+	t.x = round(t.x)
+	t.y = round(t.y)
+	t.z = round(t.z)
+	
+	t.w = round(t.w)
+	
+	return t
+	
 }
 
 function sn_round(t)	{ // round the x, y, or z entries of a tuple down to 0 when < EPSILON.

@@ -617,10 +617,13 @@ function group(id2)	{
 
 	};
 	
-	g.addChild =  function(sh)	{
+	g.addChild =  function()	{
 		
-		sh.parent = this;
-		this.s.push(sh);
+		for (var i = 0; i < arguments.length; i++)	{
+			
+			arguments[i].parent = this;
+			this.s.push(arguments[i]);
+		}
 	};
 	
 	g.bounds_of = function()	{
@@ -837,7 +840,7 @@ function test_shape()	{
 function Shape(type, id2)	{
 	
 	this.id2 = id2 || 0;
-	this.id = GetUID()/*(Math.floor(Math.random() * 999999)) + 1*/
+	this.id = GetUID()
 	this.transform = identity_matrix()
 	this.material = new material()
 	

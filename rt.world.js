@@ -5,12 +5,16 @@ function world()	{
 	
 }
 
+var wto_ic = []
 function world_to_object(s, p)	{
+	
+	if(!wto_ic[s.id])
+		wto_ic[s.id] = inverse(s.transform)
 	
 	if (s.parent)
 		p = world_to_object(s.parent, p)
 	
-	return mul(s.transform, p)
+	return mul(wto_ic[s.id], p)
 }
 
 
@@ -20,12 +24,16 @@ function normal_to_world(s, n)	{
 	if(!ntw_ic[s.id])
 		ntw_ic[s.id] = transpose(inverse(s.transform))
 	
-	n = mul(ntw_ic[s.id], n)
-	n.w = 0
-	n = normalize(n)
-	
 	if (s.parent)
 		n = normal_to_world(s.parent, n)
+	
+	else	{
+	
+		n = mul(ntw_ic[s.id], n)
+		n.w = 0
+		n = normalize(n)
+	}
+
 	
 	return n
 }

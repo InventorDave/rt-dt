@@ -58,7 +58,7 @@ function lighting(_material, _light, obj, _point, eyev, normalv, in_shadow, f)	{
 		   light reflects away from the eye.
 		*/
 		
-		var neg_lightv = new tuple(-lightv.x, -lightv.y, -lightv.z, -lightv.w);
+		var neg_lightv = new tuple(-lightv.x, -lightv.y, -lightv.z, 0);
 		var reflectv = reflect(neg_lightv, normalv);
 		var reflect_dot_eye = dot(reflectv, eyev);
 		

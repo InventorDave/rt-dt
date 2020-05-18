@@ -130,7 +130,7 @@ function scene2()	{
 										)
 						);
 						
-	var l = new point_light(point(-1000, 600, 500), colour(1,1,1)) 
+	var l = new point_light(point(/*-1000*/400, /*600*/300, 500), colour(1,1,1)) 
 	
 	var s1 = sphere("1")
 	s1.material.color = colour(0.0,0.0,1.0)
