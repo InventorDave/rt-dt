@@ -1,4 +1,4 @@
-# js-raytracer-challenge
+# rt/dt
 Javascript implementation of Jamis Buck's Raytracer Challenge.
 
 Once you have downloaded the project files, simply load "raytracer.html" into your browser. *This program is a work in progress.* Included are some .obj mesh files you can load into the program by selecting the "choose file" button below the canvas window. Then,
