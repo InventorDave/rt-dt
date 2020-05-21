@@ -85,7 +85,7 @@ function scene1()	{
 	
 	prepCanvas()
 	
-	ofData.c.setCTransform(view_transform(
+	Data.c.setCTransform(view_transform(
 										point(10,0,-20),
 										point(0,0,0),
 										vector(0,1,0)
@@ -109,8 +109,8 @@ function scene1()	{
 	//o.divide(1)
 	
 	//debugger;
-	ofData.o = o
-	ofData.l = l
+	Data.o = o
+	Data.l = l
 	
 	
 	renderImage();
@@ -123,7 +123,7 @@ function scene2()	{
 	
 	prepCanvas()
 	
-	ofData.c.setCTransform(view_transform(
+	Data.c.setCTransform(view_transform(
 										point(200,200,1000),
 										point(0,50,0),
 										vector(0,1,0)
@@ -190,19 +190,10 @@ function scene2()	{
 
 
 	var o = group()
-	o.addChild(s1)
-	o.addChild(s2)
-	o.addChild(s3)
-	o.addChild(s4)
-	o.addChild(s5)
-	o.addChild(s6)
-	o.addChild(s7)
-	o.addChild(s8)
+	o.addChild(s1, s2, s3, s4, s5, s6, s7, s8)
 
-	
-
-	ofData.o = o
-	ofData.l = l
+	Data.o = o
+	Data.l = l
 	
 	
 	console.log("Select Render->Render!.")
@@ -214,7 +205,7 @@ function scene3()	{
 	
 	prepCanvas()
 	
-	ofData.c.setCTransform(view_transform(
+	Data.c.setCTransform(view_transform(
 										point(0,0,4),
 										point(0,0,0),
 										vector(0,1,0)
@@ -230,8 +221,8 @@ function scene3()	{
 	var o = group()
 	o.addChild(s)
 	
-	ofData.o = o
-	ofData.l = l
+	Data.o = o
+	Data.l = l
 	
 	console.log("Select Render->Render!.")
 }

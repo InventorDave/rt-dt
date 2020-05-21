@@ -141,8 +141,6 @@ function normal_at(s, world_point)	{
 	return normal_to_world(s, ln)
 }
 
-
-
 function reflect(_in, normal)	{
 	
 	

@@ -10,11 +10,11 @@ function convert3(vertices)	{
 	var obj = [], v2 = [], vn2 = [];
 	var x, y, z;
 	
-	// CONVERT VERTICES (1-BASED OFFSETS INTO OFDATA.V[]) INTO SIZE(N) POINT()'S
+	// CONVERT VERTICES (1-BASED OFFSETS INTO Data.V[]) INTO SIZE(N) POINT()'S
 	for (var m = 0; m < vertices.length/* - 1 */; m++)	{
 		
-		var vdata = ofData["v"][vertices[m][0]-1];
-		var vndata =ofData["vn"][vertices[m][1]-1];
+		var vdata = Data["v"][vertices[m][0]-1];
+		var vndata =Data["vn"][vertices[m][1]-1];
 		
 		if(flag17)
 			debugger;
@@ -66,17 +66,17 @@ function parse_obj_file()	{
 	var ignored_lines = 0;
 	var lines = OBJFILECONTENTS.split("\n")
 	
-	ofDataR.f_begins = 0
-	ofDataR.v_begins = 0
-	ofDataR.vn_begins = 0
-	ofDataR.vt_begins = 0
+	DataR.f_begins = 0
+	DataR.v_begins = 0
+	DataR.vn_begins = 0
+	DataR.vt_begins = 0
 	
-	ofDataR.x_min = 0
-	ofDataR.x_max = 0
-	ofDataR.y_min = 0
-	ofDataR.y_max = 0
-	ofDataR.z_min = 0
-	ofDataR.z_max = 0
+	DataR.x_min = 0
+	DataR.x_max = 0
+	DataR.y_min = 0
+	DataR.y_max = 0
+	DataR.z_min = 0
+	DataR.z_max = 0
 	
 	for (var l = 0; l<lines.length;l++)	{
 		
@@ -88,10 +88,10 @@ function parse_obj_file()	{
 		if (str=="f ")	{
 			
 			curr_e = "f";
-			if(!ofDataR.f_begins)	{
+			if(!DataR.f_begins)	{
 			
-				ofData["f"] = []
-				ofDataR.f_begins = l;
+				Data["f"] = []
+				DataR.f_begins = l;
 			}
 			
 		}
@@ -102,10 +102,10 @@ function parse_obj_file()	{
 		}
 		else if (str=="v ")	{
 		
-			if(!ofDataR.v_begins)	{
+			if(!DataR.v_begins)	{
 			
-				ofData["v"] = []
-				ofDataR.v_begins = l;
+				Data["v"] = []
+				DataR.v_begins = l;
 			}
 			
 			curr_e = "v";
@@ -113,19 +113,19 @@ function parse_obj_file()	{
 		else if (str=="vn")	{
 		
 			curr_e = "vn";
-			if(!ofDataR.vn_begins)	{
+			if(!DataR.vn_begins)	{
 				
-				ofData["vn"] = []
-				ofDataR.vn_begins = l;
+				Data["vn"] = []
+				DataR.vn_begins = l;
 			}
 		}
 		else if (str=="vt")	{
 			
 			curr_e = "vt"
-			if(!ofDataR.vt_begins)	{
+			if(!DataR.vt_begins)	{
 				
-				ofData["vt"] = []
-				ofDataR.vt_begins = l;
+				Data["vt"] = []
+				DataR.vt_begins = l;
 			}
 		}
 		else	{
@@ -145,7 +145,7 @@ function parse_obj_file()	{
 				if((body2[g]!==" ")&&(body2[g]))
 					body.push(body2[g])
 			
-			ofData[curr_e].push(body);
+			Data[curr_e].push(body);
 			
 			if(curr_e=="v")	{
 				if(body[0]==0)
@@ -157,20 +157,20 @@ function parse_obj_file()	{
 				if(body[2]==0)
 					body[2]=0
 				
-				if (body[0] < ofDataR.x_min)
-					ofDataR.x_min = body[0]
-				else if(body[0] > ofDataR.x_max)
-					ofDataR.x_max = body[0]
+				if (body[0] < DataR.x_min)
+					DataR.x_min = body[0]
+				else if(body[0] > DataR.x_max)
+					DataR.x_max = body[0]
 				
-				if (body[1] < ofDataR.y_min)
-					ofDataR.y_min = body[1]
-				else if(body[1] > ofDataR.y_max)
-					ofDataR.y_max = body[1]
+				if (body[1] < DataR.y_min)
+					DataR.y_min = body[1]
+				else if(body[1] > DataR.y_max)
+					DataR.y_max = body[1]
 				
-				if (body[2] < ofDataR.z_min)
-					ofDataR.z_min = body[2]
-				else if(body[2] > ofDataR.z_max)
-					ofDataR.z_max = body[2]
+				if (body[2] < DataR.z_min)
+					DataR.z_min = body[2]
+				else if(body[2] > DataR.z_max)
+					DataR.z_max = body[2]
 			}
 		}
 	}
@@ -179,12 +179,12 @@ function parse_obj_file()	{
 	
 	var o = group()
 	
-	for (var i = 0; i < ofData.f.length; i++)	{
+	for (var i = 0; i < Data.f.length; i++)	{
 	
 		var f = [];
 		
-		for (var j = 0; j < ofData["f"][i].length; j++) { // for teapot, vertice refs only, no n//n structure
-			f.push([ofData["f"][i][j].split("/")[0], ofData["f"][i][j].split("/")[2]])
+		for (var j = 0; j < Data["f"][i].length; j++) { // for teapot, vertice refs only, no n//n structure
+			f.push([Data["f"][i][j].split("/")[0], Data["f"][i][j].split("/")[2]])
 		}	
 	
 		var s = convert3(f); // if from teapot, last entry in f is not invalid, it is in man mesh file
@@ -196,7 +196,7 @@ function parse_obj_file()	{
 		}
 	
 	}
-	ofData.o = o
+	Data.o = o
 	
 	console.log("Generated triangle mesh.")
 }

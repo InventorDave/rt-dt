@@ -13,7 +13,7 @@ function Pattern()	{
 		return colour(0.5,0.5,0.5)
 	}
 	
-	this.transform = identity_matrix()
+	this.transform = m()
 	
 	this.color_at_object = function(obj, wp)	{ // p132
 		
@@ -27,33 +27,153 @@ function Pattern()	{
 function my_pattern(texture_map)	{
 	
 	var tp = new Pattern()
+	tp.type = "TextureMap"
+	
 	tp.texture_map = texture_map
 	
 	tp.algorithm = function(p)	{
 		
 		//console.log("test_pattern() colour = r: " + p.x + ", g: " + p.y + ", b: " + p.z + "\n")
-		return pattern_at(this.texture_map, p)
+		
+		//return pattern_at(this.texture_map, p)
+		
+		var uv = this.texture_map.uv_map(p)
+		return this.texture_map.uv_pattern.uv_pattern_at(uv.u, uv.v)
 	}
 	
 	return tp;
 }
 
+// USAGE:
+// var TextureMap = texture_map(checkers_pattern(2, 2, {x: 1, y: 1, z: 1}, {x: 0.4, y: 0.4, z: 0.4}), spherical_map)
+// s.material.pattern = my_pattern(TextureMap)
+
+function cube_uv_front(p)	{
+	
+	var u = ((p.x + 1) % 2.0) / 2.0
+	var v = ((p.y + 1) % 2.0) / 2.0
+
+	return {u: u, v: v}
+}
+
+function cube_uv_back(p)	{
+	
+	var u = ((1 - p.x) % 2.0) / 2.0
+	var v = ((p.y + 1) % 2.0) / 2.0
+
+	return {u: u, v: v}
+}
+
+function cube_uv_up(p)	{
+	
+	var u = ((1 - p.x) % 2.0) / 2.0
+	var v = ((1 - p.z) % 2.0) / 2.0
+
+	return {u: u, v: v}
+}
+
+function cube_uv_down(p)	{
+	
+	var u = ((p.x + 1) % 2.0) / 2.0
+	var v = ((p.z + 1) % 2.0) / 2.0
+
+	return {u: u, v: v}
+}
+
+function cube_uv_left(p)	{
+	
+	var u = ((p.z + 1) % 2.0) / 2.0
+	var v = ((p.y + 1) % 2.0) / 2.0
+
+	return {u: u, v: v}
+}
+
+function cube_uv_right(p)	{
+	
+	var u = ((1 - p.z) % 2.0) / 2.0
+	var v = ((p.y + 1) % 2.0) / 2.0
+
+	return {u: u, v: v}
+}
+
+function CubeMap(c1, c2, c3, c4, c5, c6, c7, c8)	{
+	
+	var cm = new Pattern()
+	
+	cm.type = "CubeMap"
+		
+	
+	cm.texture_map = {"left": align_check_pattern(c2, c5, c1, c6, c3), "front": align_check_pattern(c5, c1, c2, c3, c4), "right": align_check_pattern(c1, c2, c7, c4, c8), "back": align_check_pattern(c4, c7, c5, c8, c6), "up": align_check_pattern(c3, c5, c7, c1, c2), "down": align_check_pattern(c7, c3, c4, c6, c8)}
+	
+	cm.face_from_point = function(p)	{
+	
+		var abs_x = Math.abs(p.x)
+		var abs_y = Math.abs(p.y)
+		var abs_z = Math.abs(p.z)
+		var coord = Math.max(abs_x, abs_y, abs_z)
+
+		if(coord == p.x)
+			return "right"
+
+		if(coord == -p.x)
+			return "left"
+	  
+		if(coord == p.y)
+			return "up"
+		
+		if(coord == -p.y)
+			return "down"
+
+		if(coord == p.z)
+			return "front"
+
+		//the only option remaining!
+		return "back"
+	};
+	
+	cm.cube_uv = {"front": cube_uv_front, "back": cube_uv_back, "left": cube_uv_left, "right": cube_uv_right, "up": cube_uv_up, "down": cube_uv_down}
+	
+	cm.algorithm = function(p) {
+		
+		var face = this.face_from_point(p)
+		// align_check_pattern(main, ul, ur, bl, br)
+		var uv = this.cube_uv[face](p)
+		
+		var color = this.texture_map[face].uv_pattern_at(uv.u, uv.v)
+		return color
+	}
+	
+	return cm
+}
+
+/*
+//The below function has been inlined into the Pattern.algorithm() method, see Pattern Factory "my_pattern(...)", above.
 function pattern_at(texture_map, p)	{
 	
 	var uv = texture_map.uv_map(p)
-	return uv_pattern_at(texture_map.uv_pattern, uv.u, uv.v)
+	//return uv_pattern_at(texture_map.uv_pattern, uv.u, uv.v)
+	return texture_map.uv_pattern.uv_pattern_at(uv.u, uv.v)
 	
 }
+*/
 
+/*
+function texture_map(uv_pattern, uv_map), which returns a new TextureMap pattern instance that encapsulates the given uv_pattern (like uv_checkers()) and uv_map (like spherical_map()).
+*/
 function texture_map(uv_pattern, uv_map)	{
 	
 	return { uv_pattern: uv_pattern, uv_map: uv_map }
+	// eg uv_pattern = checkers_pattern(...) || align_check_pattern(...)
 }
+
+
+
+
 
 function cylindrical_map(p)	{
 
   //compute the azimuthal angle, same as with spherical_map()
-  var theta = Math.atan2(p.x, p.y)
+  var theta = Math.atan2(p.y, p.x)
   var raw_u = theta / (2 * Math.PI)
   var u = 1 - (raw_u + 0.5)
 
@@ -119,21 +239,56 @@ function spherical_map(p)	{
   return { u: u, v: v }
 }
 
-function uv_pattern_at(checkers, u, v)	{
 
-	var u2 = Math.floor(u*checkers.width)
-	var v2 = Math.floor(v*checkers.height)
+function checkers_pattern(width, height, color_a, color_b)	{
+
+	return { uv_pattern_at: checkers_uv_pattern_at, width: width, height: height, color_a: color_a, color_b: color_b }
+}
+
+function checkers_uv_pattern_at(u, v)	{
+
+	var u2 = Math.floor(u*this.width)
+	var v2 = Math.floor(v*this.height)
 	
 	if((u2+v2) % 2 == 0)
-		return checkers.color_a
+		return this.color_a
 	else
-		return checkers.color_b
+		return this.color_b
 }
 
-function uv_checkers(width, height, color_a, color_b)	{
 
-	return { width: width, height: height, color_a: color_a, color_b: color_b }
+function align_check_pattern(main, ul, ur, bl, br)	{
+
+		return { uv_pattern_at: align_check_uv_pattern_at, main: main, ul: ul, ur: ur, bl: bl, br: br }
+		//uv_align_check(main, ul, ur, bl, br)
 }
+
+function align_check_uv_pattern_at(u, v)	{
+	
+	// remember: v=0 at the bottom, v=1 at the top
+	if (v > 0.8)	{
+		
+		if (u < 0.2)
+			return this.ul
+		if (u > 0.8)
+			return this.ur
+	}
+	else if (v < 0.2)	{
+    
+		if (u < 0.2)
+			return this.bl
+		if (u > 0.8)
+			return this.br
+	}
+
+	return this.main
+}
+
+
+
+
+
+
 
 function test_pattern()	{
 	

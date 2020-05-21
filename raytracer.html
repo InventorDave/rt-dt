@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
   <title>rt/dt (Beta)</title>
-
+<meta charset="utf-8"/>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
 <script src="https://kit.fontawesome.com/504ca65532.js" crossorigin="anonymous"></script>
 <style>
@@ -24,7 +24,7 @@
 
 	font-size: 10px;
 	padding: 7px 16px;
-	border_radius: 6px;
+	border-radius: 6px;
 }
 
 .buttonCamera	{
@@ -189,7 +189,7 @@
       <a href="mailto:leedavidodea@hotmail.co.uk"><i class="fas fa-at" title="Send me an email!"></i></a>
     </div>
     <div class="dropdown">
-      <a onclick="option('spotify'); return false;"><i class="fas fa-music" style="color: #008000;" title="Check out my Spotiy playlists!"></i></a>
+      <a onclick="option('spotify'); return false;"><i class="fas fa-music" style="color: #008000;" title="Check out my Spotify playlists!"></i></a>
     </div>
     <div class="dropdown">
       <a onclick="option('youtube'); return false;"><i class="fab fa-youtube" style="color: #dc143c;" title="Check out my YouTube playlists!"></i></a>
@@ -293,8 +293,8 @@ window.onclick = function(e) {
 
 <div style="text-align: center;">
 <select id="os" name="options" onchange="optionSelected(); return false;">
-  <option value="small">Preview  (150,100)</option>
-  <option value="large">Viewport (500,281.25)</option>
+  <option value="small">Preview  (150,84)</option>
+  <option value="large" selected>Viewport (500,281.25)</option>
   <!-- <option value="vlarge">900,550</option> -->
 </select>
 </div>
@@ -416,11 +416,11 @@ function renderImage()	{
 
 	prepCanvas()
 	
-	var c = ofData.c
+	var c = Data.c
 	var w = new world()
 	
-	w.light = ofData.l
-	w.objects = [ofData.o]
+	w.light = Data.l
+	w.objects = [Data.o]
 	
 	render(c,w,5); // render(c, w, remaining) "rt.raytracer.js"
 }
@@ -431,7 +431,7 @@ function option(opt)	{
 	
 	if (opt=="render")	{
 	
-		if(ofData.o.s.length)
+		if(Data.o.s.length)
 			renderImage()
 		else
 			console.log("No scene in memory!")

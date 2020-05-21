@@ -380,65 +380,6 @@ function p211()	{
 	
 }
 
-function tm_s()	{
-	
-	clearInterval(loop);
-	ctx.fillStyle = BG_COLOR;
-	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
-	
-	var cam = new camera(WIDTH, HEIGHT, Math.PI/2);
-	var w = new world();
-	
-	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
-	
-	cam.setCTransform(view_transform(point(0,0,-10), // from
-								point(0,0,0),   // to
-								vector(0,1,0)) // up
-					);
-	
-	
-	
-	var checkers = uv_checkers(8, 4, colour(0,0,1), colour(1,0,0))
-	var pattern = texture_map(checkers, spherical_map /* fn */)
-	var s = sphere()
-	s.material.pattern = my_pattern( pattern )
-	s.transform = m().scaling(2,2,2)
-	
-	checkers = uv_checkers(8, 4, colour(0,0,1), colour(1,0,0))
-	pattern = texture_map(checkers, cylindrical_map /* fn */)
-	var c = cylinder()
-	c.min = -2, c.max = 2
-	c.material.pattern = my_pattern( pattern )
-	c.transform = m().translation(7,0,-1).rotation_z(Math.PI/2)
-	
-	checkers = uv_checkers(8, 4, colour(0,0,1), colour(1,0,0))
-	pattern = texture_map(checkers, spherical_map /* fn */)
-	var cb = cube()
-	cb.material.pattern = my_pattern( pattern )
-	cb.transform = m().translation(-4, 1, 0).rotation_z(Math.PI/4)
-	
-	/*
-	checkers = uv_checkers(2, 2, colour(0.5,0.5,0.5), colour(1,1,1))
-	pattern = texture_map(checkers, planar_map)
-	var pl = plane()
-	pl.material.pattern = my_pattern( pattern )
-	pl.transform = m().translation(0,-2,0)
-	*/
-	var o = group()
-	o.addChild(s)
-	o.addChild(c)
-	o.addChild(cb)
-	
-	//o.divide(1)
-	
-	//debugger;
-	w.objects.push(o)
-	//w.objects.push(pl)
-	
-	render(cam,w,1);
-	
-}
-
 function test_refraction()	{
 	
 	clearInterval(loop);
@@ -662,7 +603,7 @@ function hereWeGo()	{
 
 function fremag()	{
 	
-	ofData.c.setCTransform(view_transform(point(0,0,-10), point(0,0,0), vector(0,1,0)));
+	Data.c.setCTransform(view_transform(point(0,0,-10), point(0,0,0), vector(0,1,0)));
 	var l = new point_light(point(-50, 100, -100), colour(1,1,1)) 
 		
 	var s3 = sphere("3")
@@ -675,16 +616,179 @@ function fremag()	{
 	var o = group()
 	o.addChild(s3)
 	
-	ofData.o = o
-	ofData.l = l
+	Data.o = o
+	Data.l = l
 
 	renderImage()
 }
+
+
+/* TEXTURE MAP TESTS */
+
+function tm_1()	{
+	
+	prepCanvas()
+	
+	var l = new point_light(point(-50, 100, -100), colour(1,1,1)) 
+	
+	var s1 = sphere()
+	s1.transform = m().scaling(2, 2, 2)
+	
+	var p = checkers_pattern(4, 4, colour(1,1,1), colour(1, 0.3, 0.3))
+	var TextureMap = texture_map(p, spherical_map)
+	s1.material.pattern = my_pattern(TextureMap)
+	
+	
+	var o = group()
+	o.addChild(s1)
+	
+	Data.o = o
+	Data.l = l
+	
+	renderImage()
+}
+
+function tm_2()	{
+
+	prepCanvas()
+	
+	var l = new point_light(point(-10, 10, -10), colour(1,1,1)) 
+	Data.c.setCTransform(view_transform(point(0,0,-30), point(0,0,0), vector(0,1,0)));
+	
+	var p = checkers_pattern(8, 4, colour(1,1,1), colour(1, 0.3, 0.3))
+	var TextureMap = texture_map(p, spherical_map)
+	var s = sphere()
+	s.material.pattern = my_pattern( TextureMap )
+	s.transform = m().scaling(2,2,2)
+	
+	p = checkers_pattern(2, 1, colour(0,0,1), colour(1, 0, 0))
+	TextureMap = texture_map(p, cylindrical_map)
+	var c = cylinder()
+	c.min = -2, c.max = 2
+	c.material.pattern = my_pattern( TextureMap )
+	c.transform = m().translation(7,0,-1).rotation_z(Math.PI/2)
+	
+	p = checkers_pattern(8, 4, colour(0,0,1), colour(1, 0, 0))
+	TextureMap = texture_map(p, spherical_map)
+	var cb = cube()
+	cb.material.pattern = my_pattern( TextureMap )
+	cb.transform = m().translation(-4, 1, 0).rotation_z(Math.PI/4)
+	
+	var o = group()
+	o.addChild(s, c, cb)
+	
+	Data.o = o
+	Data.l = l
+	
+	renderImage()
+}
+
+function cm_1()	{
+	// PASSED: http://www.raytracerchallenge.com/bonus/texture-mapping.html
+	var main = colour(1,1,1), ul = colour(1,0,0), ur = colour(1,1,0), bl = colour(0,1,0), br = colour(0,1,1)
+	var p =  align_check_pattern(main, ul, ur, bl, br)
+	
+	var a = []
+	a.push({u: 0.5, v: 0.5})
+	a.push({u: 0.1, v: 0.9})
+	a.push({u: 0.9, v: 0.9})
+	a.push({u: 0.1, v: 0.1})
+	a.push({u: 0.9, v: 0.1})
+	
+	var c = [];
+	for(var i = 0; i < a.length; i++)	{
+		
+		c.push(p.uv_pattern_at(a[i].u, a[i].v))
+	}
+	
+	debugger;
+	/*
+  Then c = <expected>
+  Examples:
+    | u    | v    | expected |
+    | 0.5  | 0.5  | main     |
+    | 0.1  | 0.9  | ul       |
+    | 0.9  | 0.9  | ur       |
+    | 0.1  | 0.1  | bl       |
+    | 0.9  | 0.1  | br       |
+	*/
+}
+
+function cm_plane()	{
+	
+	prepCanvas()
+	
+	var l = new point_light(point(-10, 10, -10), colour(1,1,1)) 
+	Data.c.setCTransform(view_transform(point(0,10,-30), point(0,0,0), vector(0,1,0)));
+	
+	var main = colour(1,1,1), ul = colour(1,0,0), ur = colour(1,1,0), bl = colour(0,1,0), br = colour(0,1,1)
+	var p =  align_check_pattern(main, ul, ur, bl, br)
+	
+	var TextureMap = texture_map(p, planar_map)
+	var pl = plane()
+	pl.material.pattern = my_pattern( TextureMap )
+	
+	var o = group()
+	o.addChild(pl)
+	
+	Data.o = o
+	Data.l = l
+	
+	renderImage()
+	
+}
+
+function cm_2()	{
+	// PASSED
+	
+	var c1 = colour(1,0,0), c2 = colour(1,1,0), c3 = colour(1,0.5,0), c4 = colour(0,1,0), c5 = colour(0,1,1), c6 = colour(0,0,1), c7 = colour(1,0,1), c8 = colour(1,1,1)
+	
+	var cm = CubeMap(c1,c2,c3,c4,c5,c6,c7,c8)
+	
+	// cm.color_at(p)
+	
+	var p = []
+	p.push(point(-1,0,0)), p.push(point(-1,0.9,-0.9))
+	p.push(point(-1,0.9,0.9)), p.push(point(-1, -0.9, -0.9))
+	
+
+	var res = []
+	for (var i = 0; i < p.length; i++)	{
+		
+		res.push(cm.color_at(p[i]))
+	}
+	
+	debugger;
+	
+	/*
+	Expected: yellow, cyan, red, blue
+	*/
+}
+
+function cm_cube()	{
+	
+	prepCanvas()
+	
+	var l = new point_light(point(-10, 10, -10), colour(1,1,1)) 
+	Data.c.setCTransform(view_transform(point(0,10,-30), point(0,0,0), vector(0,1,0)));
+	
+	var c1 = colour(1,0,0), c2 = colour(1,1,0), c3 = colour(1,0.5,0), c4 = colour(0,1,0), c5 = colour(0,1,1), c6 = colour(0,0,1), c7 = colour(1,0,1), c8 = colour(1,1,1)
+	
+	var cb = cube()
+	cb.material.pattern = CubeMap(c1,c2,c3,c4,c5,c6,c7,c8)
+	
+	cb.transform = m().scaling(2,2,2).rotation_z(Math.PI / 4).rotation_y(Math.PI / 4)
+	
+	var o = group()
+	o.addChild(cb)
+	
+	Data.o = o
+	Data.l = l
+	
+	renderImage()
+	
+}
 /* */
-
-
-
-
 function linetest1()	{
 	
 	// PASS - Both methods calculate the same length for the line

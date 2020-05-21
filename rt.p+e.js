@@ -1,17 +1,4 @@
-/* RAY, PROJECTILE & ENVIRONMENT */
-
-function projectile(id, position, velocity)	{
-	
-	this.id = id;
-	this.position = position; // POINT
-	this.velocity = velocity; // VECTOR
-}
-
-function environment(gravity, wind)	{
-	
-	this.gravity = gravity; // VECTOR
-	this.wind    = wind;    // VECTOR
-}
+/* RAY & PRIMITIVES */
 
 function ray(origin, direction)	{
 	
@@ -530,7 +517,7 @@ function group(id2)	{
 	
 	var g = new Shape("group", id2)
 	
-	ofData.g[g.id] = g
+	Data.g[g.id] = g
 	
 	g.s=[];
 	
@@ -550,11 +537,10 @@ function group(id2)	{
 		var _bb = this.bb.split_bounds()
 		
 		var ch_b, child;
-		//var L = this.s.length;
 		
 		for (var i = 0; i<this.s.length; i++)	{
 			
-			var child = this.s[i]
+			child = this.s[i]
 			ch_b = child.bounds_of()
 			
 			/*
@@ -859,7 +845,7 @@ function Shape(type, id2)	{
 	this.bbMax = point(0,0,0)
 	this.bb = new BB()
 	this.hasGenBB = false
-	this.bounds_of = function()	{ // REDEFINE FOR GROUP (AND CSG) !!
+	this.bounds_of = function()	{ // REDEFINE FOR GROUP (AND CSG), and some primitives - see source code!!
 						
 						if(!this.hasGenBB)	{
 							

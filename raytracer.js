@@ -1,13 +1,13 @@
 
-var WIDTH = 150;
-var HEIGHT = 84; /*Math.round(WIDTH*(9/16));*/
+			var WIDTH = 500;
+			var HEIGHT = Math.round(500*(9/16));
 var FGCOLOR = "#2222cc";
 var BGCOLOR = "#000000";
 var RENDER_BG_COLOR = colour(0,0,0)
 
 /** GLOBAL OBJECTS */
 
-var ofData = {
+var Data = {
 				f: [],
 				v: [],
 				vn: [],
@@ -21,7 +21,7 @@ var ofData = {
 				presets: { camera: [], lights: [], scenes: [] }
 };
 
-var ofDataR = {
+var DataR = {
 				x_min: Infinity,
 				x_max: -Infinity,
 				y_min: Infinity,
@@ -37,9 +37,9 @@ var ofDataR = {
 				divideValue: 100
 };
 
-ofData.presets.camera.push(view_transform(point(0,0,20),point(0,0,0),vector(0,1,0)))
-ofData.presets.camera.push(view_transform(point(0,5,8),point(0,1,0),vector(0,1,0)))
-ofData.presets.camera.push(view_transform(point(25,0, 25), // from
+Data.presets.camera.push(view_transform(point(0,0,20),point(0,0,0),vector(0,1,0)))
+Data.presets.camera.push(view_transform(point(0,5,8),point(0,1,0),vector(0,1,0)))
+Data.presets.camera.push(view_transform(point(25,0, 25), // from
 								point(0,10,0),   // to
 								vector(0,1,0)))
 
@@ -53,25 +53,25 @@ function optionSelected()	{
 		case 0:
 			WIDTH = 150;
 			HEIGHT = Math.round(150*(9/16));
-			ct = ofData.c.transform;
-			ofData.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
-			ofData.c.setCTransform(ct);
+			ct = Data.c.transform;
+			Data.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
+			Data.c.setCTransform(ct);
 			break;
 		
 		case 1:
 			WIDTH = 500;
 			HEIGHT = Math.round(500*(9/16));
-			ct = ofData.c.transform;
-			ofData.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
-			ofData.c.setCTransform(ct);
+			ct = Data.c.transform;
+			Data.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
+			Data.c.setCTransform(ct);
 			break;
 			
 		case 2:
 			WIDTH = 900
 			HEIGHT = 550
-			ct = ofData.c.transform;
-			ofData.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
-			ofData.c.setCTransform(ct);
+			ct = Data.c.transform;
+			Data.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
+			Data.c.setCTransform(ct);
 			break;
 			
 		default:
@@ -82,7 +82,7 @@ function camPresetSelected()	{
 	
 	var v = document.getElementById("campresets")
 	
-	ofData.c.setCTransform(ofData.presets.camera[v.selectedIndex])
+	Data.c.setCTransform(Data.presets.camera[v.selectedIndex])
 	console.log("Set Camera to preset " + (v.selectedIndex+1) + ".")
 }
 
@@ -90,7 +90,7 @@ function doDivide()	{
 	
 	try	{
 		
-		ofData.o.divide(ofDataR.divideValue)
+		Data.o.divide(DataR.divideValue)
 		return true
 	} catch(e)	{
 		
@@ -106,7 +106,7 @@ var loop;
 
 function init()	{
 
-	ofData.c.setCTransform(ofData.presets.camera[0]);
+	Data.c.setCTransform(Data.presets.camera[0]);
 	
 	ctx.fillStyle = "#2222cc"
 	ctx.fillRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT)
@@ -329,12 +329,19 @@ var I = {}
 function parseFileContents(fn)	{
 	
 	alert(fn)
+	
 	try	{
+		// if file ext == ".rdt" then
 		eval("I = " + FILECONTENTS + ";")
-		//openFileModal
+		// else if file ext == ".ppm"
+		// parsePPMBuffer(FILECONTENTS) // Data.PPM.push(new PPM{width, height, colour_depth, pixels[height][width], filename})
+		// else throw new Error("parseFileContents(filename) FAILED!")
 	} catch(e)	{
 		console.log("Error loading file '" + fn + "'.")
 	}
+	
+	// else
+	
 }
 
 /* END OF FILE */

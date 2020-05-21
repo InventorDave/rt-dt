@@ -39,7 +39,7 @@ function perpendicular_test()	{
 	var L1 = new Line2d(_p1,_p2)
 	var L2 = new Line2d(_p3,_p4)
 	
-	console.log("L1 & L2 perpendicular? : " + isPerpendicular(L1, L2))
+	console.log("L1 & L2 perpendicular? : " + L1.isPerpendicularTo(L2))
 	
 }
 /** END OF TESTS **/

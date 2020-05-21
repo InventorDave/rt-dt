@@ -41,18 +41,18 @@ function mandelbrot(canvas, xmin, xmax, ymin, ymax, iterations) {
         var c = 3 * Math.log(i) / Math.log(iterations - 1.0);
  
         if (c < 1) {
-          pix[ppos] = 	Math.round(1/c)		//255 * c;
-          pix[ppos + 1]  = 255		//= 0;
-          pix[ppos + 2]  = 255		//= 0;
+          pix[ppos] = 	255 * c;
+          pix[ppos + 1]  = 0;
+          pix[ppos + 2]  = 0;
         }
         else if ( c < 2 ) {
-          pix[ppos] = 		0	//255;
-          pix[ppos + 1] = 	Math.round(1/(c-1))	//255 * (c - 1);
-          pix[ppos + 2] = 	255	//0;
+          pix[ppos] = 		255;
+          pix[ppos + 1] = 	255 * (c - 1);
+          pix[ppos + 2] = 	0;
         } else {
-          pix[ppos] = 		0	//255;
-          pix[ppos + 1] = 	0	//255;
-          pix[ppos + 2] = 	Math.round(1/(c-2))	//255 * (c - 2);
+          pix[ppos] = 		255;
+          pix[ppos + 1] = 	255;
+          pix[ppos + 2] = 	255 * (c - 2);
         }
       }
       pix[ppos + 3] = 255;
