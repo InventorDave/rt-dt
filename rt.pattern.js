@@ -376,8 +376,8 @@ function image_uv_pattern_at(u, v)	{
 	//flip v over so it matches the image layout, with y at the top
 	var v = 1 - v
 
-	var x = u * (1000 - 1)
-	var y = v * (500 - 1)
+	var x = u * (this.c.width - 1)
+	var y = v * (this.c.height - 1)
 
 	//be sure and round x and y to the nearest whole number
 	
