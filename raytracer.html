@@ -282,6 +282,12 @@ window.onclick = function(e) {
 <canvas id="canvas" width="500" height="281" style="border:1px solid #000000;"></canvas>
 <textarea id="msg-output" style="position: fixed; left: 25px;" readonly cols="30" rows="30">CONSOLE
 </textarea>
+<div id="ui-options" style="position: fixed; right: 175px;">
+<button label="mySkyBox()" onclick="mySkyBox(); return false;"><br>
+<button label="endGame()" onclick="endGame(); return false;"><br>
+<button label="earth()" onclick="earth(); return false;"><br>
+<button label="cm_cube()" onclick="cm_cube(); return false;"><br>
+</div>
 
 
 </div>
@@ -289,7 +295,7 @@ window.onclick = function(e) {
 <br/>
 
 
-<div style="text-align: center;">Select a mesh or scene file to parse:<br><input type="file" id="file-input" class="selectButton selectFileButton" /></div>
+<div style="text-align: center;">Select a mesh file to parse:<br><input type="file" id="file-input" class="selectButton selectFileButton" /></div>
 
 <div style="text-align: center;">
 <select id="os" name="options" onchange="optionSelected(); return false;">
@@ -318,7 +324,7 @@ window.onclick = function(e) {
     <span class="close">&times;</span>
     <p>
 	Hello! My name is Dave! This Graphics app is ultimately meant for Node.js when it's completed, to be typically run on the command line. The work
-	is built on Jamis Buck's seminal raytracer guide, but I am extending the code to incorporate raster graphics (ideal for previewing 3d scenes
+	is built on Jamis Buck's raytracer guide, but I am extending the code to incorporate raster graphics (ideal for previewing 3d scenes
 	quickly), and basic animation (rendering loop + camera helicopter), with the final output frames hopefully being photo-realistic, and
 	trivially stitched together by an appropriate tool. The toolbar at the top of the screen has a few buttons, including a link to my email (just
 	click on the '@'). Feel free to dash me an email telling me what you think of the app.<br>
@@ -327,8 +333,6 @@ window.onclick = function(e) {
 	the "Help" menu.
 	
 	Excelsior!
-	
-	
 	</p>
   </div>
 
@@ -407,17 +411,23 @@ window.onclick = function(e) {
 <script>
 function prepCanvas()	{
 	
-	clearInterval(loop);
 	ctx.fillStyle = BGCOLOR;
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	
 }
 
-function renderImage()	{
+function renderImage(l, o)	{
 
 	prepCanvas()
 	
 	var c = Data.c
 	var w = new world()
+	
+	if(l)
+		Data.l = l
+	
+	if(o)
+		Data.o = o
 	
 	w.light = Data.l
 	w.objects = [Data.o]
@@ -455,10 +465,12 @@ function option(opt)	{
 		window.open("https://www.youtube.com/channel/UCF7KG1BdQfnL73JYrl2vDDw/playlists")
 	}
 	
+	/*
 	if (opt=='report-bug')	{
 	
 		bugModal.style.display = "block"
 	}
+	*/
 	
 	if (opt=="gen-bvh")
 		if(doDivide())
@@ -481,7 +493,7 @@ function option(opt)	{
 		sceneModal.style.display = "block"
 	}
 	
-	if (opt=="open-proj")	{
+	if (opt=="load-file")	{
 	
 		openFileModal.style.display = "block"
 	}

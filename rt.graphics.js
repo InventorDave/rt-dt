@@ -1,13 +1,5 @@
 /** TESTS **/
 
-function testTan(r)	{
-	// Math.tan(r) accepts angle in radians
-	// var res = testTan(radians(angle_in_degrees))
-	console.log("r: " + r + ", tan: " + Math.tan(r))
-}
-
-
-
 function calcVector(p1, p2)	{
 	
 	if(!p1)

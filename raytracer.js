@@ -1,13 +1,13 @@
-
-			var WIDTH = 500;
-			var HEIGHT = Math.round(500*(9/16));
-var FGCOLOR = "#2222cc";
-var BGCOLOR = "#000000";
+var CANVAS_WIDTH = 500, CANVAS_HEIGHT = 281.25;
+var WIDTH = CANVAS_WIDTH;
+var HEIGHT = Math.round(CANVAS_HEIGHT);
+var BGCOLOR = "#2222cc";
 var RENDER_BG_COLOR = colour(0,0,0)
 
 /** GLOBAL OBJECTS */
 
 var Data = {
+				PPM: [],
 				f: [],
 				v: [],
 				vn: [],
@@ -108,7 +108,7 @@ function init()	{
 
 	Data.c.setCTransform(Data.presets.camera[0]);
 	
-	ctx.fillStyle = "#2222cc"
+	ctx.fillStyle = BGCOLOR
 	ctx.fillRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT)
 }
 
@@ -116,6 +116,17 @@ function init()	{
 
 
 /** RAYTRACER CODE */
+
+function scene()	{
+	
+	var o = group()
+	for (var i = 0; i < arguments.length; i++)
+		o.addChild(arguments[i])
+	
+	Data.o = o
+	
+	return o
+}
 
 var g_c, g_w, g_r, g_x, g_y
 
@@ -307,7 +318,8 @@ function readObjectFile(e) {
 
 function readFile(e)	{
 	
-	var file = e.target.files[0]
+	//var file = e.target.files[0]
+	var file = e.target.files[0];
 	
 	if (!file)	{
 		alert("No File identified!")
@@ -317,6 +329,7 @@ function readFile(e)	{
 	var reader = new FileReader()
 	
 	reader.onload = function(e)	{
+		
 		
 		FILECONTENTS = e.target.result
 		parseFileContents(file.name)
@@ -328,26 +341,80 @@ function readFile(e)	{
 var I = {}
 function parseFileContents(fn)	{
 	
-	alert(fn)
+	//alert(fn)
 	
 	try	{
 		// if file ext == ".rdt" then
-		eval("I = " + FILECONTENTS + ";")
+		//eval("I = " + FILECONTENTS + ";")
 		// else if file ext == ".ppm"
-		// parsePPMBuffer(FILECONTENTS) // Data.PPM.push(new PPM{width, height, colour_depth, pixels[height][width], filename})
-		// else throw new Error("parseFileContents(filename) FAILED!")
+		
+		if(!parsePPM(FILECONTENTS, fn)) 
+			throw new Error("parseFileContents() FAILED!")
 	} catch(e)	{
-		console.log("Error loading file '" + fn + "'.")
+		console.log("Error loading file.")
 	}
 	
 	// else
 	
 }
 
+function parsePPM(contents, fn)	{
+	// Data.PPM.push(new PPM{width, height, colour_depth, pixels[height*width], filename})
+	
+	var arr = contents.split("\n");
+	
+	if(arr[0]!="P3")	{
+		return false;
+	}
+
+	var line = arr[1];
+	var vals = line.split(" ")
+	var width = Number(vals[0])
+	var height = Number(vals[1])
+	
+	var bit_depth = Number(arr[2])
+	
+	/*
+	var canvas = document.createElement('canvas');
+	canvas.width = width;
+	canvas.height = height;
+
+	var ctx = canvas.getContext('2d');
+	var img = ctx.getImageData(0, 0, width, height);
+	var pix = img.data;
+	*/
+	
+	
+	//var arr = []
+	
+	//var x = 0, y = 0
+	
+	var pix = []
+	for (var i = 3; i < arr.length; i = i + 3)	{
+		
+		var r = Number(arr[i])
+		var g = Number(arr[i+1])
+		var b = Number(arr[i+2])
+		
+		//r = 255, g = 33, b = 33
+		//pix[ppos]=r [ppos+1]=g [ppos+2]=b [ppos+3]=255
+		pix[i-3] = r, pix[i-2] = g, pix[i-1] = b;
+
+	}
+	
+	//ctx.putImageData(img, 0, 0)
+
+	var c = { data: pix, width: width, height: height }
+	Data.PPM[fn] = c;
+
+	alert("Image processed, Canvas created.")
+	
+	return true;
+}
 /* END OF FILE */
 
 /* SPLASH SCREEN FUNCTIONS & VARIABLES */
  
-var CANVAS_WIDTH = 500, CANVAS_HEIGHT = 281.25;
+
 
 /* END OF SPLASH SCREEN FUNCTIONS & VARIABLES */

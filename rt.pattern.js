@@ -1,6 +1,6 @@
 function Pattern()	{
 	
-	this.texture_map = undefined
+	this.TextureMap = undefined
 	this.colours = []
 	this.type = "default"
 	this.color_at = function (p)	{
@@ -20,33 +20,59 @@ function Pattern()	{
 		var op = multiply_matrix_by_tuple(inverse(obj.transform), wp)
 		var pp = multiply_matrix_by_tuple(inverse(this.transform), op)
 		
-		return this.color_at(pp)
+		return this.algorithm(pp)//this.color_at(pp)
 	};
 }
 
-function my_pattern(texture_map)	{
+/*
+
+var canvas = document.createElement('canvas');
+canvas.width = 900;
+canvas.height = 600;
+
+  var width = canvas.width;
+  var height = canvas.height;
+ 
+  var ctx = canvas.getContext('2d');
+  var img = ctx.getImageData(0, 0, width, height);
+  var pix = img.data;
+  
+  //4 slots per pixel, r, g, b, alpha (255)
+  
+   for (var ix = 0; ix < width; ++ix) {
+    for (var iy = 0; iy < height; ++iy) {
+      var x = xmin + (xmax - xmin) * ix / (width - 1);
+      var y = ymin + (ymax - ymin) * iy / (height - 1);
+     
+      var ppos = 4 * (width * iy + ix);
+  
+	  //pix[ppos]=r [ppos+1]=g [ppos+2]=b [ppos+3]=255
+  
+  ctx.putImageData(img, 0, 0);
+*/
+
+function my_pattern(TextureMap)	{
 	
 	var tp = new Pattern()
 	tp.type = "TextureMap"
 	
-	tp.texture_map = texture_map
+	tp.TextureMap = TextureMap
 	
 	tp.algorithm = function(p)	{
 		
-		//console.log("test_pattern() colour = r: " + p.x + ", g: " + p.y + ", b: " + p.z + "\n")
+		var uv = this.TextureMap.uv_map(p)
+		var col = this.TextureMap.uv_pattern.uv_pattern_at(uv.u, uv.v)
 		
-		//return pattern_at(this.texture_map, p)
-		
-		var uv = this.texture_map.uv_map(p)
-		return this.texture_map.uv_pattern.uv_pattern_at(uv.u, uv.v)
+		//console.log("r: " + col.x + ", g: " + col.y + ", b: " + col.z)
+		return col;
 	}
 	
 	return tp;
 }
 
 // USAGE:
-// var TextureMap = texture_map(checkers_pattern(2, 2, {x: 1, y: 1, z: 1}, {x: 0.4, y: 0.4, z: 0.4}), spherical_map)
-// s.material.pattern = my_pattern(TextureMap)
+// var tm = TextureMap(checkers_pattern(2, 2, {x: 1, y: 1, z: 1}, {x: 0.4, y: 0.4, z: 0.4}), spherical_map)
+// s.material.pattern = my_pattern(tm)
 
 function cube_uv_front(p)	{
 	
@@ -66,7 +92,7 @@ function cube_uv_back(p)	{
 
 function cube_uv_up(p)	{
 	
-	var u = ((1 - p.x) % 2.0) / 2.0
+	var u = ((p.x + 1) % 2.0) / 2.0
 	var v = ((1 - p.z) % 2.0) / 2.0
 
 	return {u: u, v: v}
@@ -103,7 +129,7 @@ function CubeMap(c1, c2, c3, c4, c5, c6, c7, c8)	{
 	cm.type = "CubeMap"
 		
 	
-	cm.texture_map = {"left": align_check_pattern(c2, c5, c1, c6, c3), "front": align_check_pattern(c5, c1, c2, c3, c4), "right": align_check_pattern(c1, c2, c7, c4, c8), "back": align_check_pattern(c4, c7, c5, c8, c6), "up": align_check_pattern(c3, c5, c7, c1, c2), "down": align_check_pattern(c7, c3, c4, c6, c8)}
+	cm.TextureMap = {"left": align_check_pattern(c2, c5, c1, c6, c3), "front": align_check_pattern(c5, c1, c2, c3, c4), "right": align_check_pattern(c1, c2, c7, c4, c8), "back": align_check_pattern(c4, c7, c5, c8, c6), "up": align_check_pattern(c3, c5, c7, c1, c2), "down": align_check_pattern(c7, c3, c4, c6, c8)}
 	
 	cm.face_from_point = function(p)	{
 	
@@ -139,35 +165,81 @@ function CubeMap(c1, c2, c3, c4, c5, c6, c7, c8)	{
 		// align_check_pattern(main, ul, ur, bl, br)
 		var uv = this.cube_uv[face](p)
 		
-		var color = this.texture_map[face].uv_pattern_at(uv.u, uv.v)
+		var color = this.TextureMap[face].uv_pattern_at(uv.u, uv.v)
 		return color
 	}
 	
 	return cm
 }
 
+function SkyBox(left, right, front, back, top, bottom)	{
+	// { arr[], width, height }
+	var sb = new Pattern()
+	
+	sb.type = "SkyBox"
+		
+	
+	sb.TextureMap = {"left": skybox_pattern(left.data, left.width, left.height), "front": skybox_pattern(front.data, front.width, front.height), "right": skybox_pattern(right.data, right.width, right.height), "back": skybox_pattern(back.data, back.width, back.height), "top": skybox_pattern(top.data, top.width, top.height), "bottom": skybox_pattern(bottom.data, bottom.width, bottom.height)}
+	
+	sb.face_from_point = function(p)	{
+	
+		var abs_x = Math.abs(p.x)
+		var abs_y = Math.abs(p.y)
+		var abs_z = Math.abs(p.z)
+		var coord = Math.max(abs_x, abs_y, abs_z)
+
+		if(coord == p.x)
+			return "right"
+
+		if(coord == -p.x)
+			return "left"
+	  
+		if(coord == p.y)
+			return "top"
+		
+		if(coord == -p.y)
+			return "bottom"
+
+		if(coord == p.z)
+			return "front"
+
+		//the only option remaining!
+		return "back"
+	};
+	
+	sb.skybox_uv = {"front": cube_uv_front, "back": cube_uv_back, "left": cube_uv_left, "right": cube_uv_right, "top": cube_uv_up, "bottom": cube_uv_down}
+	
+	sb.algorithm = function(p) {
+		
+		var face = this.face_from_point(p)
+		// align_check_pattern(main, ul, ur, bl, br)
+		var uv = this.skybox_uv[face](p)
+		
+		var color = this.TextureMap[face].uv_pattern_at(uv.u, uv.v)
+		return color
+	}
+	
+	return sb
+}
 /*
 //The below function has been inlined into the Pattern.algorithm() method, see Pattern Factory "my_pattern(...)", above.
-function pattern_at(texture_map, p)	{
+function pattern_at(TextureMap, p)	{
 	
-	var uv = texture_map.uv_map(p)
-	//return uv_pattern_at(texture_map.uv_pattern, uv.u, uv.v)
-	return texture_map.uv_pattern.uv_pattern_at(uv.u, uv.v)
+	var uv = TextureMap.uv_map(p)
+	//return uv_pattern_at(TextureMap.uv_pattern, uv.u, uv.v)
+	return TextureMap.uv_pattern.uv_pattern_at(uv.u, uv.v)
 	
 }
 */
 
 /*
-function texture_map(uv_pattern, uv_map), which returns a new TextureMap pattern instance that encapsulates the given uv_pattern (like uv_checkers()) and uv_map (like spherical_map()).
+function TextureMap(uv_pattern, uv_map), which returns a new TextureMap pattern instance that encapsulates the given uv_pattern (like uv_checkers()) and uv_map (like spherical_map()).
 */
-function texture_map(uv_pattern, uv_map)	{
+function TextureMap(uv_pattern, uv_map)	{
 	
 	return { uv_pattern: uv_pattern, uv_map: uv_map }
 	// eg uv_pattern = checkers_pattern(...) || align_check_pattern(...)
 }
-
-
-
 
 
 function cylindrical_map(p)	{
@@ -256,6 +328,82 @@ function checkers_uv_pattern_at(u, v)	{
 		return this.color_b
 }
 
+function skybox_pattern(data, width, height)	{
+
+		return { uv_pattern_at: skybox_uv_pattern_at, data: data, width: width, height: height, pixel_at: skybox_pixel_at }
+		
+}
+
+function skybox_uv_pattern_at(u, v)	{
+	
+	//flip v over so it matches the image layout, with y at the top
+	var v = 1 - v
+
+	var x = u * (this.width - 1)
+	var y = v * (this.height- 1)
+
+	//be sure and round x and y to the nearest whole number
+	
+	var col = this.pixel_at(Math.round(x), Math.round(y))
+	//console.log("r: " + col.x + ", g: " + col.y + ", b: " + col.z)
+	return col
+}
+
+function skybox_pixel_at(x, y)	{
+	
+	var width = this.width;
+	var height = this.height;
+ 
+	//4 slots per pixel, r, g, b, alpha
+	// 3 for [] implementation
+	var ppos = 3 * (width * y + x);
+  
+	var col = colour(this.data[ppos]/255, this.data[ppos+1]/255, this.data[ppos+2]/255)
+	//var col = colour(pix[ppos], pix[ppos+1], pix[ppos+2])
+	
+	//console.log("r: " + col.x + ", g: " + col.y + ", b: " + col.z)
+	
+	return col;
+}
+
+function image_pattern(c)	{
+	
+	return { uv_pattern_at: image_uv_pattern_at, c: c, pixel_at: image_pattern_pixel_at }
+}
+
+function image_uv_pattern_at(u, v)	{
+	
+	//flip v over so it matches the image layout, with y at the top
+	var v = 1 - v
+
+	var x = u * (1000 - 1)
+	var y = v * (500 - 1)
+
+	//be sure and round x and y to the nearest whole number
+	
+	var col = this.pixel_at(Math.round(x), Math.round(y))
+	//console.log("r: " + col.x + ", g: " + col.y + ", b: " + col.z)
+	return col
+}
+
+function image_pattern_pixel_at(x, y)	{
+	
+	var width = this.c.width;
+	var height = this.c.height;
+ 
+	//4 slots per pixel, r, g, b, alpha
+	// 3 for [] implementation
+	var ppos = 3 * (width * y + x);
+  
+	var col = colour(this.c.data[ppos]/255, this.c.data[ppos+1]/255, this.c.data[ppos+2]/255)
+	//var col = colour(pix[ppos], pix[ppos+1], pix[ppos+2])
+	
+	//console.log("r: " + col.x + ", g: " + col.y + ", b: " + col.z)
+	
+	return col;
+}
+
+
 
 function align_check_pattern(main, ul, ur, bl, br)	{
 
@@ -283,10 +431,6 @@ function align_check_uv_pattern_at(u, v)	{
 
 	return this.main
 }
-
-
-
-
 
 
 
