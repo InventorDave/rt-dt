@@ -726,7 +726,9 @@ function cm_plane()	{
 	
 	var tm = TextureMap(p, planar_map)
 	var pl = plane()
-	pl.material.pattern = my_pattern( tm )
+	var pat = my_pattern( tm )
+	pat.transform = m().scaling(2,2,2)
+	pl.material.pattern = pat
 	
 	var o = group()
 	o.addChild(pl)
@@ -765,113 +767,6 @@ function cm_2()	{
 	*/
 }
 
-function cm_cube()	{
-	
-	prepCanvas()
-	
-	var l = new point_light(point(-10, 10, -10), colour(1,1,1)) 
-	Data.c.setCTransform(view_transform(point(0,10,-30), point(0,0,0), vector(0,1,0)));
-	
-	var c1 = colour(1,0,0), c2 = colour(1,1,0), c3 = colour(1,0.5,0), c4 = colour(0,1,0), c5 = colour(0,1,1), c6 = colour(0,0,1), c7 = colour(1,0,1), c8 = colour(1,1,1)
-	
-	var cb = cube()
-	cb.material.pattern = CubeMap(c1,c2,c3,c4,c5,c6,c7,c8)
-	
-	cb.transform = m().scaling(2,2,2).rotation_z(Math.PI / 4, 1).rotation_y(Math.PI / 4, 1)
-	
-	var o = group()
-	o.addChild(cb)
-	
-	Data.o = o
-	Data.l = l
-	
-	renderImage()
-	
-}
-
-function earth()	{
-	
-	prepCanvas()
-	
-	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
-	Data.c.setCTransform(view_transform(point(0,0,-20), point(0,0,0), vector(0,1,0)));
-	
-	
-	var c = Data.PPM["earth.ppm"];
-	var tm = TextureMap(image_pattern(c), spherical_map)
-	//var tm = TextureMap(checkers_pattern(8, 4, colour(0,1,0),colour(0,0,1)), spherical_map)
-	var s = sphere()
-	s.transform = m().scaling(2,2,2).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
-	s.material.pattern = my_pattern( tm )
-	
-	s.material.diffuse = 0.9
-	s.material.specular = 0.1
-	s.material.shininess = 10
-	s.material.ambient = 0.9
- 
-	var o = group()
-	o.addChild(s)
-	
-	renderImage(l, o)	
-}
-
-function endGame()	{
-	
-	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
-	Data.c.setCTransform(view_transform(point(0,0,-20), point(0,0,0), vector(0,1,0)));
-	
-	var left = ppmObj("left.ppm")
-	var right = ppmObj("right.ppm")
-	var front = ppmObj("front.ppm")
-	var back = ppmObj("back.ppm")
-	var top = ppmObj("top.ppm")
-	var bottom = ppmObj("bottom.ppm")
-	
-	
-	var cb = cube()
-	cb.transform = m().scaling(60,60,60).rotation_y(Math.PI/4, 1).rotation_z(Math.PI/4, 1)
-	cb.material.pattern = SkyBox(left, right, front, back, top, bottom)
-	
-	scene(cb)
-	
-	renderImage(l)
-}
-
-
-
-function ppmObj(fn)	{
-	
-	return { data: Data.PPM[fn].data, width: Data.PPM[fn].width, height: Data.PPM[fn].height }
-}
-function mySkyBox()	{
-	
-	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
-	Data.c = new camera(WIDTH, HEIGHT, (Math.PI/4))
-	Data.c.setCTransform(view_transform(point(0,0,60), point(0,-60,-60), vector(0,1,0)));
-	
-	var left = ppmObj("block.ppm")
-	var right = ppmObj("block.ppm")
-	var front = ppmObj("block.ppm")
-	var back = ppmObj("block.ppm")
-	var top = ppmObj("grass.ppm")
-	var bottom = ppmObj("grass.ppm")
-	
-	
-	var cb = cube()
-	cb.transform = m().scaling(60,60,60)
-	cb.material.pattern = SkyBox(left, right, front, back, top, bottom)
-	
-	var s = glass_sphere()
-	s.transform = m().translation(0, -55, -50).scaling(5,5,5)
-	
-	var o = group()
-	o.addChild(cb, s)
-	
-	Data.o = o
-	Data.l = l
-	
-	renderImage()
-}
 
 
 /* */

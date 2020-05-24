@@ -157,7 +157,7 @@ function isPerpendicular(L1, L2)	{
 /** END OF LINE */
 
 /** ETC **/
-function dist2d(p1, p2)	{ // (obsolete) distance between 2d points, can use 'new Line(p1,p2).length' for either 2d or 3d points/lines
+function dist2d(p1, p2)	{ // (obsolete) distance between 2d points, can use 'new Line(p1,p2).length' for 2d points/lines
 	
 	var a = Math.abs(p1.x - p2.x) ** 2
 	var b = Math.abs(p1.y - p2.y) ** 2

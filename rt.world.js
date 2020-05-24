@@ -8,12 +8,13 @@ function world()	{
 var wto_ic = []
 function world_to_object(s, p)	{
 	
+	if (s.parent)
+		p = world_to_object(s.parent, p)
+
 	if(!wto_ic[s.id])
 		wto_ic[s.id] = inverse(s.transform)
 	
-	if (s.parent)
-		p = world_to_object(s.parent, p)
-	
+
 	return mul(wto_ic[s.id], p)
 }
 

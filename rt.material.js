@@ -1,6 +1,6 @@
 function material()	{
 	
-	this.color = colour(0, 1, 0);
+	this.color = convHexClr("00ff00")//colour(0, 1, 0);
 	this.ambient = 0.1;
 	this.diffuse = 0.9;
 	this.specular = 0.9;

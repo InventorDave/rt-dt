@@ -2,7 +2,7 @@ var CANVAS_WIDTH = 500, CANVAS_HEIGHT = 281.25;
 var WIDTH = CANVAS_WIDTH;
 var HEIGHT = Math.round(CANVAS_HEIGHT);
 var BGCOLOR = "#2222cc";
-var RENDER_BG_COLOR = colour(0,0,0)
+var RENDER_BG_COLOR = convHexClr("d6b96f") //colour(0,0,0)
 
 /** GLOBAL OBJECTS */
 
@@ -295,6 +295,11 @@ function render(c, w, remaining)	{
 /** END OF RAYTRACER CODE */
 
 /* FILE */
+
+function ppmObj(fn)	{
+	
+	return { data: Data.PPM[fn].data, width: Data.PPM[fn].width, height: Data.PPM[fn].height }
+}
 
 var OBJFILECONTENTS = "";
 var FILECONTENTS = "";

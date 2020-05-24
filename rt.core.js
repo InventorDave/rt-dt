@@ -190,3 +190,17 @@ function removeNullEntries2(arr)	{
 	
 	return arr
 }
+
+function convHexClr(hexCodeStr)	{
+	
+	var r = hexCodeStr.substring(0,2)
+	var g = hexCodeStr.substring(2,4)
+	var b = hexCodeStr.substring(4,6)
+	
+	r = parseInt(r, 16)
+	g = parseInt(g, 16)
+	b = parseInt(b, 16)
+	
+	//return { r: r/255, g: g/255, b: b/255 }
+	return colour(r/255, g/255, b/255)
+}

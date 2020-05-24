@@ -257,10 +257,26 @@ function cylindrical_map(p)	{
 
 function planar_map(p)	{
 
-  var u = p.x - Math.floor(p.x)
-  var v = p.z - Math.floor(p.z)
-
-  return { u: u, v: v }
+	/*
+	var u = p.x - Math.floor(p.x)
+	var v = p.z - Math.floor(p.z)
+	*/
+	
+	var u, v
+	
+	if (p.x<0)
+		u = Math.abs(Math.floor(p.x)) + p.x
+	else
+		u = p.x - Math.floor(p.x)
+	
+	
+	if (p.z<0)
+		v = Math.abs(Math.floor(p.z)) + p.z
+	else
+		v = p.z - Math.floor(p.z)
+	
+	
+	return { u: u, v: v }
 }
 
 function spherical_map(p)	{
