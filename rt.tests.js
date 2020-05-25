@@ -767,8 +767,6 @@ function cm_2()	{
 	*/
 }
 
-
-
 /* */
 function linetest1()	{
 	

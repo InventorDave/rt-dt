@@ -24,32 +24,6 @@ function Pattern()	{
 	};
 }
 
-/*
-
-var canvas = document.createElement('canvas');
-canvas.width = 900;
-canvas.height = 600;
-
-  var width = canvas.width;
-  var height = canvas.height;
- 
-  var ctx = canvas.getContext('2d');
-  var img = ctx.getImageData(0, 0, width, height);
-  var pix = img.data;
-  
-  //4 slots per pixel, r, g, b, alpha (255)
-  
-   for (var ix = 0; ix < width; ++ix) {
-    for (var iy = 0; iy < height; ++iy) {
-      var x = xmin + (xmax - xmin) * ix / (width - 1);
-      var y = ymin + (ymax - ymin) * iy / (height - 1);
-     
-      var ppos = 4 * (width * iy + ix);
-  
-	  //pix[ppos]=r [ppos+1]=g [ppos+2]=b [ppos+3]=255
-  
-  ctx.putImageData(img, 0, 0);
-*/
 
 function my_pattern(TextureMap)	{
 	
@@ -71,8 +45,9 @@ function my_pattern(TextureMap)	{
 }
 
 // USAGE:
-// var tm = TextureMap(checkers_pattern(2, 2, {x: 1, y: 1, z: 1}, {x: 0.4, y: 0.4, z: 0.4}), spherical_map)
+// var tm = TextureMap(checkers_pattern(2, 2, colour(1,1,1), colour(0.4,0.4,0.4), spherical_map)
 // s.material.pattern = my_pattern(tm)
+
 
 function cube_uv_front(p)	{
 	
@@ -172,13 +147,13 @@ function CubeMap(c1, c2, c3, c4, c5, c6, c7, c8)	{
 	return cm
 }
 
+
 function SkyBox(left, right, front, back, top, bottom)	{
-	// { arr[], width, height }
+	
 	var sb = new Pattern()
 	
 	sb.type = "SkyBox"
 		
-	
 	sb.TextureMap = {"left": skybox_pattern(left.data, left.width, left.height), "front": skybox_pattern(front.data, front.width, front.height), "right": skybox_pattern(right.data, right.width, right.height), "back": skybox_pattern(back.data, back.width, back.height), "top": skybox_pattern(top.data, top.width, top.height), "bottom": skybox_pattern(bottom.data, bottom.width, bottom.height)}
 	
 	sb.face_from_point = function(p)	{
@@ -221,16 +196,6 @@ function SkyBox(left, right, front, back, top, bottom)	{
 	
 	return sb
 }
-/*
-//The below function has been inlined into the Pattern.algorithm() method, see Pattern Factory "my_pattern(...)", above.
-function pattern_at(TextureMap, p)	{
-	
-	var uv = TextureMap.uv_map(p)
-	//return uv_pattern_at(TextureMap.uv_pattern, uv.u, uv.v)
-	return TextureMap.uv_pattern.uv_pattern_at(uv.u, uv.v)
-	
-}
-*/
 
 /*
 function TextureMap(uv_pattern, uv_map), which returns a new TextureMap pattern instance that encapsulates the given uv_pattern (like uv_checkers()) and uv_map (like spherical_map()).
@@ -328,6 +293,19 @@ function spherical_map(p)	{
 }
 
 
+function bgImage_uv_pattern_at(u, v)	{
+
+	var x = Math.round(u * (Data.PPM["bgImage.ppm"].width - 1))
+	var y = Math.round(v * (Data.PPM["bgImage.ppm"].height - 1))
+	
+	var ppos = 3 * (Data.PPM["bgImage.ppm"].width * y + x)
+	
+	var d = Data.PPM["bgImage.ppm"].data
+	
+	return colour(d[ppos]/255, d[ppos+1]/255, d[ppos+2]/255)
+}
+
+
 function checkers_pattern(width, height, color_a, color_b)	{
 
 	return { uv_pattern_at: checkers_uv_pattern_at, width: width, height: height, color_a: color_a, color_b: color_b }
@@ -343,6 +321,7 @@ function checkers_uv_pattern_at(u, v)	{
 	else
 		return this.color_b
 }
+
 
 function skybox_pattern(data, width, height)	{
 
@@ -382,6 +361,7 @@ function skybox_pixel_at(x, y)	{
 	return col;
 }
 
+
 function image_pattern(c)	{
 	
 	return { uv_pattern_at: image_uv_pattern_at, c: c, pixel_at: image_pattern_pixel_at }
@@ -418,7 +398,6 @@ function image_pattern_pixel_at(x, y)	{
 	
 	return col;
 }
-
 
 
 function align_check_pattern(main, ul, ur, bl, br)	{

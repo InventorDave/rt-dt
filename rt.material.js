@@ -13,3 +13,16 @@ function material()	{
 	
 	this.pattern = undefined;
 }
+
+function SkyBoxMaterial(skyBox)	{
+	
+	var m = new material()
+	m.ambient = 1.0
+	m.diffuse = 0.0
+	m.specular = 0.0
+	
+	if(skyBox)
+		m.pattern = skyBox
+	
+	return m
+}

@@ -2,7 +2,7 @@ var CANVAS_WIDTH = 500, CANVAS_HEIGHT = 281.25;
 var WIDTH = CANVAS_WIDTH;
 var HEIGHT = Math.round(CANVAS_HEIGHT);
 var BGCOLOR = "#2222cc";
-var RENDER_BG_COLOR = convHexClr("d6b96f") //colour(0,0,0)
+var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f") //colour(0,0,0)
 
 /** GLOBAL OBJECTS */
 
@@ -44,7 +44,6 @@ Data.presets.camera.push(view_transform(point(25,0, 25), // from
 								vector(0,1,0)))
 
 /** END GLOBAL OBJECTS */
-
 
 function optionSelected()	{
 	var ct;
@@ -151,11 +150,20 @@ function render2()	{
 				
 		var c = color_at(g_w, r, g_r)
 		
-		if ((c.x==0)&&(c.y==0)&&(c.z==0))
-			c = RENDER_BG_COLOR
+		if ((c.x==0)&&(c.y==0)&&(c.z==0))	{
+			// render bg image
+			if(!Data.PPM["bgImage.ppm"])
+				c = RENDER_BG_COLOR
+			
+			else	{
+				
+				c = bgImage_uv_pattern_at(g_x/WIDTH, g_y/HEIGHT)
+			}
+			
+		}
 		
 		c = convert(c)
-		ctx.fillStyle = "#" + c.x + c.y + c.z
+		ctx.fillStyle = c
 		
 		var x = g_x + ((CANVAS_WIDTH/2) - WIDTH/2)
 		var y = g_y + ((CANVAS_HEIGHT/2) - HEIGHT/2)
@@ -247,11 +255,9 @@ function convert(c)	{
 	blue = rgbToHex(blue);
 	green = rgbToHex(green);
 	
-	return { x: red, y: green, z: blue }
-	/*
-	var res = "#" + red + blue + green;
-	return res;
-	*/
+	//return { x: red, y: green, z: blue }
+	
+	return res = "#" + red + green + blue;
 }
 
 function rgbToHex(rgb) { 
@@ -297,6 +303,9 @@ function render(c, w, remaining)	{
 /* FILE */
 
 function ppmObj(fn)	{
+	
+	if(!Data.PPM[fn])
+		return false
 	
 	return { data: Data.PPM[fn].data, width: Data.PPM[fn].width, height: Data.PPM[fn].height }
 }
