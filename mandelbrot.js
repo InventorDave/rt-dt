@@ -1,24 +1,16 @@
 // https://rosettacode.org/wiki/Mandelbrot_set#JavaScript
 
-function mandelIter(cx, cy, maxIter) {
-  var x = 0.0;
-  var y = 0.0;
-  var xx = 0;
-  var yy = 0;
-  var xy = 0;
- 
-  var i = maxIter;
-  while (i-- && xx + yy <= 4) {
-    xy = x * y;
-    xx = x * x;
-    yy = y * y;
-    x = xx - yy + cx;
-    y = xy + xy + cy;
-  }
-  return maxIter - i;
+function mandelbrot()	{
+	
+	var canvas_ = document.createElement('canvas');
+	canvas_.width = 900;
+	canvas_.height = 600;
+	document.body.insertBefore(canvas_, document.body.childNodes[0])
+	mandelbrot_(canvas_, -2, 1, -1, 1, 1000)
 }
+
  
-function mandelbrot(canvas, xmin, xmax, ymin, ymax, iterations) {
+function mandelbrot_(canvas, xmin, xmax, ymin, ymax, iterations) {
   var width = canvas.width;
   var height = canvas.height;
  
@@ -61,11 +53,21 @@ function mandelbrot(canvas, xmin, xmax, ymin, ymax, iterations) {
  
   ctx.putImageData(img, 0, 0);
 }
+
+function mandelIter(cx, cy, maxIter) {
+  var x = 0.0;
+  var y = 0.0;
+  var xx = 0;
+  var yy = 0;
+  var xy = 0;
  
-var canvas = document.createElement('canvas');
-canvas.width = 900;
-canvas.height = 600;
- 
-document.body.insertBefore(canvas, document.body.childNodes[0]);
- 
-mandelbrot(canvas, -2, 1, -1, 1, 1000);
+  var i = maxIter;
+  while (i-- && xx + yy <= 4) {
+    xy = x * y;
+    xx = x * x;
+    yy = y * y;
+    x = xx - yy + cx;
+    y = xy + xy + cy;
+  }
+  return maxIter - i;
+}

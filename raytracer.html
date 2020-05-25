@@ -417,7 +417,7 @@ function prepCanvas()	{
 	
 }
 
-function renderImage(l, o)	{
+function renderImage(l, o, d)	{
 
 	prepCanvas()
 	
@@ -430,10 +430,13 @@ function renderImage(l, o)	{
 	if(o)
 		Data.o = o
 	
+	if(!d)
+		d = 5
+		
 	w.light = Data.l
 	w.objects = [Data.o]
 	
-	render(c,w,5); // render(c, w, remaining) "rt.raytracer.js"
+	render(c,w,d); // render(c, w, remaining) "rt.raytracer.js"
 }
 
 function option(opt)	{
