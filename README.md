@@ -11,17 +11,18 @@ Then select "Render->Render!" and watch in wonder as the mesh object is rendered
 
 Alternately, define a collection of primitives (look in "rt.p+e.js" to see the objects available, there is sphere, cylinder, cube, triangle etc...), create a light source object, then the best way to initialise your scene is:
 
-	renderImage(lightObj, scene(shape1, shape2, ...))
+	renderImage(lights(lightObj), scene(shape1, shape2, ...))
 	
 Or,
 
-	Data.o = scene(shape1, shape2, ...)
-	Data.l = new light(positionPoint, intensityColour)
+	scene(shape1, shape2, ...)
+	lights(new point_light(positionPoint, intensityColour))
 	// positionPoint = point(x,y,z), intensityColour = colour(1,1,1)
 	
 	var c = new Camera(width, height, fov_in_radians)
-	c.setCTransform(...) // positions and orients the Camera
-	Data.c = c
+	c.setCTransform(view_transform(fromPoint, toPoint, upVector)) // positions and orients the Camera
+	// point(x,y,z), vector(x,y,z)
+	camera(c)
 	
 
 Then, the scene can be rendered from menu option "Render->Render!". Note, whether you choose to manually call renderImage() or not, if you want to define the camera, you must do the lower 3 lines above before you call renderImage()/exit your function.

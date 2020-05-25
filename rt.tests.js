@@ -76,7 +76,7 @@ function ch7final107()	{
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
 	
 	
-	var c = new camera(WIDTH, HEIGHT, Math.PI/2);
+	var c = new Camera(WIDTH, HEIGHT, Math.PI/2);
 	var w = new world();
 	
 	w.light = new point_light(point(-10, 10, -10), colour(0.65,0.65,0.65));
@@ -145,7 +145,7 @@ function ch9()	{
 	ctx.fillStyle = BG_COLOR;
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
 	
-	var c = new camera(WIDTH, HEIGHT, Math.PI/2);
+	var c = new Camera(WIDTH, HEIGHT, Math.PI/2);
 	var w = new world();
 	
 	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
@@ -218,7 +218,7 @@ function ch12()	{
 	ctx.fillStyle = BG_COLOR;
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
 	
-	var c = new camera(WIDTH, HEIGHT, Math.PI/2);
+	var c = new Camera(WIDTH, HEIGHT, Math.PI/2);
 	var w = new world();
 	
 	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
@@ -288,7 +288,7 @@ function ch13()	{
 	ctx.fillStyle = BG_COLOR;
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
 	
-	var c = new camera(WIDTH, HEIGHT, Math.PI/2);
+	var c = new Camera(WIDTH, HEIGHT, Math.PI/2);
 	var w = new world();
 	
 	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
@@ -323,7 +323,7 @@ function ch14()	{
 	ctx.fillStyle = BG_COLOR;
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
 	
-	var c = new camera(WIDTH, HEIGHT, Math.PI/2);
+	var c = new Camera(WIDTH, HEIGHT, Math.PI/2);
 	var w = new world();
 	
 	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
@@ -361,7 +361,7 @@ function p211()	{
 	ctx.fillStyle = BG_COLOR;
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
 	
-	var c = new camera(WIDTH, HEIGHT, Math.PI/2);
+	var c = new Camera(WIDTH, HEIGHT, Math.PI/2);
 	var w = new world();
 	
 	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));
@@ -386,7 +386,7 @@ function test_refraction()	{
 	ctx.fillStyle = BG_COLOR;
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
 	
-	var cam = new camera(WIDTH, HEIGHT, Math.PI/2);
+	var cam = new Camera(WIDTH, HEIGHT, Math.PI/2);
 	var w = new world();
 	
 	w.light = new point_light(point(-10, 10, -10), colour(1,1,1));

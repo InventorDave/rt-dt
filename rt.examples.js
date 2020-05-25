@@ -53,9 +53,8 @@ function hexagon()	{
 	return hex
 }
 
-// w.objects.push(hexagon())
 
-
+// PYRAMID
 function pyramid()	{
 	
 	var pyramid = group("pyramid")
@@ -338,13 +337,10 @@ function endGame()	{
 
 
 
-
-
-
 function mySkyBox()	{
 	
 	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
-	Data.c = new camera(WIDTH, HEIGHT, (Math.PI/4))
+	Data.c = new Camera(WIDTH, HEIGHT, (Math.PI/4))
 	Data.c.setCTransform(view_transform(point(0,0,60), point(0,-60,-60), vector(0,1,0)));
 	
 	var left = ppmObj("block.ppm")

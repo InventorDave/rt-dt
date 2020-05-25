@@ -15,7 +15,7 @@ var Data = {
 				g: [], // not currently used
 				o: {},
 				cache: {},
-				c: new camera(WIDTH, HEIGHT, (Math.PI/4)),
+				c: new Camera(WIDTH, HEIGHT, (Math.PI/4)),
 				l: new point_light(point(-20, 20, 40), colour(1,1,1)),
 				
 				presets: { camera: [], lights: [], scenes: [] }
@@ -53,7 +53,7 @@ function optionSelected()	{
 			WIDTH = 150;
 			HEIGHT = Math.round(150*(9/16));
 			ct = Data.c.transform;
-			Data.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
+			Data.c = new Camera(WIDTH, HEIGHT, (Math.PI/4));
 			Data.c.setCTransform(ct);
 			break;
 		
@@ -61,7 +61,7 @@ function optionSelected()	{
 			WIDTH = 500;
 			HEIGHT = Math.round(500*(9/16));
 			ct = Data.c.transform;
-			Data.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
+			Data.c = new Camera(WIDTH, HEIGHT, (Math.PI/4));
 			Data.c.setCTransform(ct);
 			break;
 			
@@ -69,7 +69,7 @@ function optionSelected()	{
 			WIDTH = 900
 			HEIGHT = 550
 			ct = Data.c.transform;
-			Data.c = new camera(WIDTH, HEIGHT, (Math.PI/4));
+			Data.c = new Camera(WIDTH, HEIGHT, (Math.PI/4));
 			Data.c.setCTransform(ct);
 			break;
 			
@@ -126,6 +126,21 @@ function scene()	{
 	
 	return o
 }
+
+function lights()	{
+	
+	Data.l = arguments[0]
+	
+	return arguments[0]
+}
+
+function camera(c)	{
+	
+	Data.c = arguments[0]
+	
+	return arguments[0]
+}
+
 
 var g_c, g_w, g_r, g_x, g_y
 

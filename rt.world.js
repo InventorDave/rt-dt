@@ -101,7 +101,7 @@ function view_transform(from, to, up)	{
 	return res;
 }
 
-function camera(hsize, vsize, fov)	{
+function Camera(hsize, vsize, fov)	{
 	
 	this.hsize = hsize;
 	this.vsize = vsize;
