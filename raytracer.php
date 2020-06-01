@@ -1,5 +1,5 @@
 <?  ?>
-
+ 
 <!DOCTYPE html>
 <head>
   <title>rt/dt (Beta)</title>
@@ -162,10 +162,13 @@
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content" id="myDropdownFile">
+	<!--
       <a onclick="option('open-proj'); return false;">Open Project</a>
       <a onclick="option('save-proj'); return false;">Save Project</a>
-	  <a onclick="option('load-file'); return false;">Load File</a>
-	  <a onclick="option('close-proj'); return false;">Close Project</a>
+	-->
+	  <a onclick="Data.openFileType = 'IMG'; option('load-file'); return false;">Load Image File</a>
+	  <a onclick="Data.openFileType = 'PPM'; option('load-ppm-file'); return false;">Load PPM File</a>
+	  <a onclick="option('close-proj'); return false;">Unload Project Files</a>
     </div>
   </div> 
   
@@ -222,27 +225,33 @@ function myFunction(i) {
 
 	var el = ""
 	var nel = ""
+	var ne2 = ""
+	
 	switch(i)	{
 	
 		case 1:
 			el = "myDropdownFile"
 			nel = "myDropdownRender"
+			ne2 = "myDropdownHelp"
 			break;
 			
 		case 2:
 			el = "myDropdownRender"
 			nel = "myDropdownFile"
+			ne2 = "myDropdownHelp"
 			break;
 			
 		case 3:
 			el = "myDropdownHelp"
 			nel = "myDropdownRender"
+			ne2 = "myDropdownFile"
 			break;
 			
 	}
 	
   document.getElementById(el).classList.toggle("show");
   document.getElementById(nel).classList.remove('show');
+  document.getElementById(ne2).classList.remove('show');
 }
 
 // Close the dropdown if the user clicks outside of it
@@ -296,6 +305,7 @@ window.onclick = function(e) {
 
 
 </div>
+<canvas id="imgCanvas" width="500" height="281" style="border:1px solid #ffffff;"></canvas>
 <p style="float: left;">
 <br/>
 
@@ -317,9 +327,6 @@ window.onclick = function(e) {
 <button class="selectButton buttonScene">Scene</button>
 </div>
 <br>
-
-
-
 
 <!-- The Modals -->
 <div id="myModal" class="modal">
@@ -411,6 +418,7 @@ window.onclick = function(e) {
 <script src="rt.material.js"></script>
 <script src="rt.ray.js"></script>
 
+<script src="rt.image.js"></script>
 <script src="rt.graphics.js"></script>
 
 <script>
@@ -501,7 +509,7 @@ function option(opt)	{
 		sceneModal.style.display = "block"
 	}
 	
-	if (opt=="load-file")	{
+	if ((opt=="load-file") || (opt=="load-ppm-file"))	{
 	
 		openFileModal.style.display = "block"
 	}

@@ -18,7 +18,9 @@ var Data = {
 				c: new Camera(WIDTH, HEIGHT, (Math.PI/4)),
 				l: new point_light(point(-20, 20, 40), colour(1,1,1)),
 				
-				presets: { camera: [], lights: [], scenes: [] }
+				presets: { camera: [], lights: [], scenes: [] },
+				
+				openFileType: ""
 };
 
 var DataR = {
@@ -346,6 +348,20 @@ function readObjectFile(e) {
 }
 
 function readFile(e)	{
+
+	if (Data.openFileType=="PPM")
+		readPPMFile(e)
+	
+	else if (Data.openFileType=="IMG")
+		readImageFile(e)
+	
+	else
+		alert("Do not know what type of file to read!")
+}
+
+function readPPMFile(e)	{
+	
+	//alert("inside readppmfile!")
 	
 	//var file = e.target.files[0]
 	var file = e.target.files[0];
