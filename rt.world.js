@@ -103,6 +103,7 @@ function view_transform(from, to, up)	{
 
 function Camera(hsize, vsize, fov)	{
 	
+	this.string = "Camera(" + hsize + ", " + vsize + ", " + fov + ")"
 	this.hsize = hsize;
 	this.vsize = vsize;
 	this.fov = fov;

@@ -305,7 +305,7 @@ window.onclick = function(e) {
 
 
 </div>
-<canvas id="imgCanvas" width="500" height="281" style="border:1px solid #ffffff;"></canvas>
+<canvas id="imgCanvas" width="500" height="281" style="border:1px solid #ffffff; visibility: hidden; display: none;"></canvas>
 <p style="float: left;">
 <br/>
 
@@ -341,9 +341,7 @@ window.onclick = function(e) {
 	trivially stitched together by an appropriate tool. The toolbar at the top of the screen has a few buttons, including a link to my email (just
 	click on the '@'). Feel free to dash me an email telling me what you think of the app.<br>
 	<br>
-	Also, I have compiled a Spotify playlist of most of my favourite music. Check it out, if you want. If you want to check out Jamis's book, go to
-	the "Help" menu.
-	
+	<br>
 	Excelsior!
 	</p>
   </div>
@@ -366,6 +364,7 @@ window.onclick = function(e) {
   <option value="2">2</option>
   <option value="3">3</option>
 </select>
+<span id="cameraDetails"></span>
 	</p>
   </div>
 

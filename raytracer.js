@@ -7,6 +7,7 @@ var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f") //colour(0,0,0)
 /** GLOBAL OBJECTS */
 
 var Data = {
+				PPM_refs: [],
 				PPM: [],
 				f: [],
 				v: [],
@@ -39,11 +40,11 @@ var DataR = {
 				divideValue: 100
 };
 
-Data.presets.camera.push(view_transform(point(0,0,20),point(0,0,0),vector(0,1,0)))
-Data.presets.camera.push(view_transform(point(0,5,8),point(0,1,0),vector(0,1,0)))
-Data.presets.camera.push(view_transform(point(25,0, 25), // from
+Data.presets.camera.push({ str: "preset1", vt: view_transform(point(0,0,20),point(0,0,0),vector(0,1,0)) })
+Data.presets.camera.push({ str: "preset2", vt: view_transform(point(0,5,8),point(0,1,0),vector(0,1,0)) })
+Data.presets.camera.push({ str: "preset3", vt: view_transform(point(25,0, 25), // from
 								point(0,10,0),   // to
-								vector(0,1,0)))
+								vector(0,1,0)) })
 
 /** END GLOBAL OBJECTS */
 
@@ -83,7 +84,11 @@ function camPresetSelected()	{
 	
 	var v = document.getElementById("campresets")
 	
-	Data.c.setCTransform(Data.presets.camera[v.selectedIndex])
+	Data.c.setCTransform(Data.presets.camera[v.selectedIndex].vt)
+	
+	var el = document.getElementById("cameraDetails")
+	
+	el.innerText = Data.presets.camera[v.selectedIndex].str + " : " + Data.c.string;
 	console.log("Set Camera to preset " + (v.selectedIndex+1) + ".")
 }
 
@@ -393,7 +398,7 @@ function parseFileContents(fn)	{
 		//eval("I = " + FILECONTENTS + ";")
 		// else if file ext == ".ppm"
 		
-		if(!parsePPM(FILECONTENTS, fn)) 
+		if(!parsePPM(fn)) 
 			throw new Error("parseFileContents() FAILED!")
 	} catch(e)	{
 		console.log("Error loading file.")
@@ -403,39 +408,30 @@ function parseFileContents(fn)	{
 	
 }
 
-function parsePPM(contents, fn)	{
-	// Data.PPM.push(new PPM{width, height, colour_depth, pixels[height*width], filename})
+function parsePPM(fn)	{
 	
-	var arr = contents.split("\n");
+	var arr = FILECONTENTS.split("\n").join(" ").split(" ");
 	
-	if(arr[0]!="P3")	{
+	if(arr[0].indexOf("P3")==-1)	{
+		alert("FAIL: PPM File is not in correct format! arr[0] == " + arr[0]);
 		return false;
 	}
+	for (var j = 1; j < arr.length; j++)	{
+		
+		if ( (arr[j]=="\n") || (arr[j]=="") || (arr[j]==" ") || (isNaN(arr[j])) )
+				arr.splice(j,1)
+	}
+	
+	
 
-	var line = arr[1];
-	var vals = line.split(" ")
-	var width = Number(vals[0])
-	var height = Number(vals[1])
+	console.log("Completed Stage 1 of parsing PPM file.")
 	
-	var bit_depth = Number(arr[2])
-	
-	/*
-	var canvas = document.createElement('canvas');
-	canvas.width = width;
-	canvas.height = height;
-
-	var ctx = canvas.getContext('2d');
-	var img = ctx.getImageData(0, 0, width, height);
-	var pix = img.data;
-	*/
-	
-	
-	//var arr = []
-	
-	//var x = 0, y = 0
+	var width = arr[1]
+	var height = arr[2]
+	var bit_depth = arr[3]
 	
 	var pix = []
-	for (var i = 3; i < arr.length; i = i + 3)	{
+	for (var i = 4; i < arr.length; i = i + 3)	{
 		
 		var r = Number(arr[i])
 		var g = Number(arr[i+1])
@@ -443,7 +439,7 @@ function parsePPM(contents, fn)	{
 		
 		//r = 255, g = 33, b = 33
 		//pix[ppos]=r [ppos+1]=g [ppos+2]=b [ppos+3]=255
-		pix[i-3] = r, pix[i-2] = g, pix[i-1] = b;
+		pix[i-4] = r, pix[i-3] = g, pix[i-2] = b;
 
 	}
 	
@@ -451,8 +447,9 @@ function parsePPM(contents, fn)	{
 
 	var c = { data: pix, width: width, height: height }
 	Data.PPM[fn] = c;
+	Data.PPM_refs.push(fn)
 
-	alert("Image processed, Canvas created.")
+	console.log("PPM file processed, internal image created.")
 	
 	return true;
 }

@@ -37,32 +37,31 @@ function imageLoaded()	{
 	var pix = img.data;
 	
 	
+	console.log("Image File Loaded.")
+	convertToPPM(pix, width, height);
 	//debugger;
 }
 
-/*
-var file = input.files[0];
-var fr = new FileReader();
-fr.onload = createImage;   // onload fires after reading is complete
-fr.readAsDataURL(file);    // begin reading
+function convertToPPM(data, width, height)	{
+	
+	var nl = " "
+	
+	var output = "P3 <br>" + width + " " + height + " <br>" + "255 <br>"
+	for (var i = 0; i < data.length; i += 4)	{
+		
+		output += data[i] + nl + data[i+1] + nl + data[i+2] + nl
+		
+		/*
+		if ((i % 16) == 0)
+			output += "<br>"
+		*/
+	}
+	
+	var ppmWindow = window.open("ppmWindow.html","newWindow" + GetUID(),"width=500,height=700");  
+	ppmWindow.onload = function(){
 
+		ppmWindow.document.getElementById('mainBody').innerHTML = output;
+    } 
 
-createImage():
-
-img = new Image();
-img.onload = imageLoaded;
-img.src = fr.result;
-
-
-imageLoaded():
-
-canvas.width = img.width;      // set canvas size big enough for the image
-canvas.height = img.height;
-var ctx = canvas.getContext("2d");
-ctx.drawImage(img,0,0);         // draw the image
-
-// do some manipulations...
-
-canvas.toDataURL("image/png");  // get the data URL
-
-*/
+	//ppmWindow.window.close();
+}
