@@ -66,6 +66,8 @@ function intersect_world(w, r)	{
 
 	var oi = [];
 	
+	//console.log("i = " + w.objects.length)
+	
 	for (var i = 0; i < w.objects.length; i++)
 		oi[i] = intersect(w.objects[i], r);
 

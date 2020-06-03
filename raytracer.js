@@ -7,6 +7,7 @@ var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f") //colour(0,0,0)
 /** GLOBAL OBJECTS */
 
 var Data = {
+				SkyBox: { top: "", bottom: "", left: "", right: "", front: "", back: "" },
 				PPM_refs: [],
 				PPM: [],
 				f: [],
@@ -21,7 +22,8 @@ var Data = {
 				
 				presets: { camera: [], lights: [], scenes: [] },
 				
-				openFileType: ""
+				openFileType: "",
+				normalizeMesh: 0
 };
 
 var DataR = {
@@ -96,7 +98,10 @@ function doDivide()	{
 	
 	try	{
 		
+		//debugger;
 		Data.o.divide(DataR.divideValue)
+		//debugger;
+		
 		return true
 	} catch(e)	{
 		
@@ -112,7 +117,7 @@ var loop;
 
 function init()	{
 
-	Data.c.setCTransform(Data.presets.camera[0]);
+	Data.c.setCTransform(Data.presets.camera[0].vt);
 	
 	ctx.fillStyle = BGCOLOR
 	ctx.fillRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT)
@@ -346,7 +351,7 @@ function readObjectFile(e) {
   reader.onload = function(e) {
     OBJFILECONTENTS = e.target.result;
     //displayContents(OBJFILECONTENTS);
-	parse_obj_file()
+	parse_obj_file(Data.normalizeMesh)
   }; 
   
   reader.readAsText(file);

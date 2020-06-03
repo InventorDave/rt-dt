@@ -566,7 +566,7 @@ function group(id2)	{
 		 return { left: left, right: right }
 		*/
 		
-		this.left = left, this.right = right
+		//this.left = left, this.right = right
 		return { left: left, right: right }
 	};
 	
@@ -639,6 +639,7 @@ function group(id2)	{
 		
 			for (var i = 0; i<this.s.length;i++)	{
 			
+				//console.log("g.l_i = " + i)
 				var xs = intersect(this.s[i], r);
 			
 				for (var j=0;j<xs.length;j++)

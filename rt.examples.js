@@ -288,54 +288,21 @@ function endGame()	{
 	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
 	Data.c.setCTransform(view_transform(point(0,0,-20), point(0,0,0), vector(0,1,0)));
 	
-	var left = ppmObj("left.ppm")
-	if(!left)	{
-		alert("Please load file 'left.ppm' first.")
-		return
-	}
-	
-	var right = ppmObj("right.ppm")
-	if(!right)	{
-		alert("Please load file 'right.ppm' first.")
-		return
-	}
-	
-	var front = ppmObj("front.ppm")
-	if(!front)	{
-		alert("Please load file 'front.ppm' first.")
-		return
-	}
-	
-	var back = ppmObj("back.ppm")
-	if(!back)	{
-		alert("Please load file 'back.ppm' first.")
-		return
-	}
-	
-	var top = ppmObj("top.ppm")
-	if(!top)	{
-		alert("Please load file 'top.ppm' first.")
-		return
-	}
-	
-	var bottom = ppmObj("bottom.ppm")
-	if(!bottom)	{
-		alert("Please load file 'bottom.ppm' first.")
-		return
-	}
-	
-	
+	var skyBox = getSkyBoxObject()
 	
 	var cb = cube()
 	cb.transform = m().scaling(60,60,60).rotation_y(Math.PI/4, 1).rotation_z(Math.PI/4, 1)
-	cb.material = SkyBoxMaterial(SkyBox(left, right, front, back, top, bottom))
+	cb.material = SkyBoxMaterial(SkyBox(skyBox.left, skyBox.right, skyBox.front, skyBox.back, skyBox.top, skyBox.bottom))
 	
 	scene(cb)
 	
 	renderImage(l)
 }
 
-
+function getSkyBoxObject()	{
+	
+	return { left: Data.SkyBox.left, right: Data.SkyBox.right, front: Data.SkyBox.front, back: Data.SkyBox.back, top: Data.SkyBox.top, bottom: Data.SkyBox.bottom }
+}
 
 function mySkyBox()	{
 	
@@ -343,17 +310,13 @@ function mySkyBox()	{
 	Data.c = new Camera(WIDTH, HEIGHT, (Math.PI/4))
 	Data.c.setCTransform(view_transform(point(0,0,60), point(0,-60,-60), vector(0,1,0)));
 	
-	var left = ppmObj("block.ppm")
-	var right = ppmObj("block.ppm")
-	var front = ppmObj("block.ppm")
-	var back = ppmObj("block.ppm")
-	var top = ppmObj("grass.ppm")
-	var bottom = ppmObj("grass.ppm")
+
 	
+	var skyBox = getSkyBoxObject()
 	
 	var cb = cube()
 	cb.transform = m().scaling(60,60,60)
-	cb.material = SkyBoxMaterial(SkyBox(left, right, front, back, top, bottom))
+	cb.material = SkyBoxMaterial(SkyBox(skyBox.left, skyBox.right, skyBox.front, skyBox.back, skyBox.top, skyBox.bottom))
 	
 	var s = glass_sphere()
 	s.transform = m().translation(0, -55, -50).scaling(5,5,5)

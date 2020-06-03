@@ -1,7 +1,7 @@
 
 
 var flag17 = false;
-function convert3(vertices)	{
+function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 
 	// vertices[] - check for invalid entries for both teapot(checked) and man
 	if(flag17)
@@ -9,6 +9,9 @@ function convert3(vertices)	{
 	
 	var obj = [], v2 = [], vn2 = [];
 	var x, y, z;
+	
+
+	
 	
 	// CONVERT VERTICES (1-BASED OFFSETS INTO Data.V[]) INTO SIZE(N) POINT()'S
 	for (var m = 0; m < vertices.length/* - 1 */; m++)	{
@@ -22,9 +25,33 @@ function convert3(vertices)	{
 		if(!vdata)  // hack for invalid final entry, basically accounts for leading/trailing ws in man obj file "f" entries
 			continue;
 		
+			/*
+	bbox = bounding_box( all vertices )
+
+	sx = bbox.max.x - bbox.min.x
+	sy = bbox.max.y - bbox.min.y
+	sz = bbox.max.z - bbox.min.z
+
+	scale = max(sx, sy, sz) / 2
+
+	for each vertex v
+    v.x = (v.x - (bbox.min.x + sx/2)) / scale
+    v.y = (v.y - (bbox.min.y + sy/2)) / scale
+    v.z = (v.z - (bbox.min.z + sz/2)) / scale
+	*/
+		
 		x = vdata[0];
 		y = vdata[1];
 		z = vdata[2];
+		
+		if (normalizeMesh)	{
+			
+
+	
+			x = (x - (bbox.min.x + sx/2)) / scale
+			y = (y - (bbox.min.y + sy/2)) / scale
+			z = (z - (bbox.min.z + sz/2)) / scale
+		}
 		
 		v2.push(point(x,y,z));
 		
@@ -57,7 +84,7 @@ function convert3(vertices)	{
 	return obj
 }
 
-function parse_obj_file()	{
+function parse_obj_file(normalizeMesh)	{
 	
 	// use global OBJFILECONTENTS
 	if (!OBJFILECONTENTS)
@@ -176,6 +203,22 @@ function parse_obj_file()	{
 	}
 	console.log("Parsed Object File: " + (lines.length-ignored_lines) + " lines of data.")
 	
+			var bbox, scale, sx, sy, sz;
+			bbox = new BB();
+			bbox.addP(DataR.x_min)
+			bbox.addP(DataR.x_max)
+			bbox.addP(DataR.y_min)
+			bbox.addP(DataR.y_max)
+			bbox.addP(DataR.z_min)
+			bbox.addP(DataR.z_max)
+			
+			var sx = bbox.max.x - bbox.min.x
+			var sy = bbox.max.y - bbox.min.y
+			var sz = bbox.max.z - bbox.min.z
+			
+			var scale = Math.max(sx, sy, sz) / 2
+	
+	//debugger;
 	
 	var o = group()
 	
@@ -187,7 +230,8 @@ function parse_obj_file()	{
 			f.push([Data["f"][i][j].split("/")[0], Data["f"][i][j].split("/")[2]])
 		}	
 	
-		var s = convert3(f); // if from teapot, last entry in f is not invalid, it is in man mesh file
+		
+		var s = convert3(f, normalizeMesh, bbox, scale, sx, sy, sz); // if from teapot, last entry in f is not invalid, it is in man mesh file
 		
 		for (var j = 0; j < s.length; j++)	{
 			
@@ -196,6 +240,9 @@ function parse_obj_file()	{
 		}
 	
 	}
+	
+	//debugger
+	
 	Data.o = o
 	
 	console.log("Generated triangle mesh.")
