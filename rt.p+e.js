@@ -566,7 +566,7 @@ function group(id2)	{
 		 return { left: left, right: right }
 		*/
 		
-		//this.left = left, this.right = right
+		this.left = left, this.right = right
 		return { left: left, right: right }
 	};
 	

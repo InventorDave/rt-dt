@@ -94,6 +94,17 @@ function camPresetSelected()	{
 	console.log("Set Camera to preset " + (v.selectedIndex+1) + ".")
 }
 
+function bgImageOptionsSelected()	{
+
+		var s = document.getElementById("images")
+		
+		debugger;
+		var str = "Data.PPM[Data.PPM_refs[s.value]]";
+		
+		Data.PPM["bgImage"] = Data.PPM[Data.PPM_refs[s.value]];
+}
+
+
 function doDivide()	{
 	
 	try	{
@@ -179,7 +190,7 @@ function render2()	{
 		
 		if ((c.x==0)&&(c.y==0)&&(c.z==0))	{
 			// render bg image
-			if(!Data.PPM["bgImage.ppm"])
+			if(!Data.PPM["bgImage"])
 				c = RENDER_BG_COLOR
 			
 			else	{

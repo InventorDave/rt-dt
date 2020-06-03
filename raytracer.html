@@ -182,6 +182,16 @@
   </div>
   
   <div class="dropdown">
+    <button class="dropbtn" onclick="myFunction(4)">Options
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content" id="myDropdownOptions">
+      <a onclick="option('set-skybox-params'); return false;">Set Skybox</a>
+	  <a onclick="option('set-bg-image'); return false;">Set/Unset BG Image</a>
+    </div>
+  </div>
+  
+  <div class="dropdown">
     <div class="dropdown">
       <a href="https://github.com/leeodea/rt-dt" target="_new"><i class="fas fa-code-branch" title="View Source Code Repo."></i></a>
     </div>
@@ -224,6 +234,7 @@ function myFunction(i) {
 	var el = ""
 	var nel = ""
 	var ne2 = ""
+	var ne3 = ""
 	
 	switch(i)	{
 	
@@ -231,25 +242,34 @@ function myFunction(i) {
 			el = "myDropdownFile"
 			nel = "myDropdownRender"
 			ne2 = "myDropdownHelp"
+			ne3 = "myDropdownOptions"
 			break;
 			
 		case 2:
 			el = "myDropdownRender"
 			nel = "myDropdownFile"
 			ne2 = "myDropdownHelp"
+			ne3 = "myDropdownOptions"
 			break;
 			
 		case 3:
 			el = "myDropdownHelp"
 			nel = "myDropdownRender"
 			ne2 = "myDropdownFile"
+			ne3 = "myDropdownOptions"
 			break;
 			
+		case 4:
+			el = "myDropdownOptions"
+			nel = "myDropdownRender"
+			ne2 = "myDropdownFile"
+			ne3 = "myDropdownHelp"
 	}
 	
   document.getElementById(el).classList.toggle("show");
   document.getElementById(nel).classList.remove('show');
   document.getElementById(ne2).classList.remove('show');
+  document.getElementById(ne3).classList.remove('show');
 }
 
 // Close the dropdown if the user clicks outside of it
@@ -271,6 +291,11 @@ window.onclick = function(e) {
       myDropdown.classList.remove('show');
     }
 	
+   myDropdown = document.getElementById("myDropdownOptions");
+    if (myDropdown.classList.contains('show')) {
+      myDropdown.classList.remove('show');
+    }
+
 	if (e.target == modal) {
 		modal.style.display = "none";
 	}
@@ -281,6 +306,14 @@ window.onclick = function(e) {
 	
 	if (e.target == openFileModal)	{
 		openFileModal.style.display = "none"
+	}
+	
+	if (e.target == setBGImageModal)	{
+		setBGImageModal.style.display = "none"
+	}
+	
+	if (e.target == setSkyBoxParamsModal)	{
+		setSkyBoxParamsModal.style.display = "none"
 	}
   }
 
@@ -320,7 +353,7 @@ window.onclick = function(e) {
 <br><br>
 <div style="text-align: center;">
 
-<button class="selectButton buttonCamera"onclick="option('cameraOptions'); return false;">Camera</button>
+<button class="selectButton buttonCamera" onclick="option('cameraOptions'); return false;">Camera</button>
 <button class="selectButton buttonLights">Lights</button>
 <button class="selectButton buttonScene">Scene</button>
 </div>
@@ -345,6 +378,7 @@ window.onclick = function(e) {
   </div>
 
 </div>
+
 
 <div id="myModal_Camera" class="modal">
 
@@ -398,6 +432,60 @@ window.onclick = function(e) {
   </div>
 
 </div>
+
+<div id="myModal_SkyBox" class="modal">
+
+  <div class="modal-content">
+    <span class="close">&times;</span>
+	  <p>
+	  Set the SkyBox values (Data.SkyBox.top ...)
+	  </p>
+	</span>
+  </div>
+</div>
+	
+<div id="myModal_BGImage" class="modal">
+
+  <div class="modal-content">
+    <span class="close">&times;</span>
+	  <p id="p_id">
+	   Set the BG Image.<br>
+	   <br>
+	   <button label="Press this first!" class="buttonClass" onclick="populateImagesSelection(); return false;">Press this first!</button>
+	   <select id="images" name="bgimageoptions" onchange="bgImageOptionsSelected(); return false;">
+
+		</select>
+	  </p>
+	  <script type="text/javascript">
+	    function populateImagesSelection()	{
+			
+			var p = document.getElementById("p_id")
+			p.removeChild(p.lastElementChild)
+			
+			var select = document.createElement("select")
+			select.addEventListener("change", bgImageOptionsSelected)
+			select.id = "images"
+			
+			for (var i = 0; i < Data.PPM_refs.length; i++)	{
+			
+				var option = document.createElement("option")
+				option.text = Data.PPM_refs[i]
+				option.value = i
+				
+				//var option = Data.PPM[Data.PPM_refs[i]]
+				
+				select.add(option)
+			}
+			
+			
+			p.appendChild(select)
+			//alert("doing something!")
+		}
+	  </script>
+	</span>
+  </div>
+</div>
+
 
 <script src="rt.p+e.js"></script>
 <script src="rt.pattern.js"></script>
@@ -510,6 +598,16 @@ function option(opt)	{
 	
 		openFileModal.style.display = "block"
 	}
+	
+	if (opt=="set-bg-image")	{
+		
+		setBGImageModal.style.display = "block"
+	}
+	
+	if (opt=="set-skybox-params")	{
+		
+		setSkyBoxParamsModal.style.display = "block"
+	}
 }
 </script>
 
@@ -525,11 +623,17 @@ var sceneModal = document.getElementById("myModal_Scene")
 
 var openFileModal = document.getElementById("myModal_OpenFile")
 
+var setSkyBoxParamsModal = document.getElementById("myModal_SkyBox")
+var setBGImageModal = document.getElementById("myModal_BGImage")
+
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 var span_CameraModal = document.getElementsByClassName("close")[1]; 
 var span_OpenFileModal = document.getElementsByClassName("close")[2];
 var span_bugModal = document.getElementsByClassName("close")[3];
+var span_skyBoxModal = document.getElementsByClassName("close")[4];
+var span_bgImageModal = document.getElementsByClassName("close")[5];
+
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
@@ -537,6 +641,14 @@ span.onclick = function() {
 
 span_CameraModal.onclick = function()	{
 	camModal.style.display = "none"
+}
+
+span_skyBoxModal.onclick = function()	{
+	setSkyBoxParamsModal.style.display = "none"
+}
+
+span_bgImageModal.onclick = function()	{
+	setBGImageModal.style.display = "none"
 }
 
 span_OpenFileModal.onclick = function()	{

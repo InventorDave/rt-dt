@@ -295,12 +295,12 @@ function spherical_map(p)	{
 
 function bgImage_uv_pattern_at(u, v)	{
 
-	var x = Math.round(u * (Data.PPM["bgImage.ppm"].width - 1))
-	var y = Math.round(v * (Data.PPM["bgImage.ppm"].height - 1))
+	var x = Math.round(u * (Data.PPM["bgImage"].width - 1))
+	var y = Math.round(v * (Data.PPM["bgImage"].height - 1))
 	
-	var ppos = 3 * (Data.PPM["bgImage.ppm"].width * y + x)
+	var ppos = 3 * (Data.PPM["bgImage"].width * y + x)
 	
-	var d = Data.PPM["bgImage.ppm"].data
+	var d = Data.PPM["bgImage"].data
 	
 	return colour(d[ppos]/255, d[ppos+1]/255, d[ppos+2]/255)
 }
