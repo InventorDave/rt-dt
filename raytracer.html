@@ -498,8 +498,9 @@ window.onclick = function(e) {
 <script src="rt.light.js"></script>
 <script src="raytracer.js"></script>
 <script src="rt.examples.js"></script>
-<script src="rt.objfile.js"></script>
 <script src="rt.material.js"></script>
+<script src="rt.objfile.js"></script>
+
 <script src="rt.ray.js"></script>
 
 <script src="rt.image.js"></script>
@@ -527,7 +528,7 @@ function renderImage(l, o, d)	{
 		Data.o = o
 	
 	if(!d)
-		d = 5
+		d = 1
 		
 	w.light = Data.l
 	w.objects = [Data.o]
