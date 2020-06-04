@@ -45,7 +45,7 @@ function my_pattern(TextureMap)	{
 }
 
 // USAGE:
-// var tm = TextureMap(checkers_pattern(2, 2, colour(1,1,1), colour(0.4,0.4,0.4), spherical_map)
+// var tm = TextureMap(checkers_pattern(2, 2, colour(1,1,1), colour(0.4,0.4,0.4)), spherical_map)
 // s.material.pattern = my_pattern(tm)
 
 
