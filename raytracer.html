@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 <head>
   <title>rt/dt (Beta)</title>
 <meta charset="utf-8"/>
@@ -320,7 +321,6 @@ window.onclick = function(e) {
 		setSkyBoxParamsModal.style.display = "none"
 	}
   }
-
 }
 </script>
 
@@ -500,9 +500,7 @@ window.onclick = function(e) {
 <script src="rt.examples.js"></script>
 <script src="rt.material.js"></script>
 <script src="rt.objfile.js"></script>
-
 <script src="rt.ray.js"></script>
-
 <script src="rt.image.js"></script>
 <script src="rt.graphics.js"></script>
 
@@ -511,7 +509,6 @@ function prepCanvas()	{
 	
 	ctx.fillStyle = BGCOLOR;
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-	
 }
 
 function renderImage(l, o, d)	{
@@ -667,6 +664,7 @@ console.log = function(str)	{
 
 	document.getElementById("msg-output").value = (document.getElementById("msg-output").value + '\n' + str)
 }
+
 init();
 </script>
 </body>

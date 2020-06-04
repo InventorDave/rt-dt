@@ -6,6 +6,7 @@ function ray(origin, direction)	{
 	this.direction = direction;
 }
 
+
 function cone(id2)	{
 	
 	var c = new Shape("cone", id2 || 0)
@@ -115,6 +116,7 @@ function cone(id2)	{
 	return c
 }
 
+
 function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	
 	var t = new Shape("triangle", id2 || 0)
@@ -221,6 +223,7 @@ function fan_triangulation(vertices, _vn)	{
 	return ts
 }
 
+
 function cylinder(id2)	{
 	
 	var c = new Shape("cylinder", id2)
@@ -316,6 +319,7 @@ function cylinder(id2)	{
 	return c
 }
 
+
 function sphere(id2)	{
 	
 	var s = new Shape("sphere", id2)
@@ -355,6 +359,7 @@ function sphere(id2)	{
 	
 	return s
 }
+
 
 function check_axis(origin, direction, tmin_or_tmax, p)	{
 	
@@ -488,6 +493,7 @@ function cube(id2)	{
 	
 	return c;
 }
+
 
 function plane(id2)	{
 	
@@ -816,15 +822,6 @@ function BB(min,max)	{
 	};		
 }
 
-function test_shape()	{
-	
-	var ts = new Shape("test")
-	ts.bbMin = point(-1,-1,-1)
-	ts.bbMax = point(1,1,1)
-	
-	return ts;
-}
-
 function Shape(type, id2)	{
 	
 	this.id2 = id2 || 0;
@@ -870,6 +867,16 @@ function Shape(type, id2)	{
 	this.local_normal_at = function(p)	{ /* default impl. */ return vector(p.x,p.y,p.z); };
 }
 
+
+function test_shape()	{
+	
+	var ts = new Shape("test")
+	ts.bbMin = point(-1,-1,-1)
+	ts.bbMax = point(1,1,1)
+	
+	return ts;
+}
+
 function glass_sphere()	{
 	
 	var s = sphere()
@@ -890,6 +897,7 @@ function set_transform(s, t, flag)	{
 	
 	s.transform = t;
 }
+
 
 function intersection(s, t, u, v)	{
 	

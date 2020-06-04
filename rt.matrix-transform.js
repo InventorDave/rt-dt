@@ -11,7 +11,6 @@ Array.prototype.translation = function(x, y, z)	{
 	return m_multiply(this, m)
 }
 
-
 function translation(x, y, z)	{
 	
 	var m = identity_matrix();
@@ -22,6 +21,7 @@ function translation(x, y, z)	{
 	
 	return m;
 }
+
 
 Array.prototype.scaling = function(x, y, z)	{
 	
@@ -45,22 +45,6 @@ function scaling(x, y, z)	{
 	return m;
 }
 
-function reflect_around_axis(p, axis, scale)	{
-	
-	if (!scale)
-		scale = 1
-
-	if (!axis)
-		axis = "x"
-	
-	var x = scale
-	var y = scale
-	var z = scale
-	
-	axis == "x" ? x = -x : axis == "y" ? y = -y : axis == "z" ? z = -z : x = -x ;
-	
-	return multiply_matrix_by_tuple(scaling(x, y, z), p)
-}
 
 Array.prototype.rotation_x = function(r, dir)	{
 	
@@ -96,6 +80,7 @@ function rotation_x(r, dir)	{ // r is in radians units, if dir is set to 1/true,
 	return m // returns rotation matrix, which must be multiplied with original point to get translated/rotated co-ords
 }
 
+
 Array.prototype.rotation_y = function(r, dir)	{
 	
 	var m = identity_matrix()
@@ -130,6 +115,7 @@ function rotation_y(r, dir)	{ // r is in radians units, if dir is set to 1/true,
 	return m // returns rotation matrix, which must be multiplied with original point to get translated/rotated co-ords
 }
 
+
 Array.prototype.rotation_z = function(r, dir)	{
 	
 	var m = identity_matrix()
@@ -158,6 +144,7 @@ function rotation_z(r, dir)	{ // r is in radians units, if dir is set to 1/true,
 	return m // returns rotation matrix, which must be multiplied with original point to get translated/rotated co-ords
 }
 
+
 function shearing(xy, xz, yx, yz, zx, zy)	{ // p53. returns shearing matrix for shearing operation
 	
 	var m = identity_matrix()
@@ -169,6 +156,22 @@ function shearing(xy, xz, yx, yz, zx, zy)	{ // p53. returns shearing matrix for 
 	return m
 }
 
+function reflect_around_axis(p, axis, scale)	{
+	
+	if (!scale)
+		scale = 1
+
+	if (!axis)
+		axis = "x"
+	
+	var x = scale
+	var y = scale
+	var z = scale
+	
+	axis == "x" ? x = -x : axis == "y" ? y = -y : axis == "z" ? z = -z : x = -x ;
+	
+	return multiply_matrix_by_tuple(scaling(x, y, z), p)
+}
 
 
 function multiply_matrix_by_tuple(m, t)	{

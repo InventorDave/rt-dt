@@ -2,7 +2,7 @@ var CANVAS_WIDTH = 750, CANVAS_HEIGHT = 420;
 var WIDTH = CANVAS_WIDTH / 1.5;
 var HEIGHT = Math.round(CANVAS_HEIGHT) / 1.5;
 var BGCOLOR = "#2222cc";
-var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f") //colour(0,0,0)
+var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f")
 
 /** GLOBAL OBJECTS */
 
@@ -23,7 +23,8 @@ var Data = {
 				presets: { camera: [], lights: [], scenes: [] },
 				
 				openFileType: "",
-				normalizeMesh: 0
+				normalizeMesh: 0,
+				divideValue: 100
 };
 
 var DataR = {
@@ -37,9 +38,7 @@ var DataR = {
 				f_begins: 0,
 				v_begins: 0,
 				vn_begins: 0,
-				vt_begins: 0,
-				
-				divideValue: 100
+				vt_begins: 0
 };
 
 Data.presets.camera.push({ str: "preset1", vt: view_transform(point(0,0,20),point(0,0,0),vector(0,1,0)) })
@@ -49,6 +48,7 @@ Data.presets.camera.push({ str: "preset3", vt: view_transform(point(25,0, 25), /
 								vector(0,1,0)) })
 
 /** END GLOBAL OBJECTS */
+
 
 function optionSelected()	{
 	var ct;
@@ -111,20 +111,7 @@ function bgImageOptionsSelected()	{
 }
 
 
-function doDivide()	{
-	
-	try	{
-		
-		//debugger;
-		Data.o.divide(DataR.divideValue)
-		//debugger;
-		
-		return true
-	} catch(e)	{
-		
-		return false
-	}
-}
+
 
 /** INIT */
 
@@ -230,7 +217,6 @@ function render(c, w, remaining)	{
 	render2();
 }
 
-
 function render2()	{
 
 	g_x =0;
@@ -275,42 +261,7 @@ function render2()	{
 	
 	to = setTimeout(render2, 0)	
 }
-/*
-function render2()	{
 
-	var r = g_c.ray_for_pixel(g_x, g_y);
-			
-	var c = color_at(g_w, r, g_r)
-	
-	if ((c.x==0)&&(c.y==0)&&(c.z==0))
-		c = RENDER_BG_COLOR
-	
-	c = convert(c)
-	ctx.fillStyle = "#" + c.x + c.y + c.z
-	
-	var x = g_x + ((CANVAS_WIDTH/2) - WIDTH/2)
-	var y = g_y + ((CANVAS_HEIGHT/2) - HEIGHT/2)
-	
-	ctx.fillRect(x,y,1,1)
-			
-	g_x++;
-	if (g_x === WIDTH)	{
-				
-		g_x = 0
-		g_y++
-	}
-			
-	if (g_y === HEIGHT)	{
-				
-		clearTimeout(to)
-		console.log("COMPLETED RENDER.")
-		console.timeEnd("render")
-		return
-	}
-	
-	to = setTimeout(render2, 0)	
-}
-*/
 
 function convert(c)	{
 	
@@ -364,32 +315,30 @@ function write_pixel(x, y, color)	{
 	ctx.fillRect( x, y, 1, 1 )
 }
 
-/*
-function render(c, w, remaining)	{
-	
-	console.time("render")	
-	
-	for (var y = 0; y < HEIGHT; y++)	{
-		
-		//console.log("Line " + y + " of " + HEIGHT);
-		
-		for (var x = 0; x < WIDTH; x++)	{
-	
-			var r = c.ray_for_pixel(x, y);
-			
-			ctx.fillStyle = convert(color_at(w, r, remaining))
-			ctx.fillRect(x,y,1,1)
-		}
-	}
-	
-	console.log("COMPLETED.\n")
-	console.timeEnd("render")
-}
-*/
-
 /** END OF RAYTRACER CODE */
 
+
+function doDivide()	{
+	
+	try	{
+		
+		//debugger;
+		Data.o.divide(Data.divideValue)
+		//debugger;
+		
+		return true
+	} catch(e)	{
+		
+		return false
+	}
+}
+
+
 /* FILE */
+
+var OBJFILECONTENTS = "";
+var FILECONTENTS = "";
+var I = {}
 
 function ppmObj(fn)	{
 	
@@ -398,6 +347,7 @@ function ppmObj(fn)	{
 	
 	return { data: Data.PPM[fn].data, width: Data.PPM[fn].width, height: Data.PPM[fn].height, name: Data.PPM[fn].name }
 }
+
 
 function readFile(e)	{
 
@@ -412,10 +362,6 @@ function readFile(e)	{
 	else
 		alert("Do not know what type of file to read!")
 }
-
-var OBJFILECONTENTS = "";
-var FILECONTENTS = "";
-var I = {}
 
 function readObjectFile(e) {
   var file = e.target.files[0];
@@ -457,7 +403,6 @@ function readPPMFile(e)	{
 	
 	reader.readAsText(file)
 }
-
 
 function parseFileContents(fn)	{
 	
@@ -531,10 +476,5 @@ function parsePPM(fn)	{
 	
 	return true;
 }
+
 /* END OF FILE */
-
-/* SPLASH SCREEN FUNCTIONS & VARIABLES */
- 
-
-
-/* END OF SPLASH SCREEN FUNCTIONS & VARIABLES */

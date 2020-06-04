@@ -366,7 +366,5 @@ function system()	{
 	o.addChild(m,e)
 	renderImage(l,o)
 	
-	saveScene("system", Data.c, l, o, Data.PPM["bgImage2.ppm"])
-	
-		
+	saveScene("system", Data.c, l, o, Data.PPM["bgImage2.ppm"])	
 }

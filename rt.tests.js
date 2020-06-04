@@ -398,21 +398,21 @@ function test_refraction()	{
 			
 		
 	var A = glass_sphere()
-	A.transform = m().scaling(2, 2, 2)
+	A.transform = identity_matrix().scaling(2, 2, 2)
 	A.material.color = colour(1,0,0)
 	A.material.refractive_index = 1.0
 	A.material.transparency = 0.5
 	//A.id = "A"
 	
 	var B = glass_sphere()
-	B.transform = m().translation(-0.25,0,0)
+	B.transform = identity_matrix().translation(-0.25,0,0)
 	B.material.color = colour(0,1,0)
 	B.material.refractive_index = 1.5
 	B.material.transparency = 0.75
 	//B.id = "B"
 	
 	var C = glass_sphere()
-	C.transform = m().translation(0.25,0,0)
+	C.transform = identity_matrix().translation(0.25,0,0)
 	C.material.color = colour(0,0,1)
 	C.material.refractive_index = 2.5
 	C.material.transparency = 0.75
@@ -430,6 +430,7 @@ function test_refraction()	{
 	
 	render(cam,w,5);
 }
+
 
 /** CURRENT TESTS */
 
@@ -551,7 +552,6 @@ function eCh5()	{
 	}
 }
 
-
 function hereWeGo()	{
 
 	var half = 3.5, wall_z = 10, pixel_size = 7.0 / CANVAS_HEIGHT, ray_origin = point(0,0,-5)
@@ -607,7 +607,7 @@ function fremag()	{
 	var l = new point_light(point(-50, 100, -100), colour(1,1,1)) 
 		
 	var s3 = sphere("3")
-	s3.transform = m().translation(1,0,0).scaling(1.5,1.5,1.5)
+	s3.transform = identity_matrix().translation(1,0,0).scaling(1.5,1.5,1.5)
 	s3.material.color = colour(1,0,0)
 	s3.material.ambient = 0.2
 	s3.material.diffuse = 0.7
@@ -646,6 +646,7 @@ function test222a()	{
 	
 }
 
+
 /* TEXTURE MAP TESTS */
 
 function tm_1()	{
@@ -655,7 +656,7 @@ function tm_1()	{
 	var l = new point_light(point(-50, 100, -100), colour(1,1,1)) 
 	
 	var s1 = sphere()
-	s1.transform = m().scaling(2, 2, 2)
+	s1.transform = identity_matrix().scaling(2, 2, 2)
 	
 	var p = checkers_pattern(4, 4, colour(1,1,1), colour(1, 0.3, 0.3))
 	var tm = TextureMap(p, spherical_map)
@@ -750,7 +751,7 @@ function cm_plane()	{
 	var tm = TextureMap(p, planar_map)
 	var pl = plane()
 	var pat = my_pattern( tm )
-	pat.transform = m().scaling(2,2,2)
+	pat.transform = identity_matrix().scaling(2,2,2)
 	pl.material.pattern = pat
 	
 	var o = group()
@@ -789,6 +790,7 @@ function cm_2()	{
 	Expected: yellow, cyan, red, blue
 	*/
 }
+
 
 /* */
 function linetest1()	{

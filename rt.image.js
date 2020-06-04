@@ -1,8 +1,6 @@
 var img_;
 function readImageFile(e)	{
 	
-	//alert("inside readimagefile()!")
-	//var file = e.target.files[0]
 	var file = e.target.files[0];
 	
 	if (!file)	{
@@ -61,7 +59,5 @@ function convertToPPM(data, width, height)	{
 	ppmWindow.onload = function(){
 
 		ppmWindow.document.getElementById('mainBody').innerHTML = output;
-    } 
-
-	//ppmWindow.window.close();
+    }
 }
