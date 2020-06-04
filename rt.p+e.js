@@ -135,9 +135,14 @@ function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	
 	t.normal = normalize(cross(t.e2, t.e1))
 	
-	t.local_normal_at = function(p)	{
+	t.local_normal_at = function(p, h)	{
 		
-		return this.normal;
+		if(!h)
+			return this.normal
+		
+		return 	this.vn2 * h.u +
+				this.vn3 * h.v +
+				this.vn1 * (1 - h.u - h.v)
 	};
 	
 	t.local_intersect = function(r)	{
@@ -195,7 +200,7 @@ function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 				  this.e2.y * origin_cross_e1_Y +
 				  this.e2.z * origin_cross_e1_Z);
 		
-		return [{ object: this, t: t }]
+		return [{ object: this, t: t, u: u, v: v }]
 		//return [new intersection(this, t)]
 	};
 	
@@ -500,11 +505,7 @@ function plane(id2)	{
 		
 		var t = -r.origin.y / r.direction.y
 		
-		var xs = []
-		
-		xs.push(new intersection(this, t))
-		
-		return xs 
+		return [{ object: this, t: t }]
 	};
 	
 	pl.local_normal_at = function(p)	{ return vector(0,1,0); };
@@ -879,13 +880,21 @@ function glass_sphere()	{
 	
 }
 
-function set_transform(s, t)	{
+function set_transform(s, t, flag)	{
+	
+	if(flag)	{
+		
+		s.transform = m_multiply(s.transform, t)
+		return
+	}
 	
 	s.transform = t;
 }
 
-function intersection(s, t)	{
+function intersection(s, t, u, v)	{
 	
 	this.t = t;
 	this.object = s;
+	this.u = u
+	this.v = v
 }

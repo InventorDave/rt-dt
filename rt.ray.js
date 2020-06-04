@@ -21,7 +21,7 @@ var ist = [];
 var indice = -1;
 var i_no = 0, i_yes = 0;
 
-function intersect(shape, ray)	{
+function intersect(shape, ray, i)	{
 	
 	var sh = shape
 	/*
@@ -45,7 +45,7 @@ function intersect(shape, ray)	{
 	
 	//debugger;
 	
-	return shape.local_intersect(local_ray);
+	return shape.local_intersect(local_ray, i ? i : null);
 	
 	// NOTE: p120 says the local_intersect() method of a shape should set shape.saved_ray to the ray parameter.
 	// Which one? local_ray, or the ray passed to intersect?? Apparently, local_ray....
@@ -123,20 +123,10 @@ function transform(r_in, m)	{ // p69
 	return r;
 }
 
-function normal_at(s, world_point)	{
-	
-	/* // pre-p200
-	var obj_point = mul(inverse(shape.transform), world_point);
-	var obj_normal = shape.local_normal_at(obj_point)
-	
-	var world_normal = mul(transpose(inverse(shape.transform)), obj_normal);
-	
-	world_normal.w = 0;
-	
-	return normalize(world_normal)*/
+function normal_at(s, world_point, i)	{
 	
 	var lp = world_to_object(s, world_point)
-	var ln = s.local_normal_at(lp)
+	var ln = s.local_normal_at(lp, i)
 	
 	return normal_to_world(s, ln)
 }

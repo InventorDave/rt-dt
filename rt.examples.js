@@ -329,3 +329,42 @@ function mySkyBox()	{
 	
 	renderImage()
 }
+
+function system()	{
+	
+	prepCanvas()
+	
+	var l = new point_light(point(-40, 50, -100), colour(1,1,1)) 
+	Data.c.setCTransform(view_transform(point(0,0,-75), point(0,0,0), vector(0,1,0)));
+	
+	var c = Data.PPM["2k_sun.ppm"];
+	var tm = TextureMap(image_pattern(c), spherical_map)
+	
+	var s = sphere("sun")
+	s.transform = identity_matrix().scaling(20,20,20)
+	s.material.pattern = my_pattern( tm )
+	s.material.diffuse = s.material.specular = s.material.diffuse = 1.0
+	
+	var e = sphere("earth")
+	e.transform = identity_matrix().translation(0,0,-40).rotation_y(Math.PI/2).scaling(2,2,2)
+	c = Data.PPM["earth.ppm"]
+	tm = TextureMap(image_pattern(c), spherical_map)
+	e.material.pattern = my_pattern( tm )
+	e.material.pattern.transform = m().rotation_y(Math.PI)
+	e.material.specular = 0.0
+	
+	var m = sphere("m")
+	m.transform = identity_matrix().translation(1.5,1.5,-50).rotation_y(Math.PI/2).scaling(0.7,0.7,0.7)
+	c = Data.PPM["2k_moon.ppm"]
+	tm = TextureMap(image_pattern(c), spherical_map)
+	m.material.pattern = my_pattern( tm )
+	m.material.pattern.transform = m().rotation_y(Math.PI)
+	m.material.specular = 0.0
+ 
+	var o = group()
+	o.addChild(e, m)
+	
+	saveScene("system", Data.c, l, o, Data.PPM["bgImage2.ppm"])
+	
+	renderImage(l, o)	
+}

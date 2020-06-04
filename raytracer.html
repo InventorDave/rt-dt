@@ -2,6 +2,9 @@
 <head>
   <title>rt/dt (Beta)</title>
 <meta charset="utf-8"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
 <script src="https://kit.fontawesome.com/504ca65532.js" crossorigin="anonymous"></script>
 <style>
@@ -166,6 +169,7 @@
 	-->
 	  <a onclick="Data.openFileType = 'IMG'; option('load-file'); return false;">Load Image File</a>
 	  <a onclick="Data.openFileType = 'PPM'; option('load-ppm-file'); return false;">Load PPM File</a>
+	  <a onclick="Data.openFileType = 'MESH'; option('load-mesh-file'); return false;">Load Mesh (.obj) File</a>
 	  <a onclick="option('close-proj'); return false;">Unload Project Files</a>
     </div>
   </div> 
@@ -319,45 +323,37 @@ window.onclick = function(e) {
 
 }
 </script>
-<br />
-<br>
+
 <div id="ui-options" style="position: fixed; right: 175px;">
 <button label="mySkyBox()" onclick="mySkyBox(); return false;">mySkyBox()</button><br>
 <button label="endGame()" onclick="endGame(); return false;">endGame()</button><br>
 <button label="earth()" onclick="earth(); return false;">earth()</button><br>
 <button label="cm_cube()" onclick="cm_cube(); return false;">cm_cube()</button><br>
+<button label="system()" onclick="system(); return false;">system()</button><br>
 </div>
-<div style="text-align: center; font-size: 25px; font-family: 'Fredoka One';"><b>rt/dt (Beta)</b><br>
-<br>
-<canvas id="canvas" width="500" height="281" style="border:1px solid #000000;"></canvas>
-<textarea id="msg-output" style="position: fixed; left: 25px;" readonly cols="30" rows="30">CONSOLE
-</textarea>
+<p style="position: fixed; right: 50px;">
+    <div>
+      <select id="os" name="options" onchange="optionSelected(); return false;">
+        <option value="small">Preview  (150,84)</option>
+        <option value="large" selected>Preview 2 (500,280)</option>
+        <option value="vlarge">Full Canvas (750,420)</option>
+      </select>
+      <button class="selectButton buttonCamera" onclick="option('cameraOptions'); return false;">Camera</button>
+      <button class="selectButton buttonLights">Lights</button>
+      <button class="selectButton buttonScene">Scene</button>
+    </div>
+  </p>
+  
+<div>
+  <br>
+  <canvas id="canvas" width="750" height="420" style="border:1px solid #000000; position: fixed; left: 300px;">
+  </canvas>
+  <textarea id="msg-output" style="position: fixed; left: 25px;" readonly cols="30" rows="30">CONSOLE
+  </textarea>
 
-
-
+  <canvas id="imgCanvas" width="500" height="281" style="border:1px solid #ffffff; visibility: hidden; display: none;"></canvas>
+  
 </div>
-<canvas id="imgCanvas" width="500" height="281" style="border:1px solid #ffffff; visibility: hidden; display: none;"></canvas>
-<p style="float: left;">
-<br/>
-
-
-<div style="text-align: center;">Select a mesh file to parse:<br><input type="file" id="file-input" class="selectButton selectFileButton" /></div>
-
-<div style="text-align: center;">
-<select id="os" name="options" onchange="optionSelected(); return false;">
-  <option value="small">Preview  (150,84)</option>
-  <option value="large" selected>Viewport (500,281.25)</option>
-  <!-- <option value="vlarge">900,550</option> -->
-</select>
-</div>
-<br><br>
-<div style="text-align: center;">
-
-<button class="selectButton buttonCamera" onclick="option('cameraOptions'); return false;">Camera</button>
-<button class="selectButton buttonLights">Lights</button>
-<button class="selectButton buttonScene">Scene</button>
-</div>
-<br>
 
 <!-- The Modals -->
 <div id="myModal" class="modal">
@@ -368,8 +364,7 @@ window.onclick = function(e) {
     <p>
 	Hello! My name is Dave! This Graphics app is ultimately meant for Node.js when it's completed, to be typically run on the command line. The work
 	is built on Jamis Buck's raytracer guide, but I am extending the code to incorporate raster graphics (ideal for previewing 3d scenes
-	quickly), and basic animation (rendering loop + camera helicopter), with the final output frames hopefully being photo-realistic, and
-	trivially stitched together by an appropriate tool. The toolbar at the top of the screen has a few buttons, including a link to my email (just
+	quickly). The toolbar at the top of the screen has a few buttons, including a link to my email (just
 	click on the '@'). Feel free to dash me an email telling me what you think of the app.<br>
 	<br>
 	<br>
@@ -378,7 +373,6 @@ window.onclick = function(e) {
   </div>
 
 </div>
-
 
 <div id="myModal_Camera" class="modal">
 
@@ -391,15 +385,14 @@ window.onclick = function(e) {
 	
 	<label for="campresets">Select a Camera:</label>
 
-<select id="campresets" name="camoptions" onchange="camPresetSelected(); return false;">
-  <option value="1">1</option>
-  <option value="2">2</option>
-  <option value="3">3</option>
-</select>
-<span id="cameraDetails"></span>
+    <select id="campresets" name="camoptions" onchange="camPresetSelected(); return false;">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <span id="cameraDetails"></span>
 	</p>
   </div>
-
 </div>
 
 <div id="myModal_OpenFile" class="modal">
@@ -451,7 +444,6 @@ window.onclick = function(e) {
 	  <p id="p_id">
 	   Set the BG Image.<br>
 	   <br>
-	   <button label="Press this first!" class="buttonClass" onclick="populateImagesSelection(); return false;">Press this first!</button>
 	   <select id="images" name="bgimageoptions" onchange="bgImageOptionsSelected(); return false;">
 
 		</select>
@@ -465,6 +457,14 @@ window.onclick = function(e) {
 			var select = document.createElement("select")
 			select.addEventListener("change", bgImageOptionsSelected)
 			select.id = "images"
+			
+			var opt1 = document.createElement("option")
+			opt1.text = opt1.value = "Please select."
+			select.add(opt1)
+			
+			var opt2 = document.createElement("option")
+			opt2.text = opt2.value = "No Image"
+			select.add(opt2)
 			
 			for (var i = 0; i < Data.PPM_refs.length; i++)	{
 			
@@ -485,7 +485,6 @@ window.onclick = function(e) {
 	</span>
   </div>
 </div>
-
 
 <script src="rt.p+e.js"></script>
 <script src="rt.pattern.js"></script>
@@ -594,7 +593,7 @@ function option(opt)	{
 		sceneModal.style.display = "block"
 	}
 	
-	if ((opt=="load-file") || (opt=="load-ppm-file"))	{
+	if ((opt=="load-file") || (opt=="load-ppm-file") || (opt=="load-mesh-file"))	{
 	
 		openFileModal.style.display = "block"
 	}
@@ -602,6 +601,7 @@ function option(opt)	{
 	if (opt=="set-bg-image")	{
 		
 		setBGImageModal.style.display = "block"
+		populateImagesSelection()
 	}
 	
 	if (opt=="set-skybox-params")	{
@@ -658,9 +658,6 @@ span_OpenFileModal.onclick = function()	{
 span_bugModal.onclick = function()	{
 	bugModal.style.display = "none"
 }
-
-document.getElementById('file-input')
-  .addEventListener('change', readObjectFile, false);
 
 document.getElementById('file-input2')
   .addEventListener('change', readFile, false);

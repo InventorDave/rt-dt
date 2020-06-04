@@ -61,7 +61,7 @@ function test69e()	{
 
 	var r = new ray(point(0,0,-5), vector(0,0,1));
 	var s = new sphere();
-	set_transform(s, scaling(2,2,2));
+	s.transform = m().scaling(2,2,2)
 	
 	var xs = intersect(s, r);
 	
@@ -622,6 +622,29 @@ function fremag()	{
 	renderImage()
 }
 
+
+/** SMOOTH TRIANGLES */
+
+function test222a()	{
+	// PASSED
+	var p1 = point(0,1,0)
+	var p2 = point(-1, 0, 0)
+	var p3 = point(1,0,0)
+	
+	var n1 = vector(0,1,0)
+	var n2 = vector(-1,0,0)
+	var n3 = vector(1,0,0)
+	
+	var tri = triangle(p1, p2, p3, 0, n1, n2, n3)
+	var r = new ray(point(-0.2, 0.3, -2), vector(0,0,1))
+	
+	var xs = tri.local_intersect(r)
+	
+	console.log("Check values of xs[0].u = 0.45, and xs[0].v = 0.25")
+	
+	debugger
+	
+}
 
 /* TEXTURE MAP TESTS */
 

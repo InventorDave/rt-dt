@@ -1,6 +1,6 @@
-var CANVAS_WIDTH = 500, CANVAS_HEIGHT = 281.25;
-var WIDTH = CANVAS_WIDTH;
-var HEIGHT = Math.round(CANVAS_HEIGHT);
+var CANVAS_WIDTH = 750, CANVAS_HEIGHT = 420;
+var WIDTH = CANVAS_WIDTH / 1.5;
+var HEIGHT = Math.round(CANVAS_HEIGHT) / 1.5;
 var BGCOLOR = "#2222cc";
 var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f") //colour(0,0,0)
 
@@ -16,7 +16,7 @@ var Data = {
 				vt: [],
 				g: [], // not currently used
 				o: {},
-				cache: {},
+				cache: [],
 				c: new Camera(WIDTH, HEIGHT, (Math.PI/4)),
 				l: new point_light(point(-20, 20, 40), colour(1,1,1)),
 				
@@ -71,8 +71,8 @@ function optionSelected()	{
 			break;
 			
 		case 2:
-			WIDTH = 900
-			HEIGHT = 550
+			WIDTH = 750
+			HEIGHT = 420
 			ct = Data.c.transform;
 			Data.c = new Camera(WIDTH, HEIGHT, (Math.PI/4));
 			Data.c.setCTransform(ct);
@@ -98,8 +98,14 @@ function bgImageOptionsSelected()	{
 
 		var s = document.getElementById("images")
 		
-		debugger;
+		//debugger;
 		var str = "Data.PPM[Data.PPM_refs[s.value]]";
+		
+		if (s.value=="No Image")	{
+		
+			Data.PPM["bgImage"] = null;
+			return
+		}
 		
 		Data.PPM["bgImage"] = Data.PPM[Data.PPM_refs[s.value]];
 }
@@ -149,6 +155,51 @@ function scene()	{
 	
 	return o
 }
+
+function saveScene(name, c, l, o, bgImage)	{
+	
+	var scene_ = { name: name, o: o, c: c, l: l, bgImage: bgImage }
+	
+	Data.cache.push(scene_)
+}
+
+function loadScene(name)	{
+
+	var scene_;
+	for(var i = 0; i < Data.cache.length; i++)	{
+		
+		if(Data.cache[i].name==name)	{
+			
+			scene_ = Data.cache[i]
+			break;
+		}
+	}
+	
+	if(!scene_)	{
+	
+		console.log("Couldn't find scene in cache!")
+		return false
+	}
+	
+	if(scene_.o)
+		Data.o = scene_.o
+	
+	if(scene_.c)
+		Data.c = scene_.c
+	
+	if(scene_.l)
+		Data.l = scene_.l
+	
+	if(scene_.bgImage)
+		Data.PPM["bgImage"] = scene_.bgImage
+	else
+		Data.PPM["bgImage"] = 0
+	
+	console.log("To render scene, type 'renderImage()' into browser console")
+	
+	return true
+}
+
 
 function lights()	{
 	
@@ -345,11 +396,26 @@ function ppmObj(fn)	{
 	if(!Data.PPM[fn])
 		return false
 	
-	return { data: Data.PPM[fn].data, width: Data.PPM[fn].width, height: Data.PPM[fn].height }
+	return { data: Data.PPM[fn].data, width: Data.PPM[fn].width, height: Data.PPM[fn].height, name: Data.PPM[fn].name }
+}
+
+function readFile(e)	{
+
+	if (Data.openFileType=="PPM")
+		readPPMFile(e)
+	
+	else if (Data.openFileType=="IMG")
+		readImageFile(e)
+	
+	else if (Data.openFileType=="MESH")
+		readObjectFile(e)
+	else
+		alert("Do not know what type of file to read!")
 }
 
 var OBJFILECONTENTS = "";
 var FILECONTENTS = "";
+var I = {}
 
 function readObjectFile(e) {
   var file = e.target.files[0];
@@ -366,18 +432,6 @@ function readObjectFile(e) {
   }; 
   
   reader.readAsText(file);
-}
-
-function readFile(e)	{
-
-	if (Data.openFileType=="PPM")
-		readPPMFile(e)
-	
-	else if (Data.openFileType=="IMG")
-		readImageFile(e)
-	
-	else
-		alert("Do not know what type of file to read!")
 }
 
 function readPPMFile(e)	{
@@ -404,7 +458,7 @@ function readPPMFile(e)	{
 	reader.readAsText(file)
 }
 
-var I = {}
+
 function parseFileContents(fn)	{
 	
 	//alert(fn)
@@ -426,21 +480,29 @@ function parseFileContents(fn)	{
 
 function parsePPM(fn)	{
 	
-	var arr = FILECONTENTS.split("\n").join(" ").split(" ");
+	var arr = FILECONTENTS.split("\n")
+	
+	
+	for (var k = 0; k < 10; k++)
+		if(arr[k])
+			if(arr[k].charAt(0)=="#")
+				arr.splice(k,1)
+	
+	
+	arr = arr.join(" ").split(" ");
 	
 	if(arr[0].indexOf("P3")==-1)	{
 		alert("FAIL: PPM File is not in correct format! arr[0] == " + arr[0]);
 		return false;
 	}
-	for (var j = 1; j < arr.length; j++)	{
-		
-		if ( (arr[j]=="\n") || (arr[j]=="") || (arr[j]==" ") || (isNaN(arr[j])) )
+	
+	for (var j = 1; j < arr.length; j++)
+		if ( (arr[j]=="\n") || (arr[j]=="") || (arr[j]==" ") )
 				arr.splice(j,1)
-	}
 	
 	
 
-	console.log("Completed Stage 1 of parsing PPM file.")
+	//console.log("Completed Stage 1 of parsing PPM file.")
 	
 	var width = arr[1]
 	var height = arr[2]
@@ -459,13 +521,13 @@ function parsePPM(fn)	{
 
 	}
 	
-	//ctx.putImageData(img, 0, 0)
+	var name = ""
 
-	var c = { data: pix, width: width, height: height }
+	var c = { data: pix, width: width, height: height, fn: fn, name: name }
 	Data.PPM[fn] = c;
 	Data.PPM_refs.push(fn)
 
-	console.log("PPM file processed, internal image created.")
+	console.log("PPM file '" + fn + "' processed.")
 	
 	return true;
 }

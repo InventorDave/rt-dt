@@ -62,14 +62,14 @@ function default_world()	{
 	return w;
 }
 
-function intersect_world(w, r)	{
+function intersect_world(w, r, i)	{
 
 	var oi = [];
 	
 	//console.log("i = " + w.objects.length)
 	
 	for (var i = 0; i < w.objects.length; i++)
-		oi[i] = intersect(w.objects[i], r);
+		oi[i] = intersect(w.objects[i], r, i ? i : null);
 
 	//oi contains multiple [], each containing all the intersections for an object in the world
 	
