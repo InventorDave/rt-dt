@@ -346,7 +346,7 @@ function system()	{
 	s.material.diffuse = s.material.specular = s.material.diffuse = 1.0
 	
 	var e = sphere("earth")
-	e.transform = identity_matrix().translation(0,0,-40).scaling(2,2,2).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
+	e.transform = identity_matrix().translation(0,0,-40).scaling(2,2,2) //.rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
 	c = Data.PPM["earth.ppm"]
 	tm = TextureMap(image_pattern(c), spherical_map)
 	e.material.pattern = my_pattern( tm )
@@ -354,7 +354,7 @@ function system()	{
 	e.material.specular = 0.0
 	
 	var m = sphere("m")
-	m.transform = identity_matrix().translation(1.5,1.5,-50).scaling(0.7,0.7,0.7).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
+	m.transform = identity_matrix().translation(1.5,1.5,-50).scaling(0.7,0.7,0.7) //.rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
 	c = Data.PPM["2k_moon.ppm"]
 	tm = TextureMap(image_pattern(c), spherical_map)
 	m.material.pattern = my_pattern( tm )
@@ -362,9 +362,11 @@ function system()	{
 	m.material.specular = 0.0
  
 	var o = group()
+	
 	o.addChild(m,e)
+	renderImage(l,o)
 	
 	saveScene("system", Data.c, l, o, Data.PPM["bgImage2.ppm"])
 	
-	renderImage(l, o)	
+		
 }
