@@ -13,7 +13,7 @@ function Pattern()	{
 		return colour(0.5,0.5,0.5)
 	}
 	
-	this.transform = m()
+	this.transform = identity_matrix()
 	
 	this.color_at_object = function(obj, wp)	{ // p132
 		
