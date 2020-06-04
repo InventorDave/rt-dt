@@ -350,7 +350,7 @@ function system()	{
 	c = Data.PPM["earth.ppm"]
 	tm = TextureMap(image_pattern(c), spherical_map)
 	e.material.pattern = my_pattern( tm )
-	e.material.pattern.transform = m().rotation_y(Math.PI)
+	e.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
 	e.material.specular = 0.0
 	
 	var m = sphere("m")
@@ -358,7 +358,7 @@ function system()	{
 	c = Data.PPM["2k_moon.ppm"]
 	tm = TextureMap(image_pattern(c), spherical_map)
 	m.material.pattern = my_pattern( tm )
-	m.material.pattern.transform = m().rotation_y(Math.PI)
+	m.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
 	m.material.specular = 0.0
  
 	var o = group()
