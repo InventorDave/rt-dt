@@ -2,8 +2,6 @@
 
 /* MATRICES */
 
-
-
 function compareMatrices(m1, m2)	{
 	
 	// 1. check they are the same size
@@ -33,21 +31,6 @@ function m_multiply(m1, m2)	{
 	return m;
 }
 
-/*
-function m_mul_t(m, t)	{ // multiply m, a 4x4 matrix, by t, a tuple   - raytracer book, p.31
-
-	var res = initArray(4,1);
-
-	for (var r = 0; r < 4; r++)
-			res[r][0] = 	m[r][0] * t.x +
-							m[r][1] * t.y +
-							m[r][2] * t.z +
-							m[r][3] * t.w;
-		
-	// convert result to a tuple, and return.
-	
-	return new tuple(res[0][0],res[1][0],res[2][0],res[3][0]);
-}*/
 var m_mul_t = multiply_matrix_by_tuple; // rt.matrix-transform.js
 
 function transpose(m)	{
@@ -61,6 +44,7 @@ function transpose(m)	{
 	return m2
 }
 
+
 function identity_matrix()	{ // returns the "identity matrix"
 	
 	var m = initArray(4,4);
@@ -73,6 +57,9 @@ function identity_matrix()	{ // returns the "identity matrix"
 }
 
 var m = identity_matrix;
+
+
+/* DETERMINANT */
 
 function getCofactor(mat, temp, p, q, n){ 
     var i = 0, j = 0;
@@ -170,6 +157,7 @@ function submatrix(m, row, col)	{ // deduct 1 row and 1 column from a matrix to 
 		return m2;
 }
 
+
 function inverse(m)	{
 	
 	var det = determinant(m);
@@ -188,7 +176,6 @@ function inverse(m)	{
 }
 
 
-
 //-------------------------
 // HELPER FUNCTION
 
@@ -204,40 +191,3 @@ function initArray(rows, cols)  {
 
 	return result;
 }
-
-/*
-// FAILED IMPLEMENTAION OF DETERMINANT CODE, ONLY WORKS FOR 2X2, 3X3 MATRICES
-
-function determinant2(m)	{ // input matrix must be <= 3x3
-
-	if (m.length == 2)
-		return (m[0][0]*m[1][1] - m[0][1]*m[1][0]);
-
-	var det = 0;
-	for (var c = 0; c < m.length; c++)	{
-		
-		det = det + (m[0][c] * cofactor2(m, 0, c));
-		// debugger; // to test each iteration of the above statement.
-	}
-
-	return det;
-}
-
-function minor2(m, r, c)	{ // p35
-						  // "The Minor of an element at row r and column c is the determinant of the submatrix at (r,c)"
-	return determinant2(submatrix(m, r, c));
-}
-
-function cofactor2(m, r, c)	{
-							// Minors that have possibly had their signs changed.
-							
-		var min = minor2(m, r, c);
-		
-		if (((r + c) % 2) != 0)
-			min = -min;
-		
-		return min;
-}
-
-// END BLOCK
-*/

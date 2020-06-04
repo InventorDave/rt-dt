@@ -333,6 +333,7 @@ function sphere(id2)	{
 	
 		// The vector from the  (unit) sphere's centre, to the ray origin
 		// remember: the sphere is centered at the world origin
+		
 		var shape_2_ray = subtract(local_ray.origin, point(0,0,0));
 	
 		var a = dot(local_ray.direction, local_ray.direction);
