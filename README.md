@@ -3,10 +3,10 @@ Javascript implementation of Jamis Buck's Raytracer Challenge.
 
 Once you have downloaded the project files, simply load "raytracer.html" into your browser. *This program is a work in progress.* 
 
-The best way to start is to go to "File->Load PPM File", and load 2 PPM files consecutively. 1) "earth.ppm", and 2) any PPM file you have (GIMP converts image files to .PPM - you MUST export as ASCII not RAW!). Then go to "Options->Set/Unset BG Image", click the button that it tells you to, then select your PPM file from the dropdown menu. Finally, having exited the menu by clicking on the "x", click the "earth()" button on the right of the App window. And marvel.
+The best way to start is to go to "File->Load PPM File", and load 2 PPM files consecutively. 1) "earth.ppm", and 2) any PPM file you have (GIMP converts image files to .PPM - you MUST export as ASCII not RAW!). Then go to "Options->Set/Unset BG Image", click the button that it tells you to, then select your 2nd PPM file from the dropdown menu. Finally, having exited the menu by clicking on the "x", click the "earth()" button on the right of the App window. And marvel.
 
 
-Included are some .obj mesh files you can load into the program by selecting the "choose file" button below the canvas window. Then,
+Included are some .obj mesh files you can load into the program by selecting the "Load Mesh (.obj) File" File menu option. Then,
 
 Select "Render->Generate BVH" (unless you want the rendering to take forever - BVH stands for Bounding Volume Heirarchy, and it is an optimisation technique).
 
