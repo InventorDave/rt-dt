@@ -640,7 +640,7 @@ function test222a()	{
 	
 	var xs = tri.local_intersect(r)
 	
-	console.log("Check values of xs[0].u = 0.45, and xs[0].v = 0.25")
+	console.log("Check values of xs[0].object.u = 0.45, and xs[0].object.v = 0.25")
 	
 	debugger
 	

@@ -38,9 +38,6 @@ function color_at(w, r, remaining)	{
 	if (remaining <= 0)
 		return colour(0,0,0)
 	
-	if (r == undefined)
-		console.log("shade::color_at() has an undefined ray.\n");
-	
 	var intersections = intersect_world(w, r)
 	var h = hit(intersections)
 	if (!h)

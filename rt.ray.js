@@ -19,37 +19,51 @@ function intersections()	{
 
 var ist = [];
 var indice = -1;
-var i_no = 0, i_yes = 0;
 
-function intersect(shape, ray, i)	{
+function intersect(shape, ray)	{
 	
 	var sh = shape
-	/*
-	while(sh.parent)
-		sh = sh.parent
-	*/
 	
-	if (sh.id != indice)	{
-		//i_no++;
-		indice = sh.id;
-	}
-	//else
-		//i_yes++;
-	
-	if (!ist[indice])
-		ist[indice] = inverse(sh.transform)
+	if (!ist[sh.id])
+		ist[sh.id] = inverse(sh.transform)
 
-
-
-	var local_ray = transform(ray, ist[indice]); // p119
+	var local_ray = transform(ray, ist[sh.id]); // p119
 	
 	//debugger;
 	
-	return shape.local_intersect(local_ray, i ? i : null);
+	return shape.local_intersect(local_ray);
 	
 	// NOTE: p120 says the local_intersect() method of a shape should set shape.saved_ray to the ray parameter.
 	// Which one? local_ray, or the ray passed to intersect?? Apparently, local_ray....
 }
+
+function transform(r_in, m)	{ // p69
+	
+	var res =  multiply_matrix_by_tuple(m, r_in.origin);
+	var res2 =  multiply_matrix_by_tuple(m, r_in.direction);
+	
+	var r = new ray(res, res2)
+
+	return r;
+}
+
+function normal_at(s, world_point)	{
+	
+	var lp = world_to_object(s, world_point)
+	var ln = s.local_normal_at(lp)
+	
+	/*
+	ln.x = 0 // ln.x / 0.4;
+	ln.y = 0 // ln.y / 0.2;
+	ln.z = 0 // ln.z / 0.4;
+	ln.w = 0
+	
+	ln = normalize(ln)
+	*/
+	
+	return normal_to_world(s, ln)
+}
+
 
 function order(arr)	{
 	
@@ -112,24 +126,6 @@ function hit(xs)	{ // xs = [] of intersection objects. Return the lowest nonnega
 	return x;
 }
 
-
-function transform(r_in, m)	{ // p69
-	
-	var res =  multiply_matrix_by_tuple(m, r_in.origin);
-	var res2 =  multiply_matrix_by_tuple(m, r_in.direction);
-	
-	var r = new ray(res, res2)
-
-	return r;
-}
-
-function normal_at(s, world_point, i)	{
-	
-	var lp = world_to_object(s, world_point)
-	var ln = s.local_normal_at(lp, i)
-	
-	return normal_to_world(s, ln)
-}
 
 function reflect(_in, normal)	{
 	

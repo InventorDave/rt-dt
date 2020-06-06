@@ -367,6 +367,7 @@ function readObjectFile(e) {
   var file = e.target.files[0];
   
   if (!file) {
+	  alert("no file!")
     return;
   }
   

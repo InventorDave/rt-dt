@@ -6,6 +6,7 @@ function world()	{
 }
 
 var wto_ic = []
+var tick1= 0;
 function world_to_object(s, p)	{
 	
 	if (s.parent)
@@ -15,11 +16,35 @@ function world_to_object(s, p)	{
 		wto_ic[s.id] = inverse(s.transform)
 	
 
-	return mul(wto_ic[s.id], p)
+	var res = mul(wto_ic[s.id], p)
+	
+	/*
+	tick1++
+	if((tick1 % 500) == 0)
+		console.log("p = (" + p.x + ", " + p.y + ", " + p.z + ")")
+	*/
+	return res
 }
 
 
 var ntw_ic = [];
+var tick2 = 0
+
+function normal_to_world(s, n)	{
+	
+	if(!ntw_ic[s.id])
+		ntw_ic[s.id] = transpose(inverse(s.transform))
+	
+	n = mul(ntw_ic[s.id], n)
+	n.w = 0
+	n = normalize(n)
+
+	if (s.parent)
+		n = normal_to_world(s.parent, n)
+
+	return n
+}
+/*
 function normal_to_world(s, n)	{
 	
 	if(!ntw_ic[s.id])
@@ -34,10 +59,14 @@ function normal_to_world(s, n)	{
 		n.w = 0
 		n = normalize(n)
 	}
-
+	
+	tick2++
+	if((tick2%500)==0)
+		console.log("n = (" + n.x + ", " + n.y + ", " + n.z + ")")
 	
 	return n
 }
+*/
 
 function default_world()	{
 	
@@ -62,14 +91,14 @@ function default_world()	{
 	return w;
 }
 
-function intersect_world(w, r, i)	{
+function intersect_world(w, r)	{
 
 	var oi = [];
 	
 	//console.log("i = " + w.objects.length)
 	
 	for (var i = 0; i < w.objects.length; i++)
-		oi[i] = intersect(w.objects[i], r, i ? i : null);
+		oi[i] = intersect(w.objects[i], r);
 
 	//oi contains multiple [], each containing all the intersections for an object in the world
 	
@@ -153,22 +182,9 @@ function Camera(hsize, vsize, fov)	{
 		var pixel = multiply_matrix_by_tuple(input1, input2);
 		var origin = multiply_matrix_by_tuple(input1/*inverse(this.transform)*/, point(0,0,0));
 		
-		if (origin === undefined)
-			console.log("Origin Undefined!\n");
-		
 		var direction = normalize(subtract(pixel, origin));
 		
-		if ((!(origin instanceof tuple)) || (!(direction instanceof tuple)))	{
-			
-			console.log("Error!\n");
-			debugger;
-		}
-		
-		var r = new ray(origin, direction);
-		
-		//console.log("ray(" + origin.x + "/" + direction.x + ")\n");
-		
-		return r
+		return new ray(origin, direction)
 
 	}
 }

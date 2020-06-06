@@ -113,7 +113,7 @@ function prepare_computations(i, r, xs)	{
 	comps.point = _position(r, comps.t);
 	
 	comps.eyev  = negate(r.direction);
-	comps.normalv = normal_at(comps.object, comps.point, comps.object.n1 ? i : null);
+	comps.normalv = normal_at(comps.object, comps.point);
 	comps.reflectv = reflect(r.direction, comps.normalv)
 	
 	if (dot(comps.normalv, comps.eyev) < 0)	{

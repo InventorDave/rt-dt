@@ -323,7 +323,26 @@ window.onclick = function(e) {
   }
 }
 </script>
-
+<br>
+<p style="position: fixed; right: 50px;">
+    <div>
+      <select id="os" name="options" onchange="previewSizepreviewSizeOptionSelected(); return false;">
+        <option value="small">Preview  (150,84)</option>
+        <option value="large" selected>Preview 2 (500,280)</option>
+        <option value="vlarge">Full Canvas (750,420)</option>
+      </select>
+      <button class="buttonCamera" onclick="option('cameraOptions'); return false;">Camera</button>
+      <button class="buttonLights" onclick="option('lightsOptions'); return false;">Lights</button>
+      <button class="buttonScene" onclick="option('sceneOptions'); return false;">Scene</button>
+    </div>
+</p>
+  
+<div>
+  
+  <textarea id="msg-output" style="position: relative;" readonly cols="30" rows="25">CONSOLE
+  </textarea>
+    <canvas id="canvas" width="750" height="420" style="border:1px solid #000000; position: absolute; left: 250px;">
+  </canvas>
 <div id="ui-options" style="position: fixed; right: 175px;">
 <button label="mySkyBox()" onclick="mySkyBox(); return false;">mySkyBox()</button><br>
 <button label="endGame()" onclick="endGame(); return false;">endGame()</button><br>
@@ -331,27 +350,7 @@ window.onclick = function(e) {
 <button label="cm_cube()" onclick="cm_cube(); return false;">cm_cube()</button><br>
 <button label="system()" onclick="system(); return false;">system()</button><br>
 </div>
-<p style="position: fixed; right: 50px;">
-    <div>
-      <select id="os" name="options" onchange="optionSelected(); return false;">
-        <option value="small">Preview  (150,84)</option>
-        <option value="large" selected>Preview 2 (500,280)</option>
-        <option value="vlarge">Full Canvas (750,420)</option>
-      </select>
-      <button class="selectButton buttonCamera" onclick="option('cameraOptions'); return false;">Camera</button>
-      <button class="selectButton buttonLights">Lights</button>
-      <button class="selectButton buttonScene">Scene</button>
-    </div>
-  </p>
-  
-<div>
-  <br>
-  <canvas id="canvas" width="750" height="420" style="border:1px solid #000000; position: fixed; left: 300px;">
-  </canvas>
-  <textarea id="msg-output" style="position: fixed; left: 25px;" readonly cols="30" rows="30">CONSOLE
-  </textarea>
-
-  <canvas id="imgCanvas" width="500" height="281" style="border:1px solid #ffffff; visibility: hidden; display: none;"></canvas>
+  <canvas id="imgCanvas" width="1" height="1" style="visibility: hidden; display: none;"></canvas>
   
 </div>
 
@@ -539,10 +538,17 @@ function option(opt)	{
 	
 	if (opt=="render")	{
 	
-		if(Data.o.s.length)
-			renderImage()
-		else
-			console.log("No scene in memory!")
+		try	{
+		
+			if(Data.o.s.length)
+				renderImage()
+			else
+				console.log("No scene in memory!")
+		}
+		catch(e)	{
+		
+			console.log("line 550, no scene loaded.")
+		}
 	}
 	
 	if (opt=="about")	{

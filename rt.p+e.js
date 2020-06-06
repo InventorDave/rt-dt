@@ -116,7 +116,21 @@ function cone(id2)	{
 	return c
 }
 
-
+function smooth_triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
+	
+	var st = triangle(id2)
+	
+	st.subtype="smooth"
+	
+	st.local_normal_at = function(p)	{
+		
+		return 	this.vn2 * this.u +
+				this.vn3 * this.v +
+				this.vn1 * (1 - this.u - this.v)
+	};
+	
+	return st
+}
 function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	
 	var t = new Shape("triangle", id2 || 0)
@@ -128,6 +142,9 @@ function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	t.e1 = subtract(p2, p1)
 	t.e2 = subtract(p3, p1)
 	
+	if(isNaN(vn1))
+		vn1 = "n"
+	
 	t.vn1 = vn1
 	t.vn2 = vn2
 	t.vn3 = vn3
@@ -137,9 +154,9 @@ function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	
 	t.normal = normalize(cross(t.e2, t.e1))
 	
-	t.local_normal_at = function(p, h)	{
+	t.local_normal_at = function(p)	{
 		
-		if(!h)
+		if(this.vn1==="n")
 			return this.normal
 		
 		return 	this.vn2 * h.u +
@@ -202,7 +219,10 @@ function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 				  this.e2.y * origin_cross_e1_Y +
 				  this.e2.z * origin_cross_e1_Z);
 		
-		return [{ object: this, t: t, u: u, v: v }]
+		this.u  = u
+		this.v = v
+		
+		return [{ object: this, t: t /*, u: this.u, v: this.v */}]
 		//return [new intersection(this, t)]
 	};
 	
@@ -213,12 +233,20 @@ function fan_triangulation(vertices, _vn)	{
 	
 	var ts = []
 	
-	for (var i = 1; i < vertices.length-1; i++)	{
-		//console.log("1: " + vertices[0] + ", 2: " + vertices[1] +", 3: " + vertices[2]);
-		var t = triangle(vertices[0], vertices[i], vertices[i+1], undefined, _vn[0], _vn[i], _vn[i+1])
+	if(isNaN(_vn[0]))
+		for (var i = 1; i < vertices.length-1; i++)	{
+			//console.log("1: " + vertices[0] + ", 2: " + vertices[1] +", 3: " + vertices[2]);
+			var t = triangle(vertices[0], vertices[i], vertices[i+1], GetUID())
 		
-		ts.push(t)
-	}
+			ts.push(t)
+		}
+	else
+		for (var i = 1; i < vertices.length-1; i++)	{
+			//console.log("1: " + vertices[0] + ", 2: " + vertices[1] +", 3: " + vertices[2]);
+			var t = smooth_triangle(vertices[0], vertices[i], vertices[i+1], GetUID(), _vn[0], _vn[i], _vn[i+1])
+		
+			ts.push(t)
+		}
 	
 	return ts
 }
@@ -651,7 +679,7 @@ function group(id2)	{
 				var xs = intersect(this.s[i], r);
 			
 				for (var j=0;j<xs.length;j++)
-				res.push(xs[j])
+					res.push(xs[j])
 			}
 		
 			res = order(res);
@@ -832,6 +860,9 @@ function Shape(type, id2)	{
 	
 	this.type = type // "sphere", "plane", etc
 	
+	this.u = undefined
+	this.v = undefined
+	
 	this.parent = false;
 	
 	this.local_intersect = function(local_ray)	{ /*default impl.*/ this.saved_ray = local_ray; return []; };
@@ -904,6 +935,6 @@ function intersection(s, t, u, v)	{
 	
 	this.t = t;
 	this.object = s;
-	this.u = u
-	this.v = v
+	this.object.u = u
+	this.object.v = v
 }

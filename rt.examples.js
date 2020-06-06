@@ -116,6 +116,41 @@ function scene1()	{
 	
 }
 
+function scene1b()	{
+	
+	prepCanvas()
+	
+	Data.c.setCTransform(view_transform(
+										point(10,0,-20),
+										point(0,0,0),
+										vector(0,1,0)
+										)
+						);
+						
+	var l = new point_light(point(10, 10, 10), colour(0.5,0.5,1)) 
+	
+	var s = sphere()
+	s.material.color = colour(255/255,69/255,0/255)
+	s.transform = m().scaling(2,2,2)
+	
+	var cb = cube()
+	cb.material.color = colour(135/255,206/255,250/255)
+	cb.transform = m().translation(4, 0, -2)
+	
+	var o = group()
+	o.addChild(s)
+	o.addChild(cb)
+	
+	//o.divide(1)
+	
+	//debugger;
+	Data.o = o
+	Data.l = l
+	
+	
+	renderImage();
+	
+}
 
 // Sample Scene 2
 function scene2()	{

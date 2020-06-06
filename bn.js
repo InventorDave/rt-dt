@@ -28,10 +28,10 @@ function ComputeGridNormal( data, x, y )	{
 	N.z = 2 * s//	
 	normalize( N )//
 	
-	var paV = hf.GetData( x, y );	
-	var sx = hf.GetSizeX();	
-	var sy = hf.GetSizeY();	
-	var scale = hf.GetXYScale();	
+	var paV = data.GetData( x, y );	
+	var sx = data.GetSizeX();	
+	var sy = data.GetSizeY();	
+	var scale = data.GetXYScale();	
 	var z0 = paV[ 0 ].m_Z;	
 	var Az = ( x + 1 < sx ) ? ( paV[   1 ].m_Z ) : z0;	
 	var Bz = ( y + 1 < sy ) ? ( paV[  sx ].m_Z ) : z0;	
