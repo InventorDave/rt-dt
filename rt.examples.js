@@ -261,7 +261,47 @@ function scene3()	{
 	console.log("Select Render->Render!.")
 }
 
-
+function sceneBump()	{
+	
+	prepCanvas()
+	
+	Data.c.setCTransform(view_transform(
+										point(10,0,-18),
+										point(0,0,0),
+										vector(0,1,0)
+										)
+						);
+						
+	var l = new point_light(point(-5, 10, -30), colour(1,1,1)) 
+	
+	var s = sphere()
+	s.material.color = colour(255/255,69/255,0/255)
+	s.transform = m().scaling(4,4,4).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
+	s.material.normalMap = Data.PPM["normalMap.ppm"]
+	s.material.specular = 0.0
+	
+	var c = Data.PPM["earth.ppm"];
+	if(!c)	{
+		
+		alert("Please load 'earth.ppm' file first, via File->Load File")
+		return
+	}
+	var tm = TextureMap(image_pattern(c), spherical_map)
+	s.material.pattern = my_pattern( tm )
+	
+	var o = group()
+	o.addChild(s)
+	
+	//o.divide(1)
+	
+	//debugger;
+	Data.o = o
+	Data.l = l
+	
+	
+	renderImage();
+	
+}
 
 
 function cm_cube()	{

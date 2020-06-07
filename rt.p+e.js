@@ -355,6 +355,8 @@ function sphere(id2)	{
 	s.bbMin = point(-1,-1,-1)
 	s.bbMax = point(1,1,1)
 	
+	s.P = undefined;
+	
 	s.local_intersect = function(local_ray)	{
 		
 		var xs = [];
@@ -373,8 +375,19 @@ function sphere(id2)	{
 		if (discriminant < 0)
 			return [];
 	
-		xs[0] = new intersection(this, (-b - Math.sqrt(discriminant)) / (2 * a));
-		xs[1] = new intersection(this, (-b + Math.sqrt(discriminant)) / (2 * a));
+		var t0 = (-b - Math.sqrt(discriminant)) / (2 * a)
+		var t1 = (-b + Math.sqrt(discriminant)) / (2 * a)
+		
+		 
+		//var P2 = add(local_ray.origin, multiplyInt(local_ray.direction, t1)) // point on surface
+
+		if((t0<0)||(t0>t1))
+			this.P = add(local_ray.origin, multiplyInt(local_ray.direction, t1))
+		else
+			this.P = add(local_ray.origin, multiplyInt(local_ray.direction, t0))
+		
+		xs[0] = new intersection(this, t0);
+		xs[1] = new intersection(this, t1);
 	
 		xs = order(xs);
 	
@@ -383,7 +396,7 @@ function sphere(id2)	{
 	
 	s.local_normal_at = function(p)	{
 		
-		return normalize(subtract(p, point(0,0,0)))
+		return subtract(p, point(0,0,0))
 	};
 	
 	return s

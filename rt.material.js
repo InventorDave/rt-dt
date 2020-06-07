@@ -12,6 +12,8 @@ function material()	{
 	this.casts_shadow = true;
 	
 	this.pattern = undefined;
+	
+	this.normalMap = undefined;
 }
 
 function SkyBoxMaterial(skyBox)	{

@@ -50,7 +50,7 @@ Data.presets.camera.push({ str: "preset3", vt: view_transform(point(25,0, 25), /
 /** END GLOBAL OBJECTS */
 
 
-function optionSelected()	{
+function previewSizeOptionSelected()	{
 	var ct;
 	switch(document.getElementById("os").selectedIndex)	{
 		
