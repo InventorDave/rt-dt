@@ -4,7 +4,7 @@ var flag17 = true;
 function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 
 	// vertices[] - check for invalid entries for both teapot(checked) and man
-	if(flag17)
+	//if(flag17)
 		//debugger;
 	
 	var obj = [], v2 = [], vn2 = [];
@@ -164,7 +164,6 @@ function parse_obj_file(normalizeMesh)	{
 			curr_e = "";
 			ignored_lines++;
 			// ignore line
-			// 3351-1508-6959-0290-1969-4871-4238-88 expand!2 key
 		}
 		
 		if (curr_e)	{
