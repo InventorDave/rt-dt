@@ -13,7 +13,7 @@ function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 
 	
 	
-	// CONVERT VERTICES (1-BASED OFFSETS INTO Data.V[]) INTO SIZE(N) POINT()'S
+	// CONVERT VERTICES (1-BASED OFFSETS INTO Data.V[]) INTO COUNT(M) POINT()'S
 	for (var m = 0; m < vertices.length/* - 1 */; m++)	{
 		
 		var vdata = Data["v"][vertices[m][0]-1];
@@ -25,29 +25,12 @@ function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 		if(!vdata)  // hack for invalid final entry, basically accounts for leading/trailing ws in man obj file "f" entries
 			continue;
 		
-			/*
-	bbox = bounding_box( all vertices )
-
-	sx = bbox.max.x - bbox.min.x
-	sy = bbox.max.y - bbox.min.y
-	sz = bbox.max.z - bbox.min.z
-
-	scale = max(sx, sy, sz) / 2
-
-	for each vertex v
-    v.x = (v.x - (bbox.min.x + sx/2)) / scale
-    v.y = (v.y - (bbox.min.y + sy/2)) / scale
-    v.z = (v.z - (bbox.min.z + sz/2)) / scale
-	*/
-		
 		x = vdata[0];
 		y = vdata[1];
 		z = vdata[2];
 		
 		if (normalizeMesh)	{
-			
 
-	
 			x = (x - (bbox.min.x + sx/2)) / scale
 			y = (y - (bbox.min.y + sy/2)) / scale
 			z = (z - (bbox.min.z + sz/2)) / scale
@@ -72,16 +55,12 @@ function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 		//debugger;		
 	}
 	
-	
-
-	
 	var ts = fan_triangulation(v2, vn2)
 
-	
 	for (var i = 0; i < ts.length; i++)
 		if (ts[i])	{
 			
-			ts[i].material.color = RENDER_FG_COLOR //colour(255,105,180); // #FFB6C1
+			ts[i].material.color = RENDER_FG_COLOR
 			obj.push(ts[i])
 		}
 	

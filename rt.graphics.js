@@ -115,7 +115,7 @@ function Line2d(p1, p2, id2)	{
 		}
 		
 		if(!fuzzy)
-		return this.Gradient()===L2.Gradient()?true:false;
+			return this.Gradient()===L2.Gradient()?true:false;
 	
 		return equal(this.Gradient(),L2.Gradient())?true:false;
 	}
