@@ -69,7 +69,7 @@ function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 		vn2.push(vector(x,y,z))
 		
 		//if(flag17)
-			//debugger;		
+		//debugger;		
 	}
 	
 	
@@ -205,7 +205,7 @@ function parse_obj_file(normalizeMesh)	{
 			}
 		}
 	}
-	console.log("Parsed Object File: " + (lines.length-ignored_lines) + " lines of data.")
+	log("Parsed Object File: " + (lines.length-ignored_lines) + " lines of data.")
 	
 			
 			var bbox = new BB();
@@ -249,5 +249,5 @@ function parse_obj_file(normalizeMesh)	{
 	
 	Data.o = o
 	
-	console.log("Generated triangle mesh.")
+	log("Generated triangle mesh.")
 }

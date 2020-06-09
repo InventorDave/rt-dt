@@ -35,7 +35,7 @@ function imageLoaded()	{
 	var pix = img.data;
 	
 	
-	console.log("Image File Loaded.")
+	log("Image File Loaded.")
 	convertToPPM(pix, width, height);
 	//debugger;
 }

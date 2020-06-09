@@ -561,12 +561,12 @@ function option(opt)	{
 			if(Data.o.s.length)
 				renderImage()
 			else
-				console.log("No scene in memory!")
+				log("No scene in memory!")
 		//}
 		/*
 		catch(e)	{
 		
-			console.log("line 550, no scene loaded.")
+			log("line 550, no scene loaded.")
 		}*/
 	}
 	
@@ -597,9 +597,9 @@ function option(opt)	{
 	
 	if (opt=="gen-bvh")
 		if(doDivide())
-			console.log("Scene divided into BVH.")
+			log("Scene divided into BVH.")
 		else
-			console.log("Failed to generate BVH. Have you loaded any objects into the scene?")
+			log("Failed to generate BVH. Have you loaded any objects into the scene?")
 	
 	if (opt=="cameraOptions")	{
 	
@@ -698,7 +698,7 @@ span_normalMapModal.onclick = function()	{
 document.getElementById('file-input2')
   .addEventListener('change', readFile, false);
 
-console.log = function(str)	{
+function log(str)	{
 
 	document.getElementById("msg-output").value = (document.getElementById("msg-output").value + '\n' + str)
 }

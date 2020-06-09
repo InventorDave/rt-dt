@@ -110,7 +110,7 @@ function prepare_computations(i, r, xs)	{
 	comps.t = i.t;
 	comps.object = i.object;
 	
-	comps.point = add(r.origin, multiplyInt(r.direction, comps.t))
+	comps.point = _position(r, comps.t)//add(r.origin, multiplyInt(r.direction, comps.t))
 	
 	comps.eyev  = negate(r.direction);
 	comps.normalv = normal_at(comps.object, comps.point);

@@ -24,6 +24,8 @@ function lighting(_material, _light, obj, _point, eyev, normalv, in_shadow, f)	{
 	else
 		clr = _material.color
 	
+	//console.log("LIGHTING: r: " + clr.x + ", g: " + clr.y + ", b: " + clr.z)
+	
 	//console.log("light.js::lighting(...):clr = r:"+clr.x+", g:"+clr.y+", b:"+clr.z+"\n")
 	
 	// combine the surface color with the light's color/intensity

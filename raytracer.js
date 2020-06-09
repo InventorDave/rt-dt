@@ -93,7 +93,7 @@ function camPresetSelected()	{
 	var el = document.getElementById("cameraDetails")
 	
 	el.innerText = Data.presets.camera[v.selectedIndex].str + " : " + Data.c.string;
-	console.log("Set Camera to preset " + (v.selectedIndex+1) + ".")
+	log("Set Camera to preset " + (v.selectedIndex+1) + ".")
 }
 
 function bgImageOptionsSelected()	{
@@ -166,7 +166,7 @@ function loadScene(name)	{
 	
 	if(!scene_)	{
 	
-		console.log("Couldn't find scene in cache!")
+		log("Couldn't find scene in cache!")
 		return false
 	}
 	
@@ -184,7 +184,7 @@ function loadScene(name)	{
 	else
 		Data.PPM["bgImage"] = 0
 	
-	console.log("To render scene, type 'renderImage()' into browser console")
+	log("To render scene, type 'renderImage()' into browser console")
 	
 	return true
 }
@@ -223,6 +223,7 @@ function render2()	{
 
 	g_x =0;
 	while(g_x != WIDTH) {
+		
 		var r = g_c.ray_for_pixel(g_x, g_y);
 				
 		var c = color_at(g_w, r, g_r)
@@ -247,7 +248,8 @@ function render2()	{
 		
 		ctx.fillRect(x,y,1,1)
 				
-		g_x++;
+		g_x++
+		
 	}
 
 	g_x = 0
@@ -256,7 +258,7 @@ function render2()	{
 	if (g_y === HEIGHT)	{
 				
 		clearTimeout(to)
-		console.log("COMPLETED RENDER.")
+		log("COMPLETED RENDER.")
 		console.timeEnd("render")
 		return
 	}
@@ -419,7 +421,7 @@ function parseFileContents(fn)	{
 		if(!parsePPM(fn)) 
 			throw new Error("parseFileContents() FAILED!")
 	} catch(e)	{
-		console.log("Error loading file.")
+		log("Error loading file.")
 	}
 	
 	// else
@@ -450,7 +452,7 @@ function parsePPM(fn)	{
 	
 	
 
-	//console.log("Completed Stage 1 of parsing PPM file.")
+	//log("Completed Stage 1 of parsing PPM file.")
 	
 	var width = arr[1]
 	var height = arr[2]
@@ -475,7 +477,7 @@ function parsePPM(fn)	{
 	Data.PPM[fn] = c;
 	Data.PPM_refs.push(fn)
 
-	console.log("PPM file '" + fn + "' processed.")
+	log("PPM file '" + fn + "' processed.")
 	
 	return true;
 }

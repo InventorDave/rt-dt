@@ -7,6 +7,7 @@ function shade_hit(w, comps, obj, remaining)	{
 	
 	var s = lighting(comps.object.material, w.light, comps.object, comps.over_point, comps.eyev, comps.normalv, is)
 
+	//console.log("s: r:"+s.x+", g:" + s.y + ", b:" + s.z)
 	var reflected = reflected_color(w, comps, remaining-1)
 
 	var refracted = refracted_color(w, comps, remaining)
@@ -15,7 +16,7 @@ function shade_hit(w, comps, obj, remaining)	{
 	//refracted = colour(0,0,0)
 	
 	if ((material.reflective > 0) && (material.transparency > 0))	{
-		console.log("shade.js::shade_hit(...):Transparent & Reflective.\n")
+		//console.log("shade.js::shade_hit(...):Transparent & Reflective.\n")
 		
 		var reflectance = schlick(comps)
 		

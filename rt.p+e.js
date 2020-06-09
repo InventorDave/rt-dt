@@ -128,9 +128,11 @@ function smooth_triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	
 	st.local_normal_at = function(p)	{
 		
-		return 	this.vn2 * this.u +
-				this.vn3 * this.v +
-				this.vn1 * (1 - this.u - this.v)
+		return 	add(multiplyInt(this.vn2, this.u),
+					add(multiplyInt(this.vn3, this.v),
+						multiplyInt(this.vn1, (1 - this.u - this.v))
+					)
+				)
 	};
 	
 	return st
@@ -224,18 +226,20 @@ function triangle(p1, p2, p3, id2)	{
 	return t;
 }
 
+var fl1 = false;
 function fan_triangulation(vertices, _vn)	{
 	
 	var ts = []
 	
-	if(true)
+	if(isNaN(_vn[0].x))
 		for (var i = 1; i < vertices.length-1; i++)	{
 			//console.log("1: " + vertices[0] + ", 2: " + vertices[1] +", 3: " + vertices[2]);
 			var t = triangle(vertices[0], vertices[i], vertices[i+1], GetUID())
 		
 			ts.push(t)
 		}
-	else
+	else	{
+		
 		for (var i = 1; i < vertices.length-1; i++)	{
 			
 			//console.log("ST!")
@@ -244,6 +248,7 @@ function fan_triangulation(vertices, _vn)	{
 		
 			ts.push(t)
 		}
+	}
 	
 	return ts
 }

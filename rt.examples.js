@@ -230,7 +230,7 @@ function scene2()	{
 	Data.l = l
 	
 	
-	console.log("Select Render->Render!.")
+	log("Select Render->Render!.")
 	
 }
 
@@ -258,7 +258,7 @@ function scene3()	{
 	Data.o = o
 	Data.l = l
 	
-	console.log("Select Render->Render!.")
+	log("Select Render->Render!.")
 }
 
 function sceneBump()	{
