@@ -582,7 +582,7 @@ function hereWeGo()	{
 			
 			if(h)	{
 				
-				var point_ = _position(r, h.t)
+				var point_ = add(r.origin, multiplyInt(r.direction, h.t))
 				var normal_ = normal_at(h.object, point_)
 			
 				var eye = negate(r.direction)

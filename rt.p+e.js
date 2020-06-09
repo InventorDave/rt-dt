@@ -118,9 +118,13 @@ function cone(id2)	{
 
 function smooth_triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	
-	var st = triangle(id2)
+	var st = triangle(p1, p2, p3, id2)
 	
-	st.subtype="smooth"
+	st.type = "smooth_triangle"
+	
+	st.vn1 = vn1
+	st.vn2 = vn2
+	st.vn3 = vn3
 	
 	st.local_normal_at = function(p)	{
 		
@@ -131,7 +135,7 @@ function smooth_triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	
 	return st
 }
-function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
+function triangle(p1, p2, p3, id2)	{
 	
 	var t = new Shape("triangle", id2 || 0)
 	
@@ -142,12 +146,8 @@ function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	t.e1 = subtract(p2, p1)
 	t.e2 = subtract(p3, p1)
 	
-	if(isNaN(vn1))
-		vn1 = "n"
-	
-	t.vn1 = vn1
-	t.vn2 = vn2
-	t.vn3 = vn3
+	t.u = 0
+	t.v = 0
 	
 	t.bbMin = point(Math.min(t.p1.x,t.p2.x,t.p3.x),Math.min(t.p1.y,t.p2.y,t.p3.y),Math.min(t.p1.z,t.p2.z,t.p3.z))
 	t.bbMax = point(Math.max(t.p1.x,t.p2.x,t.p3.x),Math.max(t.p1.y,t.p2.y,t.p3.y),Math.max(t.p1.z,t.p2.z,t.p3.z))
@@ -156,12 +156,7 @@ function triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	
 	t.local_normal_at = function(p)	{
 		
-		if(this.vn1==="n")
-			return this.normal
-		
-		return 	this.vn2 * h.u +
-				this.vn3 * h.v +
-				this.vn1 * (1 - h.u - h.v)
+		return this.normal
 	};
 	
 	t.local_intersect = function(r)	{
@@ -233,7 +228,7 @@ function fan_triangulation(vertices, _vn)	{
 	
 	var ts = []
 	
-	if(isNaN(_vn[0]))
+	if(true)
 		for (var i = 1; i < vertices.length-1; i++)	{
 			//console.log("1: " + vertices[0] + ", 2: " + vertices[1] +", 3: " + vertices[2]);
 			var t = triangle(vertices[0], vertices[i], vertices[i+1], GetUID())
@@ -242,6 +237,8 @@ function fan_triangulation(vertices, _vn)	{
 		}
 	else
 		for (var i = 1; i < vertices.length-1; i++)	{
+			
+			//console.log("ST!")
 			//console.log("1: " + vertices[0] + ", 2: " + vertices[1] +", 3: " + vertices[2]);
 			var t = smooth_triangle(vertices[0], vertices[i], vertices[i+1], GetUID(), _vn[0], _vn[i], _vn[i+1])
 		

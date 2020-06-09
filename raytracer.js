@@ -2,6 +2,8 @@ var CANVAS_WIDTH = 750, CANVAS_HEIGHT = 420;
 var WIDTH = CANVAS_WIDTH / 1.5;
 var HEIGHT = Math.round(CANVAS_HEIGHT) / 1.5;
 var BGCOLOR = "#2222cc";
+
+var RENDER_FG_COLOR = colour(1, 0.5, 0.5)
 var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f")
 
 /** GLOBAL OBJECTS */
@@ -24,7 +26,7 @@ var Data = {
 				
 				openFileType: "",
 				normalizeMesh: 0,
-				divideValue: 100
+				divideValue: 500
 };
 
 var DataR = {

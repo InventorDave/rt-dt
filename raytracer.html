@@ -556,17 +556,18 @@ function option(opt)	{
 	
 	if (opt=="render")	{
 	
-		try	{
+		//try	{
 		
 			if(Data.o.s.length)
 				renderImage()
 			else
 				console.log("No scene in memory!")
-		}
+		//}
+		/*
 		catch(e)	{
 		
 			console.log("line 550, no scene loaded.")
-		}
+		}*/
 	}
 	
 	if (opt=="about")	{
@@ -629,6 +630,11 @@ function option(opt)	{
 	if (opt=="set-skybox-params")	{
 		
 		setSkyBoxParamsModal.style.display = "block"
+	}
+	
+	if (opt=="set-normal-map")	{
+	
+		setNormalMapModal.style.display = "block"
 	}
 }
 </script>

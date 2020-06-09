@@ -1,11 +1,11 @@
 
 
-var flag17 = false;
+var flag17 = true;
 function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 
 	// vertices[] - check for invalid entries for both teapot(checked) and man
 	if(flag17)
-		debugger;
+		//debugger;
 	
 	var obj = [], v2 = [], vn2 = [];
 	var x, y, z;
@@ -19,8 +19,8 @@ function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 		var vdata = Data["v"][vertices[m][0]-1];
 		var vndata =Data["vn"][vertices[m][1]-1];
 		
-		if(flag17)
-			debugger;
+		//if(flag17)
+			//debugger;
 		
 		if(!vdata)  // hack for invalid final entry, basically accounts for leading/trailing ws in man obj file "f" entries
 			continue;
@@ -57,6 +57,9 @@ function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 		
 		// the if-clause is a hack to support teapot format, with no vertice_normal data
 		if(vndata)	{
+			
+			//console.log("vertice normals!")
+			
 			x = vndata[0], y = vndata[1], z = vndata[2];
 		}
 		else	{
@@ -64,12 +67,13 @@ function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 		}
 		
 		vn2.push(vector(x,y,z))
-			
+		
+		//if(flag17)
+			//debugger;		
 	}
 	
 	
-	if(flag17)
-		debugger;
+
 	
 	var ts = fan_triangulation(v2, vn2)
 
@@ -77,7 +81,7 @@ function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 	for (var i = 0; i < ts.length; i++)
 		if (ts[i])	{
 			
-			ts[i].material.color = colour(1,0,0)//colour(255,105,180); // #FFB6C1
+			ts[i].material.color = RENDER_FG_COLOR //colour(255,105,180); // #FFB6C1
 			obj.push(ts[i])
 		}
 	
@@ -203,8 +207,8 @@ function parse_obj_file(normalizeMesh)	{
 	}
 	console.log("Parsed Object File: " + (lines.length-ignored_lines) + " lines of data.")
 	
-			var bbox, scale, sx, sy, sz;
-			bbox = new BB();
+			
+			var bbox = new BB();
 			bbox.addP(DataR.x_min)
 			bbox.addP(DataR.x_max)
 			bbox.addP(DataR.y_min)
