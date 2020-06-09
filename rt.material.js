@@ -14,6 +14,10 @@ function material()	{
 	this.pattern = undefined;
 	
 	this.normalMap = undefined;
+	this.transform = m();
+	
+	this.u = undefined
+	this.v = undefined
 }
 
 function SkyBoxMaterial(skyBox)	{

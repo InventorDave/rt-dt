@@ -193,6 +193,7 @@
     <div class="dropdown-content" id="myDropdownOptions">
       <a onclick="option('set-skybox-params'); return false;">Set Skybox</a>
 	  <a onclick="option('set-bg-image'); return false;">Set/Unset BG Image</a>
+	  <a onclick="option('set-normal-map'); return false;">Set/Unset Normal Map</a>
     </div>
   </div>
   
@@ -320,13 +321,18 @@ window.onclick = function(e) {
 	if (e.target == setSkyBoxParamsModal)	{
 		setSkyBoxParamsModal.style.display = "none"
 	}
+	if (e.target == setNormalMapModal)	{
+		setNormalMapModal.style.display = "none"
+	}
+	
+	
   }
 }
 </script>
 <br>
 <p style="position: fixed; right: 50px;">
     <div>
-      <select id="os" name="options" onchange="previewSizepreviewSizeOptionSelected(); return false;">
+      <select id="os" name="options" onchange="previewSizeOptionSelected(); return false;">
         <option value="small">Preview  (150,84)</option>
         <option value="large" selected>Preview 2 (500,280)</option>
         <option value="vlarge">Full Canvas (750,420)</option>
@@ -435,7 +441,19 @@ window.onclick = function(e) {
 	</span>
   </div>
 </div>
-	
+
+<div id="myModal_NormalMap" class="modal">
+
+  <div class="modal-content">
+    <span class="close">&times;</span>
+	  <p>
+	  Set the Normal Map values (Data.PPM["normalMap.ppm"] ...)
+	  </p>
+	</span>
+  </div>
+</div>
+
+
 <div id="myModal_BGImage" class="modal">
 
   <div class="modal-content">
@@ -630,13 +648,16 @@ var openFileModal = document.getElementById("myModal_OpenFile")
 var setSkyBoxParamsModal = document.getElementById("myModal_SkyBox")
 var setBGImageModal = document.getElementById("myModal_BGImage")
 
+var setNormalMapModal = document.getElementById("myModal_NormalMap")
+
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 var span_CameraModal = document.getElementsByClassName("close")[1]; 
 var span_OpenFileModal = document.getElementsByClassName("close")[2];
 var span_bugModal = document.getElementsByClassName("close")[3];
 var span_skyBoxModal = document.getElementsByClassName("close")[4];
-var span_bgImageModal = document.getElementsByClassName("close")[5];
+var span_normalMapModal = document.getElementsByClassName("close")[5];
+var span_bgImageModal = document.getElementsByClassName("close")[6];
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
@@ -662,6 +683,11 @@ span_OpenFileModal.onclick = function()	{
 span_bugModal.onclick = function()	{
 	bugModal.style.display = "none"
 }
+
+span_normalMapModal.onclick = function()	{
+	bugModal.style.display = "none"
+}
+
 
 document.getElementById('file-input2')
   .addEventListener('change', readFile, false);

@@ -123,6 +123,9 @@ function prepare_computations(i, r, xs)	{
 	}
 	
 	comps.over_point = add(comps.point, multiplyInt(comps.normalv, EPSILON)) // p115
+	
+	//debugger;
+	
 	comps.under_point = subtract(comps.point, multiplyInt(comps.normalv, EPSILON)) // p155
 	
 	// p152

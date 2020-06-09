@@ -265,8 +265,9 @@ function sceneBump()	{
 	
 	prepCanvas()
 	
+	Data.c = new Camera(WIDTH, HEIGHT, Math.PI/4)
 	Data.c.setCTransform(view_transform(
-										point(10,0,-18),
+										point(0,0,-18),
 										point(0,0,0),
 										vector(0,1,0)
 										)
@@ -276,8 +277,12 @@ function sceneBump()	{
 	
 	var s = sphere()
 	s.material.color = colour(255/255,69/255,0/255)
+	//s.transform = m().scaling(4,4,4).rotation_z(Math.PI/2)
 	s.transform = m().scaling(4,4,4).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
+	//s.material.transform = m().rotation_x(Math.PI/2).rotation_y((Math.PI) * 0.7)
 	s.material.normalMap = Data.PPM["normalMap.ppm"]
+	
+	
 	s.material.specular = 0.0
 	
 	var c = Data.PPM["earth.ppm"];
@@ -286,8 +291,8 @@ function sceneBump()	{
 		alert("Please load 'earth.ppm' file first, via File->Load File")
 		return
 	}
-	var tm = TextureMap(image_pattern(c), spherical_map)
-	s.material.pattern = my_pattern( tm )
+	var tm = TextureMap(image_pattern(c), spherical_map, s)
+	s.material.pattern = my_pattern( tm, s )
 	
 	var o = group()
 	o.addChild(s)
@@ -341,11 +346,11 @@ function earth()	{
 		alert("Please load 'earth.ppm' file first, via File->Load File")
 		return
 	}
-	var tm = TextureMap(image_pattern(c), spherical_map)
+	var tm = TextureMap(image_pattern(c), spherical_map, s)
 	//var tm = TextureMap(checkers_pattern(8, 4, colour(0,1,0),colour(0,0,1)), spherical_map)
 	var s = sphere()
 	s.transform = m().scaling(2,2,2).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
-	s.material.pattern = my_pattern( tm )
+	s.material.pattern = my_pattern( tm, s )
 	
 	s.material.diffuse = 0.9
 	s.material.specular = 0.1
@@ -412,20 +417,22 @@ function system()	{
 	var l = new point_light(point(-40, 50, -100), colour(1,1,1)) 
 	Data.c.setCTransform(view_transform(point(0,0,-75), point(0,0,0), vector(0,1,0)));
 	
-	var c = Data.PPM["2k_sun.ppm"];
-	var tm = TextureMap(image_pattern(c), spherical_map)
+
 	
 	var s = sphere("sun")
 	s.transform = identity_matrix().scaling(20,20,20)
-	s.material.pattern = my_pattern( tm )
+	var c = Data.PPM["2k_sun.ppm"];
+	var tm = TextureMap(image_pattern(c), spherical_map, s)
 	s.material.diffuse = s.material.specular = s.material.diffuse = 1.0
+	s.material.pattern = my_pattern( tm, s )
 	
 	var e = sphere("earth")
 	e.transform = identity_matrix().translation(0,0,-40).scaling(2,2,2)
 	c = Data.PPM["earth.ppm"]
-	tm = TextureMap(image_pattern(c), spherical_map)
-	e.material.pattern = my_pattern( tm )
+	tm = TextureMap(image_pattern(c), spherical_map, e)
+	e.material.pattern = my_pattern( tm, e )
 	e.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
+	e.material.normalMap = Data.PPM["normalMap.ppm"]
 	e.material.specular = 0.0
 	
 	var m = sphere("m")
@@ -438,7 +445,7 @@ function system()	{
  
 	var o = group()
 	
-	o.addChild(m,e)
+	o.addChild(m,e, s)
 	renderImage(l,o)
 	
 	saveScene("system", Data.c, l, o, Data.PPM["bgImage2.ppm"])	

@@ -121,16 +121,18 @@ function stripe_pattern(c1, c2, scale)	{
 
 // USAGE var tm = TextureMap(checkers_pattern(2, 2, colour(1,1,1), colour(0.4,0.4,0.4)), spherical_map)
 // shape.material.pattern = my_pattern(tm)
-function my_pattern(TextureMap)	{
+function my_pattern(TextureMap, owner)	{
 	
 	var tp = new Pattern()
 	tp.type = "TextureMap"
 	
 	tp.TextureMap = TextureMap
 	
+	tp.owner = owner
+	
 	tp.algorithm = function(p)	{
 		
-		var uv = this.TextureMap.uv_map(p)
+		var uv = this.TextureMap.uv_map(p, this.owner)
 		var col = this.TextureMap.uv_pattern.uv_pattern_at(uv.u, uv.v)
 		
 		//console.log("r: " + col.x + ", g: " + col.y + ", b: " + col.z)
@@ -141,9 +143,9 @@ function my_pattern(TextureMap)	{
 }
 
 
-function TextureMap(uv_pattern, uv_map)	{
+function TextureMap(uv_pattern, uv_map, s)	{
 	
-	return { uv_pattern: uv_pattern, uv_map: uv_map }
+	return { uv_pattern: uv_pattern, uv_map: uv_map, owner: s }
 	// eg uv_pattern = checkers_pattern(...) || align_check_pattern(...)
 }
 
@@ -184,7 +186,7 @@ function planar_map(p)	{
 	return { u: u, v: v }
 }
 
-function spherical_map(p)	{
+function spherical_map(p, owner)	{
 
 	/*
 	# compute the azimuthal angle
@@ -229,6 +231,13 @@ function spherical_map(p)	{
 	*/
 	var v = 1 - phi / Math.PI
 
+	if((owner) && (owner.id))	{
+		
+		owner.material.u = u
+		owner.material.v = v
+		
+		//console.log("Set u, v.")
+	}
   return { u: u, v: v }
 }
 

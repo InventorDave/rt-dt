@@ -48,75 +48,90 @@ function transform(r_in, m)	{ // p69
 	return r;
 }
 
-var db_f2 = false
+
 function normal_at(s, world_point)	{
 	
 	var lp = world_to_object(s, world_point)
 	var ln = s.local_normal_at(lp)
 	
 	if(s.material.normalMap)	{
-		if(!db_f2)	{
-			
-			db_f2 = 1
-			console.log("normalMap detected.")
-		}
-		
-
 
 		var width = s.material.normalMap.width;
 		var height = s.material.normalMap.height;
 
-		/** INSERT */
-		/*
-		# compute the azimuthal angle
-		# -π < theta <= π
-		# angle increases clockwise as viewed from above,
-		# which is opposite of what we want, but we'll fix it later.
-		*/
+/** 	// PREV METHOD
+	
+		//# compute the azimuthal angle
+		//# -π < theta <= π
+		//# angle increases clockwise as viewed from above,
+		//# which is opposite of what we want, but we'll fix it later.
+		
 		var theta = Math.atan2(s.P.x, s.P.z)
 
-		/*
-		# vec is the vector pointing from the sphere's origin (the world origin)
-		# to the point, which will also happen to be exactly equal to the sphere's
-		# radius.
-		*/
+		
+		//# vec is the vector pointing from the sphere's origin (the world origin)
+		//# to the point, which will also happen to be exactly equal to the sphere's
+		//# radius.
+		
 		var vec = subtract(point(s.P.x, s.P.y, s.P.z), point(0,0,0))
 		var radius = magnitude(vec)
 
-		/*
-		# compute the polar angle
-		# 0 <= phi <= π
-		*/
+		
+		//# compute the polar angle
+		//# 0 <= phi <= π
+		
 		var phi = Math.acos(s.P.y / radius)
 
 		//# -0.5 < raw_u <= 0.5
 		var raw_u = theta / (2 * Math.PI)
 
-		/*
-		# 0 <= u < 1
-		# here's also where we fix the direction of u. Subtract it from 1,
-		# so that it increases counterclockwise as viewed from above.
-		*/
+		
+		//# 0 <= u < 1
+		//# here's also where we fix the direction of u. Subtract it from 1,
+		//# so that it increases counterclockwise as viewed from above.
+		
 		var u = 1 - (raw_u + 0.5)
 
-		/*
-		# we want v to be 0 at the south pole of the sphere,
-		# and 1 at the north pole, so we have to "flip it over"
-		# by subtracting it from 1.
-		*/
+		
+		//# we want v to be 0 at the south pole of the sphere,
+		//# and 1 at the north pole, so we have to "flip it over"
+		//# by subtracting it from 1.
+		
 		var v = 1 - phi / Math.PI
 
+		
+		/*
+		// http://viclw17.github.io/2019/04/12/raytracing-uv-mapping-and-texturing/
+		
+		var vec = subtract(point(s.P.x, s.P.y, s.P.z), point(0,0,0))
+		var radius = magnitude(vec)
+		
+		var phi = Math.atan2(s.P.y, s.P.x);
+		var theta = Math.asin(s.P.z / radius);
+	
+		var u = 1 - (phi + Math.PI) / (2 * Math.PI);
+		var v = (theta + Math.PI / 2) / Math.PI;
+	
+*/
+		
+		u = s.material.u || 0.5
+		v = 1 - s.material.v || 0.5
+		
 		var x = u * (width - 1)
 		var y = v * (height - 1)
-
-		var ppos = (3 * (width * Math.round(y) + Math.round(x)));
-	  
-		var _n = vector(s.material.normalMap.data[ppos], s.material.normalMap.data[ppos+1], s.material.normalMap.data[ppos+2])
 		
-		ln = add(ln, _n)	
+		
+		var ppos = (3 * (width * Math.round(y) + Math.round(x)));
+		
+		//debugger; 
+		
+		var _n = normalize(vector(s.material.normalMap.data[ppos], s.material.normalMap.data[ppos+1], s.material.normalMap.data[ppos+2]))
+		
+		_n = multiplyInt(subtractInt(_n, 0.5), 2) // // Expand the range-compressed vector to [-1, 1] from [0,1]((*255).round())
+													// https://developer.download.nvidia.com/CgTutorial/cg_tutorial_chapter08.html
+		
+		ln = subtract(ln, _n)	
 	}
-	
-	//console.log("x: "+ln.x+", y: "+ln.y+", z: "+ln.z)
 	
 	return normal_to_world(s, ln)
 }

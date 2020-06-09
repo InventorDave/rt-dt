@@ -117,6 +117,15 @@ function multiplyInt(_tuple, int)	{
 	return t;
 }
 
+function subtractInt(v, i)	{
+	
+	v.x = v.x - i
+	v.y = v.y - i
+	v.z = v.z - i
+	
+	return v
+}
+
 function divide(a, b)	{	// divide 2 tuples, a / b
 
 	if (!(a instanceof tuple) || !(b instanceof tuple))

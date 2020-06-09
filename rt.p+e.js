@@ -396,7 +396,7 @@ function sphere(id2)	{
 	
 	s.local_normal_at = function(p)	{
 		
-		return subtract(p, point(0,0,0))
+		return normalize(subtract(p, point(0,0,0)))
 	};
 	
 	return s
