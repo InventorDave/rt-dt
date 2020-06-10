@@ -14,6 +14,10 @@ function readImageFile(e)	{
 		
 		img_ = new Image();
 		img_.onload = imageLoaded;
+		
+		var imgCanvas = document.getElementById("imgCanvas")
+		imgCanvas.fn = file.name;
+		
 		img_.src = e.target.result;
 	}
 	
@@ -36,28 +40,23 @@ function imageLoaded()	{
 	
 	
 	log("Image File Loaded.")
-	convertToPPM(pix, width, height);
+	convertToPPM(pix, width, height, imgCanvas.fn);
 	//debugger;
 }
 
-function convertToPPM(data, width, height)	{
+function convertToPPM(data, width, height, fn)	{
 	
-	var nl = " "
+	var output = { data: [], width: width, height: height, filename: fn }
 	
-	var output = "P3 <br>" + width + " " + height + " <br>" + "255 <br>"
 	for (var i = 0; i < data.length; i += 4)	{
 		
-		output += data[i] + nl + data[i+1] + nl + data[i+2] + nl
-		
-		/*
-		if ((i % 16) == 0)
-			output += "<br>"
-		*/
+		output.data.push(data[i])
+		output.data.push(data[i+1])
+		output.data.push(data[i+2])
 	}
 	
-	var ppmWindow = window.open("ppmWindow.html","newWindow" + GetUID(),"width=500,height=700");  
-	ppmWindow.onload = function(){
-
-		ppmWindow.document.getElementById('mainBody').innerHTML = output;
-    }
+	Data.PPM[fn] = output;
+	Data.PPM_refs.push(fn);
+	
+	log("Converted Image To PPM.")
 }

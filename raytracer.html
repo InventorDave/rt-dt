@@ -170,6 +170,7 @@
 	-->
 	  <a onclick="Data.openFileType = 'IMG'; option('load-file'); return false;">Load Image File</a>
 	  <a onclick="Data.openFileType = 'PPM'; option('load-ppm-file'); return false;">Load PPM File</a>
+	  <a onclick="option('load-server-PPM'); return false;" style="color: #22ff22;">Get PPM Files From Server.</a>
 	  <a onclick="Data.openFileType = 'MESH'; option('load-mesh-file'); return false;">Load Mesh (.obj) File</a>
 	  <a onclick="option('close-proj'); return false;">Unload Project Files</a>
     </div>
@@ -346,8 +347,8 @@ window.onclick = function(e) {
       </select>
       <select id="os" name="options" onchange="previewSizeOptionSelected(); return false;">
         <option value="small">Preview  (150,84)</option>
-        <option value="large" selected>Preview 2 (500,280)</option>
-        <option value="vlarge">Full Canvas (750,420)</option>
+        <option value="large">Preview 2 (500,280)</option>
+        <option value="vlarge" selected>Full Canvas (750,420)</option>
       </select>
 	  
 	</span>
@@ -597,12 +598,10 @@ function option(opt)	{
 		window.open("https://www.youtube.com/channel/UCF7KG1BdQfnL73JYrl2vDDw/playlists")
 	}
 	
-	/*
 	if (opt=='report-bug')	{
 	
 		bugModal.style.display = "block"
 	}
-	*/
 	
 	if (opt=="gen-bvh")
 		if(doDivide())
@@ -644,6 +643,11 @@ function option(opt)	{
 	if (opt=="set-normal-map")	{
 	
 		setNormalMapModal.style.display = "block"
+	}
+	
+	if (opt=="load-server-PPM")	{
+	
+		var win = window.open("/PPM.php")
 	}
 }
 </script>

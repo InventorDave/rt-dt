@@ -163,7 +163,7 @@ function scene2()	{
 	
 	Data.c.setCTransform(view_transform(
 										point(200,200,1000),
-										point(0,50,0),
+										point(75,100,0),
 										vector(0,1,0)
 										)
 						);
