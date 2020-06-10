@@ -1,4 +1,4 @@
-var CANVAS_WIDTH = 750, CANVAS_HEIGHT = 420;
+var CANVAS_WIDTH = 750, CANVAS_HEIGHT = 422;
 var WIDTH = CANVAS_WIDTH;
 var HEIGHT = CANVAS_HEIGHT;
 
@@ -87,7 +87,7 @@ function previewSizeOptionSelected()	{
 			
 		case 2:
 			WIDTH = 750
-			HEIGHT = 420
+			HEIGHT = 422
 			ct = Data.c.transform;
 			Data.c = new Camera(WIDTH, HEIGHT, (Math.PI/4));
 			Data.c.setCTransform(ct);
@@ -99,9 +99,14 @@ function previewSizeOptionSelected()	{
 
 function sceneOptionSelected()	{
 	
-	var fn = document.getElementById("predefined-scene-options").value;
-	
-	eval(fn + "()");
+	try {
+		
+		var fn = document.getElementById("predefined-scene-options").value;
+		eval(fn + "()")
+	}
+	catch(e)	{
+		
+	}
 }
 
 function camPresetSelected()	{
@@ -250,7 +255,7 @@ function camera(c)	{
 }
 
 
-var g_c, g_w, g_r, g_x, g_y
+var g_c, g_w, g_r, g_x, g_y, start, end;
 
 function render(c, w, remaining)	{
 
@@ -260,7 +265,8 @@ function render(c, w, remaining)	{
 	g_r = remaining;
 	g_x = 0
 	g_y = 0
-	console.time("render")
+	
+	start = Date.now()
 	render2();
 }
 
@@ -303,8 +309,14 @@ function render2()	{
 	if (g_y === HEIGHT)	{
 				
 		clearTimeout(to)
-		log("COMPLETED RENDER.")
-		console.timeEnd("render")
+		
+		end = Date.now()
+
+		var time_sec = (end - start) / 1000
+		var time_min = time_sec / 60
+		
+		log("COMPLETED. This render took " + time_sec + " secs, " + time_min + " mins.")
+
 		return
 	}
 	
