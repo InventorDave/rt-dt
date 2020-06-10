@@ -121,23 +121,80 @@ function camPresetSelected()	{
 	log("Set Camera to preset " + (v.selectedIndex+1) + ".")
 }
 
-function bgImageOptionsSelected()	{
+function imageOptionsSelected(e)	{
 
-		var s = document.getElementById("images")
-		
-		//debugger;
-		var str = "Data.PPM[Data.PPM_refs[s.value]]";
+		alert(e.target.id)
+		var s = document.getElementById(e.target.id)
+
+		var value = null;
 		
 		if (s.value=="No Image")	{
 		
-			Data.PPM["bgImage"] = null;
-			return
+			if (s.id=="p_id_select")	{
+				
+				Data.PPM["bgImage"] = null;
+			}
+			else if (s.id=="nm_p_id")
+				Data.PPM["normalMap"] = null;
+			
+			else
+				setSBParam(s.id, null);
+			
+			return;
 		}
 		
-		Data.PPM["bgImage"] = Data.PPM[Data.PPM_refs[s.value]];
+		if (s.id=="p_id_select")	{
+		
+			Data.PPM["bgImage"] = Data.PPM[s.value];
+			alert("here! - " + s.value);
+			
+			return;
+		}
+		
+		if (s.id=="nm_p_id_select")	{
+		
+			Data.PPM["normalMap"] = Data.PPM[s.value]
+			return;
+		}
+		
+		setSBParam(s.id, s.value);
+		return
 }
 
+function setSBParam(id, val)	{
+	
+	switch(id)	{
+		
+		case "sb_left_select":
+			Data.SkyBox.left = Data.PPM[val];
+			break;
+			
+		case "sb_right_select":
+			Data.SkyBox.right = Data.PPM[val];
+			break;
+		
+		case "sb_front_select":
+			Data.SkyBox.front = Data.PPM[val];
+			break;
 
+		case "sb_back_select":
+			Data.SkyBox.back = Data.PPM[val];
+			break;
+
+		case "sb_top_select":
+			Data.SkyBox.top = Data.PPM[val];
+			break;
+
+		case "sb_bottom_select":
+			Data.SkyBox.bottom = Data.PPM[val];
+			break;	
+
+		default:
+			alert("Woopsie!")
+			break;
+	}
+	
+}
 
 
 /** INIT */

@@ -288,7 +288,7 @@ function sceneBump()	{
 	//s.transform = m().scaling(4,4,4).rotation_z(Math.PI/2)
 	s.transform = m().scaling(4,4,4).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
 	//s.material.transform = m().rotation_x(Math.PI/2).rotation_y((Math.PI) * 0.7)
-	s.material.normalMap = Data.PPM["normalMap.ppm"]
+	s.material.normalMap = Data.PPM["normalMap"]
 	
 	
 	s.material.specular = 0.0
@@ -449,7 +449,7 @@ function system()	{
 	tm = TextureMap(image_pattern(c), spherical_map, e)
 	e.material.pattern = my_pattern( tm, e )
 	e.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
-	e.material.normalMap = Data.PPM["normalMap.ppm"]
+	e.material.normalMap = Data.PPM["normalMap"]
 	e.material.specular = 0.0
 	
 	var m = sphere("m")

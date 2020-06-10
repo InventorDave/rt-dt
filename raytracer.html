@@ -445,8 +445,18 @@ window.onclick = function(e) {
 
   <div class="modal-content">
     <span class="close">&times;</span>
-	  <p>
-	  Set the SkyBox values (Data.SkyBox.top ...)
+	  Set the SkyBox values (Data.SkyBox.top ...)<br><br>
+	  <p id="sb_left">
+	  </p>
+	  <p id="sb_right">
+	  </p>
+	  <p id="sb_front">
+	  </p>
+	  <p id="sb_back">
+	  </p>
+	  <p id="sb_top">
+	  </p>
+	  <p id="sb_bottom">
 	  </p>
 	</span>
   </div>
@@ -456,8 +466,9 @@ window.onclick = function(e) {
 
   <div class="modal-content">
     <span class="close">&times;</span>
-	  <p>
+	  
 	  Set the Normal Map values (Data.PPM["normalMap.ppm"] ...)
+	  <p id="nm_p_id">
 	  </p>
 	</span>
   </div>
@@ -467,23 +478,24 @@ window.onclick = function(e) {
 <div id="myModal_BGImage" class="modal">
 
   <div class="modal-content">
-    <span class="close">&times;</span>
+    <span class="close">&times;</span>Set the BG Image. (Try loading a PPM or Image file first!)<br>
 	  <p id="p_id">
-	   Set the BG Image. (Try loading a PPM or Image file first!)<br>
-	   <br>
-	   <select id="images" name="bgimageoptions" onchange="bgImageOptionsSelected(); return false;">
-
-		</select>
 	  </p>
 	  <script type="text/javascript">
-	    function populateImagesSelection()	{
+	    function populateImagesSelection(id)	{
 			
-			var p = document.getElementById("p_id")
-			p.removeChild(p.lastElementChild)
+			var p = document.getElementById(id)
+			
+			try	{
+			
+				while(p.removeChild(p.lastElementChild))
+					;
+			}
+			catch(e) {}
 			
 			var select = document.createElement("select")
-			select.addEventListener("change", bgImageOptionsSelected)
-			select.id = "images"
+			select.addEventListener("change", imageOptionsSelected)
+			select.id = id + "_select"
 			
 			var opt1 = document.createElement("option")
 			opt1.text = opt1.value = "Please select."
@@ -497,7 +509,7 @@ window.onclick = function(e) {
 			
 				var option = document.createElement("option")
 				option.text = Data.PPM_refs[i]
-				option.value = i
+				option.value = option.text
 				
 				//var option = Data.PPM[Data.PPM_refs[i]]
 				
@@ -632,17 +644,24 @@ function option(opt)	{
 	if (opt=="set-bg-image")	{
 		
 		setBGImageModal.style.display = "block"
-		populateImagesSelection()
+		populateImagesSelection("p_id")
 	}
 	
 	if (opt=="set-skybox-params")	{
 		
 		setSkyBoxParamsModal.style.display = "block"
+		populateImagesSelection("sb_left")
+		populateImagesSelection("sb_right")
+		populateImagesSelection("sb_front")
+		populateImagesSelection("sb_back")
+		populateImagesSelection("sb_top")
+		populateImagesSelection("sb_bottom")
 	}
 	
 	if (opt=="set-normal-map")	{
 	
 		setNormalMapModal.style.display = "block"
+		populateImagesSelection("nm_p_id")
 	}
 	
 	if (opt=="load-server-PPM")	{
