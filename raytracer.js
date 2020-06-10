@@ -123,7 +123,7 @@ function camPresetSelected()	{
 
 function imageOptionsSelected(e)	{
 
-		alert(e.target.id)
+		//alert(e.target.id)
 		var s = document.getElementById(e.target.id)
 
 		var value = null;
@@ -146,7 +146,7 @@ function imageOptionsSelected(e)	{
 		if (s.id=="p_id_select")	{
 		
 			Data.PPM["bgImage"] = Data.PPM[s.value];
-			alert("here! - " + s.value);
+			//alert("here! - " + s.value);
 			
 			return;
 		}

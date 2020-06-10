@@ -78,6 +78,35 @@ function pyramid()	{
 	return pyramid
 }
 
+function glass_test()	{
+	
+	prepCanvas()
+
+	Data.c.setCTransform(view_transform(
+										point(10,0,-20),
+										point(0,0,0),
+										vector(0,1,0)
+										)
+						);
+						
+	var l = new point_light(point(-10, 10, -10), colour(0.5,0.5,1)) 
+	
+	var s1 = glass_sphere()
+	s1.transform = m().scaling(2,2,2)
+	s1.material.color = colour(1, 0, 0)
+	
+	var s2 = sphere()
+	s2.transform = m().translation(0,0,5)
+	s2.material.color = colour(0.5, 0.5, 1)
+	
+	var o = group()
+	o.addChild(s1, s2)
+	
+	renderImage(l, o)
+}
+
+addFunction("Test", "glass_test")
+
 
 // Sample Scene 1
 function scene1()	{
