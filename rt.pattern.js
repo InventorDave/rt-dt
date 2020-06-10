@@ -461,6 +461,13 @@ function skybox_pixel_at(x, y)	{
 }
 
 
+function getSkyBoxObject()	{
+	
+	return { left: Data.SkyBox.left, right: Data.SkyBox.right, front: Data.SkyBox.front, back: Data.SkyBox.back, top: Data.SkyBox.top, bottom: Data.SkyBox.bottom }
+}
+
+
+
 function image_pattern(c)	{
 	
 	return { uv_pattern_at: image_uv_pattern_at, c: c, pixel_at: image_pattern_pixel_at }

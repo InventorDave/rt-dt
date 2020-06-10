@@ -67,7 +67,7 @@ function convert3(vertices, normalizeMesh, bbox, scale, sx, sy, sz)	{
 	return obj
 }
 
-function parse_obj_file(normalizeMesh)	{
+function parse_obj_file(fn, normalizeMesh)	{
 	
 	// use global OBJFILECONTENTS
 	if (!OBJFILECONTENTS)
@@ -225,7 +225,13 @@ function parse_obj_file(normalizeMesh)	{
 	
 	//debugger
 	
+	var mesh = { filename: fn, name: "", group: o }
+	Data.meshes.push(mesh)
 	Data.o = o
+	
+	Data.f = []
+	Data.v = []
+	Data.vn = []
 	
 	log("Generated triangle mesh.")
 }

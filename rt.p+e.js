@@ -575,6 +575,8 @@ function group(id2)	{
 	g.left = []
 	g.right = []
 	
+
+	
 	g.partition_children = function()	{
 		
 		var left = [], right = []
@@ -879,6 +881,16 @@ function Shape(type, id2)	{
 	this.v = undefined
 	
 	this.parent = false;
+	
+	this.transformElements = { translation: vector(0,0,0), rotation_x: 0, rotation_y: 0, rotation_z: 0, shearing: { xy: 0, xz: 0, yx: 0, yz: 0, zx: 0, zy: 0 }, scaling: vector(0,0,0) };
+	
+	this.setTransform = function()	{
+		
+		var e = this.transformElements;
+		var tr = m().translation(e.translation.x,e.translation.y,e.translation.z).rotation_x(e.rotation_x).rotation_y(e.rotation_y).rotation_z(e.rotation_z).shearing(e.shearing.xy,e.shearing.xz,e.shearing.yx,e.shearing.yz,e.shearing.zx,e.shearing.zy).scaling(e.scaling.x,e.scaling.y,e.scaling.z)
+		
+		this.transform = tr;
+	};
 	
 	this.local_intersect = function(local_ray)	{ /*default impl.*/ this.saved_ray = local_ray; return []; };
 	

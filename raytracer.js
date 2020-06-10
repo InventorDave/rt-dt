@@ -1,6 +1,7 @@
 var CANVAS_WIDTH = 750, CANVAS_HEIGHT = 420;
 var WIDTH = CANVAS_WIDTH / 1.5;
 var HEIGHT = Math.round(CANVAS_HEIGHT) / 1.5;
+
 var BGCOLOR = "#2222cc";
 
 var RENDER_FG_COLOR = colour(1, 0.5, 0.5)
@@ -10,19 +11,25 @@ var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f")
 
 var Data = {
 				SkyBox: { top: "", bottom: "", left: "", right: "", front: "", back: "" },
+				
 				PPM_refs: [],
 				PPM: [],
+				
+				meshes: [], // { v: [], vn: [], filename: "", name: "", group: {} }
 				f: [],
 				v: [],
 				vn: [],
 				vt: [],
-				g: [], // not currently used
+				
+				g: [],
 				o: {},
+				
 				cache: [],
+				
 				c: new Camera(WIDTH, HEIGHT, (Math.PI/4)),
 				l: new point_light(point(-20, 20, 40), colour(1,1,1)),
 				
-				presets: { camera: [], lights: [], scenes: [] },
+				presets: { camera: [], lights: [], scenes: [], functions: [] },
 				
 				openFileType: "",
 				normalizeMesh: 0,
@@ -51,6 +58,12 @@ Data.presets.camera.push({ str: "preset3", vt: view_transform(point(25,0, 25), /
 
 /** END GLOBAL OBJECTS */
 
+function addFunction(name, fn)	{
+	
+	Data.presets.functions[name] = {};
+	Data.presets.functions[name].name = name;
+	Data.presets.functions[name].fn = fn;
+}
 
 function previewSizeOptionSelected()	{
 	var ct;
@@ -82,6 +95,13 @@ function previewSizeOptionSelected()	{
 			
 		default:
 	}
+}
+
+function sceneOptionSelected()	{
+	
+	var fn = document.getElementById("predefined-scene-options").value;
+	
+	eval(fn + "()");
 }
 
 function camPresetSelected()	{
@@ -127,6 +147,31 @@ function init()	{
 	
 	ctx.fillStyle = BGCOLOR
 	ctx.fillRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT)
+	populateSceneFunctionSelection();
+}
+
+function populateSceneFunctionSelection()	{
+	
+	var select = document.getElementById("predefined-scene-options")
+	
+	select.addEventListener("change", sceneOptionSelected)
+	
+	
+	var opt1 = document.createElement("option")
+	opt1.text = opt1.value = "Please select."
+	select.add(opt1)
+	
+	var i;
+		
+	for(i in Data.presets.functions)
+		if(Data.presets.functions.hasOwnProperty(i))	{
+		
+			var option = document.createElement("option")
+			option.text = Data.presets.functions[i].name;
+			option.value = Data.presets.functions[i].fn;
+		
+			select.add(option)
+		}
 }
 
 /** END OF INIT */
@@ -379,7 +424,7 @@ function readObjectFile(e) {
   reader.onload = function(e) {
     OBJFILECONTENTS = e.target.result;
     //displayContents(OBJFILECONTENTS);
-	parse_obj_file(Data.normalizeMesh)
+	parse_obj_file(file.name, Data.normalizeMesh)
   }; 
   
   reader.readAsText(file);

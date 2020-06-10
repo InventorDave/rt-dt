@@ -116,6 +116,8 @@ function scene1()	{
 	
 }
 
+addFunction("Scene 1", "scene1")
+
 function scene1b()	{
 	
 	prepCanvas()
@@ -151,6 +153,8 @@ function scene1b()	{
 	renderImage();
 	
 }
+
+addFunction("Scene 1b", "scene1b")
 
 // Sample Scene 2
 function scene2()	{
@@ -230,10 +234,11 @@ function scene2()	{
 	Data.l = l
 	
 	
-	log("Select Render->Render!.")
-	
+	//log("Select Render->Render!.")
+	renderImage()
 }
 
+addFunction("Scene 2", "scene2")
 // Sample Scene 2
 function scene3()	{
 	
@@ -258,8 +263,11 @@ function scene3()	{
 	Data.o = o
 	Data.l = l
 	
-	log("Select Render->Render!.")
+	//log("Select Render->Render!.")
+	renderImage()
 }
+
+addFunction("Scene 3", "scene3")
 
 function sceneBump()	{
 	
@@ -308,6 +316,9 @@ function sceneBump()	{
 	
 }
 
+addFunction("Bump Scene", "sceneBump")
+
+
 
 function cm_cube()	{
 	
@@ -332,6 +343,8 @@ function cm_cube()	{
 	renderImage()
 	
 }
+
+addFunction("Cube", "cm_cube")
 
 function earth()	{
 	
@@ -363,6 +376,9 @@ function earth()	{
 	renderImage(l, o)	
 }
 
+addFunction("Earth", "earth")
+
+
 function endGame()	{
 	
 	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
@@ -379,10 +395,9 @@ function endGame()	{
 	renderImage(l)
 }
 
-function getSkyBoxObject()	{
-	
-	return { left: Data.SkyBox.left, right: Data.SkyBox.right, front: Data.SkyBox.front, back: Data.SkyBox.back, top: Data.SkyBox.top, bottom: Data.SkyBox.bottom }
-}
+addFunction("Test 1", "endGame")
+
+
 
 function mySkyBox()	{
 	
@@ -409,6 +424,8 @@ function mySkyBox()	{
 	
 	renderImage()
 }
+
+addFunction("Sky Box Test", "mySkyBox")
 
 function system()	{
 	
@@ -445,8 +462,10 @@ function system()	{
  
 	var o = group()
 	
-	o.addChild(m,e, s)
+	o.addChild(m,e)
 	renderImage(l,o)
 	
 	saveScene("system", Data.c, l, o, Data.PPM["bgImage2.ppm"])	
 }
+
+addFunction("Sun & Moon", "system")

@@ -331,12 +331,27 @@ window.onclick = function(e) {
 </script>
 <br>
 <p style="position: fixed; right: 50px;">
+
     <div>
+    <span>
+	  
+      <select id="predefined-scene-options" name="options2" onchange="sceneOptionSelected(); return false;">
+	  <!--
+        <option value="mySkyBox">mySkyBox</option>
+        <option value="endGame" selected>endGame</option>
+        <option value="earth">earth</option>
+		<option value="cm_cube">cm_cube</option>
+		<option value="system">system</option>
+	-->
+      </select>
       <select id="os" name="options" onchange="previewSizeOptionSelected(); return false;">
         <option value="small">Preview  (150,84)</option>
         <option value="large" selected>Preview 2 (500,280)</option>
         <option value="vlarge">Full Canvas (750,420)</option>
       </select>
+	  
+	</span>
+	
       <button class="buttonCamera" onclick="option('cameraOptions'); return false;">Camera</button>
       <button class="buttonLights" onclick="option('lightsOptions'); return false;">Lights</button>
       <button class="buttonScene" onclick="option('sceneOptions'); return false;">Scene</button>
@@ -349,13 +364,7 @@ window.onclick = function(e) {
   </textarea>
     <canvas id="canvas" width="750" height="420" style="border:1px solid #000000; position: absolute; left: 250px;">
   </canvas>
-<div id="ui-options" style="position: fixed; right: 175px;">
-<button label="mySkyBox()" onclick="mySkyBox(); return false;">mySkyBox()</button><br>
-<button label="endGame()" onclick="endGame(); return false;">endGame()</button><br>
-<button label="earth()" onclick="earth(); return false;">earth()</button><br>
-<button label="cm_cube()" onclick="cm_cube(); return false;">cm_cube()</button><br>
-<button label="system()" onclick="system(); return false;">system()</button><br>
-</div>
+
   <canvas id="imgCanvas" width="1" height="1" style="visibility: hidden; display: none;"></canvas>
   
 </div>
