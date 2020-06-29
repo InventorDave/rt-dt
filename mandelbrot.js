@@ -2,10 +2,13 @@
 
 function mandelbrot()	{
 	
-	var canvas_ = document.createElement('canvas');
+	var canvas_ = document.getElementById('canvas');
+	
+	/*
 	canvas_.width = 900;
 	canvas_.height = 600;
 	document.body.insertBefore(canvas_, document.body.childNodes[0])
+	*/
 	mandelbrot_(canvas_, -2, 1, -1, 1, 1000)
 }
 

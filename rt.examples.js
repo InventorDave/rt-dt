@@ -497,4 +497,5 @@ function system()	{
 	saveScene("system", Data.c, l, o, Data.PPM["bgImage2.ppm"])	
 }
 
-addFunction("Sun & Moon", "system")
+addFunction("Earth & Moon", "system")
+addFunction("mandelbrot", "mandelbrot")
