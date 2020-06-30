@@ -105,10 +105,10 @@ function sceneOptionSelected()	{
 	try {
 		
 		var fn = document.getElementById("predefined-scene-options").value;
-		eval(fn + "()")
+		var res = eval(fn + "();");
 	}
 	catch(e)	{
-		
+		alert("error!")
 	}
 }
 
@@ -380,13 +380,16 @@ function render2()	{
 				
 		var c = color_at(g_w, r, g_r)
 		
+		
 		if ((c.x==0)&&(c.y==0)&&(c.z==0))	{
 			// render bg image
-			if(!Data.PPM["bgImage"])
-				c = RENDER_BG_COLOR
+			if(!Data.PPM["bgImage"])	{
 			
+				//console.log("bgimage not set.")
+				c = RENDER_BG_COLOR
+			}
 			else	{
-				
+				//console.log("bgimage set.")
 				c = bgImage_uv_pattern_at(g_x/WIDTH, g_y/HEIGHT)
 			}
 			

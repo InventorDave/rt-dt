@@ -229,7 +229,7 @@
     </button>
     <div class="dropdown-content" style="right: 0px;" id="myDropdownHelp">
       <a onclick="option('report-bug'); return false;">Report a Bug</a>
-      <a onclick="option('toc'); return false;">Table of Contents</a>
+      <a onclick="option('help'); return false;">Help Contents</a>
       <a onclick="option('selec-elem'); return false;">Select Element</a>
 	  <!--
 	  <a style="color:#cc0000;" onclick="option('jamis'); return false;">Buy Jamis Buck's Book!</a>
@@ -740,6 +740,11 @@ function option(opt)	{
 	if (opt=='youtube')	{
 	
 		window.open("https://www.youtube.com/channel/UCF7KG1BdQfnL73JYrl2vDDw/playlists")
+	}
+	
+	if (opt=='help')	{
+	
+		window.open("help.html")
 	}
 	
 	if (opt=='report-bug')	{

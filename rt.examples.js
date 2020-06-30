@@ -322,9 +322,9 @@ function sceneBump()	{
 	s.material.normalMap = Data.PPM["normalMap"]
 	if(!s.material.normalMap)	{
 		
-		alert("Please set a Normal Map first! (Hint: 'normalMap.ppm' is available in our PPM archive.)")
+		var b = alert("Please set a Normal Map first! (Hint: 'normalMap.ppm' is available in our PPM archive.)")
 		var a = 1+2;
-		return
+		return a
 	}	
 	
 	s.material.specular = 0.0
@@ -332,9 +332,9 @@ function sceneBump()	{
 	var c = Data.PPM[Data.Maps["earth"]];
 	if(!c)	{
 		
-		alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
+		var b = alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
 		var a = 1+2;
-		return
+		return a
 	}
 	var tm = TextureMap(image_pattern(c), spherical_map, s)
 	s.material.pattern = my_pattern( tm, s )
@@ -393,9 +393,9 @@ function earth()	{
 	var c = Data.PPM[Data.Maps["earth"]];
 	if(!c)	{
 		
-		alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
+		var b = alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
 		var a =2+3;
-		return
+		return a
 	}
 	var tm = TextureMap(image_pattern(c), spherical_map, s)
 	//var tm = TextureMap(checkers_pattern(8, 4, colour(0,1,0),colour(0,0,1)), spherical_map)
@@ -425,8 +425,8 @@ function endGame()	{
 	var skyBox = getSkyBoxObject()
 	if (!verify_SkyBoxObj(skyBox))	{
 		
-		alert("SkyBox obj is not populated! Please fix.")
-		return
+		var b = alert("SkyBox obj is not populated! Please fix.")
+		return 1
 	}
 	
 	var cb = cube()
@@ -453,8 +453,8 @@ function mySkyBox()	{
 	var skyBox = getSkyBoxObject()
 	if (!verify_SkyBoxObj(skyBox))	{
 		
-		alert("SkyBox obj is not populated! Please fix.")
-		return
+		var b = alert("SkyBox obj is not populated! Please fix.")
+		return 1
 	}
 	
 	var cb = cube()
@@ -491,8 +491,8 @@ function system()	{
 	
 	if (!(c = Data.PPM[Data.Maps["earth"]]))	{
 		
-		alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
-		return
+		var b = alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
+		return 1
 	}
 	
 	tm = TextureMap(image_pattern(c), spherical_map, e)
@@ -506,8 +506,8 @@ function system()	{
 	
 	if (!(c = Data.PPM[Data.Maps["moon"]]))	{
 		
-		alert("Please set a 'moon' map first! (Hint: '2k_moon.ppm' is available in our PPM archive.)")
-		return
+		var b = alert("Please set a 'moon' map first! (Hint: '2k_moon.ppm' is available in our PPM archive.)")
+		return 1
 	}
 	tm = TextureMap(image_pattern(c), spherical_map)
 	m.material.pattern = my_pattern( tm )
