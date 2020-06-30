@@ -142,8 +142,12 @@ function prepare_computations(i, r, xs)	{
 		if (curr_i == i)
 			if (containers.length == 0)
 				comps.n1 = 1.0
-			else
+			else	{
 				comps.n1 = containers[containers.length-1].material.refractive_index
+			
+				//console.log("Line 148");
+			}
+			
 		
 		// if containers includes i.object then
 		var indexOfObj;
@@ -156,9 +160,12 @@ function prepare_computations(i, r, xs)	{
 			
 			if (containers.length == 0)
 				comps.n2 = 1.0
-			else
+			else	{
+				
 				comps.n2 = containers[containers.length-1].material.refractive_index
-		
+				
+				//console.log("Line 167")
+			}
 			break;
 		}
 	}

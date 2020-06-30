@@ -72,7 +72,7 @@ function ch7final107()	{
 	
 	
 	clearInterval(loop);
-	ctx.fillStyle = BG_COLOR;
+	ctx.fillStyle = BGCOLOR;
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);	
 	
 	
@@ -591,7 +591,7 @@ function hereWeGo()	{
 				
 				var c = convert(color_)
 				
-				ctx.fillStyle = "#" + c.x + c.y + c.z
+				ctx.fillStyle = c
 				ctx.fillRect(x,y,1,1)
 			}
 			
@@ -742,8 +742,8 @@ function cm_plane()	{
 	
 	prepCanvas()
 	
-	var l = new point_light(point(-10, 10, -10), colour(1,1,1)) 
-	Data.c.setCTransform(view_transform(point(0,10,-30), point(0,0,0), vector(0,1,0)));
+	var l = new point_light(point(-10, 10, 10), colour(1,1,1)) 
+	Data.c.setCTransform(view_transform(point(0,150,0), point(0,0,0), vector(-1,0,0)));
 	
 	var main = colour(1,1,1), ul = colour(1,0,0), ur = colour(1,1,0), bl = colour(0,1,0), br = colour(0,1,1)
 	var p =  align_check_pattern(main, ul, ur, bl, br)

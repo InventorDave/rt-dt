@@ -83,7 +83,7 @@ function glass_test()	{
 	prepCanvas()
 
 	Data.c.setCTransform(view_transform(
-										point(10,0,-20),
+										point(0,0,-20),
 										point(0,0,0),
 										vector(0,1,0)
 										)
@@ -96,16 +96,16 @@ function glass_test()	{
 	s1.material.color = colour(1, 0, 0)
 	
 	var s2 = sphere()
-	s2.transform = m().translation(0,0,5)
+	s2.transform = m().translation(0,0,-2.5)
 	s2.material.color = colour(0.5, 0.5, 1)
 	
 	var o = group()
 	o.addChild(s1, s2)
 	
-	renderImage(l, o)
+	renderImage(l, o, 3)
 }
 
-addFunction("Test", "glass_test")
+addFunction("Refraction test", "glass_test")
 
 
 // Sample Scene 1
@@ -328,6 +328,7 @@ function sceneBump()	{
 	if(!c)	{
 		
 		alert("Please load 'earth.ppm' file first, via File->Load File")
+		var a = 1+2;
 		return
 	}
 	var tm = TextureMap(image_pattern(c), spherical_map, s)
@@ -384,10 +385,11 @@ function earth()	{
 	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
 	Data.c.setCTransform(view_transform(point(0,0,-20), point(0,0,0), vector(0,1,0)));
 	
-	var c = Data.PPM["earth.ppm"];
+	var c = Data.PPM[Data.Maps["earth"]];
 	if(!c)	{
 		
-		alert("Please load 'earth.ppm' file first, via File->Load File")
+		alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
+		var a =2+3;
 		return
 	}
 	var tm = TextureMap(image_pattern(c), spherical_map, s)
@@ -477,26 +479,14 @@ function system()	{
 	
 
 	
-	var s = sphere("sun")
-	s.transform = identity_matrix().scaling(20,20,20)
-	var c = Data.PPM["2k_sun.ppm"];
-	
-	if (!(c = Data.PPM["2k_sun.ppm"]))	{
-		
-		alert("Cannot find '2k_sun.ppm'! Please load.")
-		return
-	}
-	
-	var tm = TextureMap(image_pattern(c), spherical_map, s)
-	s.material.diffuse = s.material.specular = s.material.diffuse = 1.0
-	s.material.pattern = my_pattern( tm, s )
+	var c;
 	
 	var e = sphere("earth")
 	e.transform = identity_matrix().translation(0,0,-40).scaling(2,2,2)
 	
-	if (!(c = Data.PPM["earth.ppm"]))	{
+	if (!(c = Data.PPM[Data.Maps["earth"]]))	{
 		
-		alert("Cannot find 'earth.ppm'! Please load.")
+		alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
 		return
 	}
 	
@@ -509,9 +499,9 @@ function system()	{
 	var m = sphere("m")
 	m.transform = identity_matrix().translation(2,2,-55).scaling(0.7,0.7,0.7)
 	
-	if (!(c = Data.PPM["2k_moon.ppm"]))	{
+	if (!(c = Data.PPM[Data.Maps["moon"]]))	{
 		
-		alert("Cannot find '2k_moon.ppm'! Please load.")
+		alert("Please set a 'moon' map first! (Hint: '2k_moon.ppm' is available in our PPM archive.)")
 		return
 	}
 	tm = TextureMap(image_pattern(c), spherical_map)

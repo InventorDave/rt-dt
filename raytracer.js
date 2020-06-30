@@ -15,6 +15,9 @@ var Data = {
 				PPM_refs: [],
 				PPM: [],
 				
+				Maps:	{}, // keys mapped to PPM[] keys
+				Maps_refs: [],
+				
 				meshes: [], // { v: [], vn: [], filename: "", name: "", group: {} }
 				f: [],
 				v: [],
@@ -119,6 +122,28 @@ function camPresetSelected()	{
 	
 	el.innerText = Data.presets.camera[v.selectedIndex].str + " : " + Data.c.string;
 	log("Set Camera to preset " + (v.selectedIndex+1) + ".")
+}
+
+function mapsOptionsSelected(e)	{
+	
+	//(document.getElementById(e.target.id).value)
+	var m = document.getElementById("mp_id_select")
+	
+	//alert(m.value)
+	Data.Maps[m.value] = document.getElementById(e.target.id).value;
+}
+
+function mapsOptionsSelected2(e)	{
+	
+	var s = document.getElementById("mp_id_opts_select")
+	var m = document.getElementById("mp_id_select")
+	 
+	 
+	//var keys = Object.keys(Data.PPM)
+	
+
+	s.value = Data.Maps[m.value];
+	
 }
 
 function imageOptionsSelected(e)	{

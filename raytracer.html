@@ -181,9 +181,11 @@
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content" id="myDropdownRender">
+	
+      <a onclick="option('render'); return false;">Render!</a>
       <a onclick="option('gen-bvh'); return false;">Generate BVH</a>
       <a onclick="option('gen-divide'); return false;">Set BVH divide()</a>
-      <a onclick="option('render'); return false;">Render!</a>
+
     </div>
   </div>
   
@@ -195,7 +197,9 @@
       <a onclick="option('set-skybox-params'); return false;">Set Skybox</a>
 	  <a onclick="option('set-bg-image'); return false;">Set/Unset BG Image</a>
 	  <a onclick="option('set-normal-map'); return false;">Set/Unset Normal Map</a>
-    </div>
+	  
+    <a onclick="option('set-maps'); return false;">Set Maps</a>
+	</div>
   </div>
   
   <div class="dropdown">
@@ -364,8 +368,8 @@ window.onclick = function(e) {
 <div>
   
   <textarea id="msg-output" style="position: relative;" readonly cols="30" rows="25">CONSOLE
-  </textarea>
-    <canvas id="canvas" width="750" height="422" style="border:1px solid #000000; position: absolute; left: 250px;">
+  </textarea>&nbsp;
+    <canvas id="canvas" width="750" height="422" style="border:1px solid #000000; position: absolute; left: 275px;">
   </canvas>
 
   <canvas id="imgCanvas" width="1" height="1" style="visibility: hidden; display: none;"></canvas>
@@ -527,6 +531,129 @@ window.onclick = function(e) {
   </div>
 </div>
 
+
+<div id="myModal_Maps" class="modal">
+
+  <div class="modal-content">
+    <span class="close">&times;</span>
+	Create/Edit Maps.<br>
+	<br>
+	Add Map.<input id="mapname" type="text"/><button value="add" onclick="addMap()">add!</button><br>
+	
+	<script>
+	function addMap()	{
+	
+		Data.Maps[document.getElementById("mapname").value] = "";
+		//populateMapsOptions()
+		populateMapsSelection()
+	}
+	</script>
+	<span>
+	<p id="mp_id">
+	  </p>
+	</span>
+
+	  <script type="text/javascript">
+	    function populateMapsSelection()	{
+			
+			var id = "mp_id"
+			var p = document.getElementById(id)
+			
+			try	{
+			
+				while(p.removeChild(p.lastElementChild))
+					;
+			}
+			catch(e) {}
+			
+			var select = document.createElement("select")
+			select.addEventListener("change", mapsOptionsSelected2)
+			select.id = id + "_select"
+			
+			var opt1 = document.createElement("option")
+			opt1.text = opt1.value = "Please select."
+			select.add(opt1)
+			
+			console.log(Object.keys(Data.Maps))
+			
+			var iterator = Object.keys(Data.Maps);
+			//alert("going in")
+			
+			for (var i = 0; i < iterator.length; i++)	{
+			
+				//alert("Maps.")
+				
+				var option = document.createElement("option")
+				
+				option.text = iterator[i]
+				option.value = option.text
+				
+				//var option = Data.PPM[Data.PPM_refs[i]]
+				
+				select.add(option)
+			}
+			
+			
+			p.appendChild(select)
+			//alert("doing something!")
+		}
+	  </script>
+	
+	<span>
+	<p id="mp_id_opts">
+	  </p>
+	</span>
+	
+	
+  <script type="text/javascript">
+	function populateMapsOptions()	{
+		
+		var id = "mp_id_opts"
+		var p = document.getElementById(id)
+		
+		try	{
+		
+			while(p.removeChild(p.lastElementChild))
+				;
+		}
+		catch(e) {}
+		
+		var select = document.createElement("select")
+		select.addEventListener("change", mapsOptionsSelected)
+		select.id = id + "_select"
+		
+		var opt1 = document.createElement("option")
+		opt1.text = opt1.value = "Please select."
+		select.add(opt1)
+		
+		console.log(Object.keys(Data.PPM))
+			
+		var iterator = Object.keys(Data.PPM);
+		
+		for (var i = 0; i < iterator.length; i++)	{
+		
+			var option = document.createElement("option")
+			
+			option.text = iterator[i]
+			option.value = option.text
+			
+			//var option = Data.PPM[Data.PPM_refs[i]]
+			
+			select.add(option)
+		}
+		
+		
+		p.appendChild(select)
+		//alert("doing something!")
+	}
+  </script>
+	
+  </div>
+  
+</div>
+
+
+
 <script src="mandelbrot.js"></script>
 <script src="rt.p+e.js"></script>
 <script src="rt.pattern.js"></script>
@@ -581,18 +708,19 @@ function option(opt)	{
 	
 	if (opt=="render")	{
 	
-		//try	{
+		try	{
 		
 			if(Data.o.s.length)
 				renderImage()
 			else
 				log("No scene in memory!")
-		//}
-		/*
+		}
+		
 		catch(e)	{
 		
-			log("line 550, no scene loaded.")
-		}*/
+			log("line 588, no scene loaded.")
+		}
+		
 	}
 	
 	if (opt=="about")	{
@@ -667,6 +795,13 @@ function option(opt)	{
 		populateImagesSelection("nm_p_id")
 	}
 	
+	if (opt=="set-maps")	{
+	setMapsModal.style.display = "block"
+		populateMapsSelection()
+		populateMapsOptions()
+
+	}
+	
 	if (opt=="load-server-PPM")	{
 	
 		var win = window.open("/PPM.php")
@@ -691,6 +826,8 @@ var setBGImageModal = document.getElementById("myModal_BGImage")
 
 var setNormalMapModal = document.getElementById("myModal_NormalMap")
 
+var setMapsModal = document.getElementById("myModal_Maps")
+//setMapsModal
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 var span_CameraModal = document.getElementsByClassName("close")[1]; 
@@ -699,7 +836,8 @@ var span_bugModal = document.getElementsByClassName("close")[3];
 var span_skyBoxModal = document.getElementsByClassName("close")[4];
 var span_normalMapModal = document.getElementsByClassName("close")[5];
 var span_bgImageModal = document.getElementsByClassName("close")[6];
-
+var span_mapsModal = document.getElementsByClassName("close")[7];
+//setMapsModal
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
@@ -729,6 +867,11 @@ span_normalMapModal.onclick = function()	{
 	bugModal.style.display = "none"
 }
 
+span_mapsModal.onclick = function()	{
+	setMapsModal.style.display = "none"
+}
+
+//setMapsModal
 
 document.getElementById('file-input2')
   .addEventListener('change', readFile, false);

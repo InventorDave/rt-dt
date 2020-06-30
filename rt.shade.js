@@ -92,8 +92,11 @@ function reflected_color(w, comps, remaining)	{
 
 function refracted_color(w, comps, remaining)	{
 	
-	if (comps.object.material.transparency == 0)
+	if (comps.object.material.transparency == 0)	{
+		
+		//console.log("shade.js line 97 - " + comps.object.id)
 		return colour(0,0,0)
+	}
 	
 	if (remaining<=0)
 		return colour(0,0,0)
