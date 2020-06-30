@@ -194,11 +194,12 @@
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content" id="myDropdownOptions">
-      <a onclick="option('set-skybox-params'); return false;">Set Skybox</a>
+      
+	  <a onclick="option('set-maps'); return false;">Set Maps</a>
 	  <a onclick="option('set-bg-image'); return false;">Set/Unset BG Image</a>
+	  <a onclick="option('set-skybox-params'); return false;">Set Skybox</a>
 	  <a onclick="option('set-normal-map'); return false;">Set/Unset Normal Map</a>
 	  
-    <a onclick="option('set-maps'); return false;">Set Maps</a>
 	</div>
   </div>
   
@@ -440,7 +441,7 @@ window.onclick = function(e) {
 		<h2>Enter Bug Report.</h2>
 		<hr>
 		Summary: <input type="text" id="bug-summary" length="50"><br>
-		Description: <textarea id="bug-desc" readonly cols="30" rows="10"></textarea>
+		Description: <textarea id="bug-desc" cols="30" rows="10"></textarea>
 		
 	</p>
   </div>
