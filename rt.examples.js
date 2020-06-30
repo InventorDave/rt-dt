@@ -320,14 +320,19 @@ function sceneBump()	{
 	
 	
 	s.material.normalMap = Data.PPM["normalMap"]
-	
+	if(!s.material.normalMap)	{
+		
+		alert("Please set a Normal Map first! (Hint: 'normalMap.ppm' is available in our PPM archive.)")
+		var a = 1+2;
+		return
+	}	
 	
 	s.material.specular = 0.0
 	
-	var c = Data.PPM["earth.ppm"];
+	var c = Data.PPM[Data.Maps["earth"]];
 	if(!c)	{
 		
-		alert("Please load 'earth.ppm' file first, via File->Load File")
+		alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
 		var a = 1+2;
 		return
 	}
