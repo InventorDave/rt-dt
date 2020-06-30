@@ -241,6 +241,25 @@ function populateSceneFunctionSelection()	{
 
 /** RAYTRACER CODE */
 
+function verify_PPM(e)	{
+	
+	var ppm = Data.PPM[e]
+	if(!ppm)	{
+		
+		alert("Cannot find '" + e + "'! Please load.")
+		return
+	}
+	
+	return ppm
+}
+
+function verify_SkyBoxObj(skyBox)	{
+	
+	// { left: Data.SkyBox.left, right: Data.SkyBox.right, front: Data.SkyBox.front, back: Data.SkyBox.back, top: Data.SkyBox.top, bottom: Data.SkyBox.bottom }
+	
+	return (skyBox.left &&  skyBox.right && skyBox.front && skyBox.back && skyBox.top && skyBox.bottom)
+}
+
 function scene()	{
 	
 	var o = group()

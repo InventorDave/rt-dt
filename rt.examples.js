@@ -317,6 +317,8 @@ function sceneBump()	{
 	//s.transform = m().scaling(4,4,4).rotation_z(Math.PI/2)
 	s.transform = m().scaling(4,4,4).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
 	//s.material.transform = m().rotation_x(Math.PI/2).rotation_y((Math.PI) * 0.7)
+	
+	
 	s.material.normalMap = Data.PPM["normalMap"]
 	
 	
@@ -414,6 +416,11 @@ function endGame()	{
 	Data.c.setCTransform(view_transform(point(0,0,-20), point(0,0,0), vector(0,1,0)));
 	
 	var skyBox = getSkyBoxObject()
+	if (!verify_SkyBoxObj(skyBox))	{
+		
+		alert("SkyBox obj is not populated! Please fix.")
+		return
+	}
 	
 	var cb = cube()
 	cb.transform = m().scaling(60,60,60).rotation_y(Math.PI/4, 1).rotation_z(Math.PI/4, 1)
@@ -437,6 +444,11 @@ function mySkyBox()	{
 
 	
 	var skyBox = getSkyBoxObject()
+	if (!verify_SkyBoxObj(skyBox))	{
+		
+		alert("SkyBox obj is not populated! Please fix.")
+		return
+	}
 	
 	var cb = cube()
 	cb.transform = m().scaling(60,60,60)
@@ -468,13 +480,26 @@ function system()	{
 	var s = sphere("sun")
 	s.transform = identity_matrix().scaling(20,20,20)
 	var c = Data.PPM["2k_sun.ppm"];
+	
+	if (!(c = Data.PPM["2k_sun.ppm"]))	{
+		
+		alert("Cannot find '2k_sun.ppm'! Please load.")
+		return
+	}
+	
 	var tm = TextureMap(image_pattern(c), spherical_map, s)
 	s.material.diffuse = s.material.specular = s.material.diffuse = 1.0
 	s.material.pattern = my_pattern( tm, s )
 	
 	var e = sphere("earth")
 	e.transform = identity_matrix().translation(0,0,-40).scaling(2,2,2)
-	c = Data.PPM["earth.ppm"]
+	
+	if (!(c = Data.PPM["earth.ppm"]))	{
+		
+		alert("Cannot find 'earth.ppm'! Please load.")
+		return
+	}
+	
 	tm = TextureMap(image_pattern(c), spherical_map, e)
 	e.material.pattern = my_pattern( tm, e )
 	e.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
@@ -483,7 +508,12 @@ function system()	{
 	
 	var m = sphere("m")
 	m.transform = identity_matrix().translation(2,2,-55).scaling(0.7,0.7,0.7)
-	c = Data.PPM["2k_moon.ppm"]
+	
+	if (!(c = Data.PPM["2k_moon.ppm"]))	{
+		
+		alert("Cannot find '2k_moon.ppm'! Please load.")
+		return
+	}
 	tm = TextureMap(image_pattern(c), spherical_map)
 	m.material.pattern = my_pattern( tm )
 	m.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
@@ -498,4 +528,7 @@ function system()	{
 }
 
 addFunction("Earth & Moon", "system")
+
+
+
 addFunction("mandelbrot", "mandelbrot")
