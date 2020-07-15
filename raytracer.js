@@ -105,7 +105,7 @@ function sceneOptionSelected()	{
 	try {
 		
 		var fn = document.getElementById("predefined-scene-options").value;
-		var res = eval(fn + "();");
+		var res = eval("var res2 = " + fn + "();");
 	}
 	catch(e)	{
 		alert("error!")

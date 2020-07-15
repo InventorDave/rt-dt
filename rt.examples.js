@@ -324,7 +324,7 @@ function sceneBump()	{
 		
 		var b = alert("Please set a Normal Map first! (Hint: 'normalMap.ppm' is available in our PPM archive.)")
 		var a = 1+2;
-		return a
+		return false
 	}	
 	
 	s.material.specular = 0.0
@@ -334,7 +334,7 @@ function sceneBump()	{
 		
 		var b = alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
 		var a = 1+2;
-		return a
+		return false
 	}
 	var tm = TextureMap(image_pattern(c), spherical_map, s)
 	s.material.pattern = my_pattern( tm, s )
@@ -395,7 +395,7 @@ function earth()	{
 		
 		var b = alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
 		var a =2+3;
-		return a
+		return false
 	}
 	var tm = TextureMap(image_pattern(c), spherical_map, s)
 	//var tm = TextureMap(checkers_pattern(8, 4, colour(0,1,0),colour(0,0,1)), spherical_map)
@@ -426,7 +426,7 @@ function endGame()	{
 	if (!verify_SkyBoxObj(skyBox))	{
 		
 		var b = alert("SkyBox obj is not populated! Please fix.")
-		return 1
+		return false
 	}
 	
 	var cb = cube()
@@ -454,7 +454,7 @@ function mySkyBox()	{
 	if (!verify_SkyBoxObj(skyBox))	{
 		
 		var b = alert("SkyBox obj is not populated! Please fix.")
-		return 1
+		return false
 	}
 	
 	var cb = cube()
@@ -492,7 +492,7 @@ function system()	{
 	if (!(c = Data.PPM[Data.Maps["earth"]]))	{
 		
 		var b = alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
-		return 1
+		return false
 	}
 	
 	tm = TextureMap(image_pattern(c), spherical_map, e)
@@ -507,7 +507,7 @@ function system()	{
 	if (!(c = Data.PPM[Data.Maps["moon"]]))	{
 		
 		var b = alert("Please set a 'moon' map first! (Hint: '2k_moon.ppm' is available in our PPM archive.)")
-		return 1
+		return false
 	}
 	tm = TextureMap(image_pattern(c), spherical_map)
 	m.material.pattern = my_pattern( tm )
@@ -523,7 +523,5 @@ function system()	{
 }
 
 addFunction("Earth & Moon", "system")
-
-
 
 addFunction("mandelbrot", "mandelbrot")
