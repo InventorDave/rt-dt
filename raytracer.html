@@ -205,7 +205,7 @@
   
   <div class="dropdown">
     <div class="dropdown">
-      <a href="https://github.com/leeodea/rt-dt" target="_blank" rel="noopener noreffer"><i class="fas fa-code-branch" title="View Source Code Repo."></i></a>
+      <a href="https://github.com/inventordave/rt-dt" target="_blank" rel="noopener noreffer"><i class="fas fa-code-branch" title="View Source Code Repo."></i></a>
     </div>
     <div class="dropdown">
       <a href="updates.php" target="_blank" rel="noopener noreffer"><i class="fas fa-bell" style="color: #7b68ee;" title="Receive updates."></i></a>
@@ -228,12 +228,13 @@
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content" style="right: 0px;" id="myDropdownHelp">
-      <a onclick="option('report-bug'); return false;">Report a Bug</a>
+      
       <a onclick="option('help'); return false;">Help Contents</a>
-      <a onclick="option('selec-elem'); return false;">Select Element</a>
+      <a onclick="option('selec-elem'); return false;">Select UI Element</a>
 	  <!--
 	  <a style="color:#cc0000;" onclick="option('jamis'); return false;">Buy Jamis Buck's Book!</a>
 	  -->
+	  <a onclick="option('report-bug'); return false;">Report a Bug</a>
 	  <a onclick="option('about'); return false;">About</a>
     </div>
   </div>
@@ -744,7 +745,7 @@ function option(opt)	{
 	
 	if (opt=='help')	{
 	
-		window.open("help.html")
+		window.open("faq/")
 	}
 	
 	if (opt=='report-bug')	{

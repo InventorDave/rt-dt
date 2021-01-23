@@ -2,4 +2,6 @@ You may peruse the source files at your own leisure. The engine itself, the "ray
 
 The file you want to run the app is "raytracer.html".
 
-Please send feedback, good or bad, to dave@leedavidodea.co.uk
+Please send feedback, good or bad, to dave@inventordave.com
+
+(c) 2020, No-one.

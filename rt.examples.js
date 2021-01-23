@@ -137,8 +137,8 @@ function scene1()	{
 	//o.divide(1)
 	
 	//debugger;
-	Data.o = o
-	Data.l = l
+	Data.o = o // add group of shapes
+	Data.l = l // add light
 	
 	
 	renderImage();
@@ -298,6 +298,34 @@ function scene3()	{
 
 addFunction("Scene 3", "scene3")
 
+
+function cm_cube()	{
+	
+	prepCanvas()
+	
+	var l = new point_light(point(-10, 0, -10), colour(1,1,1)) 
+	Data.c.setCTransform(view_transform(point(0,10,-30), point(0,0,0), vector(0,1,0)));
+	
+	var c1 = colour(1,0,0), c2 = colour(1,1,0), c3 = colour(1,0.5,0), c4 = colour(0,1,0), c5 = colour(0,1,1), c6 = colour(0,0,1), c7 = colour(1,0,1), c8 = colour(1,1,1)
+	
+	var cb = cube()
+	cb.material.pattern = CubeMap(c1,c2,c3,c4,c5,c6,c7,c8)
+	
+	cb.transform = m().scaling(2,2,2).rotation_z(Math.PI / 4, 1).rotation_y(Math.PI / 4, 1)
+	
+	var o = group()
+	o.addChild(cb)
+	
+	Data.o = o
+	Data.l = l
+	
+	renderImage()
+}
+
+addFunction("Cube", "cm_cube")
+
+
+
 function sceneBump()	{
 	
 	prepCanvas()
@@ -357,31 +385,7 @@ addFunction("Bump Scene", "sceneBump")
 
 
 
-function cm_cube()	{
-	
-	prepCanvas()
-	
-	var l = new point_light(point(-10, 0, -10), colour(1,1,1)) 
-	Data.c.setCTransform(view_transform(point(0,10,-30), point(0,0,0), vector(0,1,0)));
-	
-	var c1 = colour(1,0,0), c2 = colour(1,1,0), c3 = colour(1,0.5,0), c4 = colour(0,1,0), c5 = colour(0,1,1), c6 = colour(0,0,1), c7 = colour(1,0,1), c8 = colour(1,1,1)
-	
-	var cb = cube()
-	cb.material.pattern = CubeMap(c1,c2,c3,c4,c5,c6,c7,c8)
-	
-	cb.transform = m().scaling(2,2,2).rotation_z(Math.PI / 4, 1).rotation_y(Math.PI / 4, 1)
-	
-	var o = group()
-	o.addChild(cb)
-	
-	Data.o = o
-	Data.l = l
-	
-	renderImage()
-	
-}
 
-addFunction("Cube", "cm_cube")
 
 function earth()	{
 	

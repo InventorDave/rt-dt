@@ -30,7 +30,7 @@ Or,
 	camera(c)
 	
 
-Then, the scene can be rendered from menu option "Render->Render!". Note, whether you choose to manually call renderImage() or not, if you want to define the camera, you must do the lower 3 lines above before you call renderImage()/exit your function.
+Then, the scene can be rendered from menu option "Render->Render!". Note, whether you choose to manually call renderImage() or not, if you want to define the camera, you must do the lower 3 lines of code above before you call renderImage()/exit your function.
 
 
 (Note, any primitives that have a .min and .max property - see their definition function - needs to have those values set upon creation, it should be intuitive if you have any experience working with primitives in a raytracer...)
