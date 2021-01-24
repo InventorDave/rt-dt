@@ -669,12 +669,13 @@ window.onclick = function(e) {
 <script src="rt.shade.js"></script>
 <script src="rt.core.js"></script>
 <script src="rt.light.js"></script>
+<script src="rt.image.js"></script>
 <script src="raytracer.js"></script>
 <script src="rt.examples.js"></script>
 <script src="rt.material.js"></script>
 <script src="rt.objfile.js"></script>
 <script src="rt.ray.js"></script>
-<script src="rt.image.js"></script>
+
 <script src="rt.graphics.js"></script>
 
 <script>
@@ -702,6 +703,9 @@ function renderImage(l, o, d)	{
 		
 	w.light = Data.l
 	w.objects = [Data.o]
+	
+	if(!Data.PPM["bgImage"] && Data.bgImage)
+	 Data.PPM["bgImage"] = Data.PPM[Data.bgImage]
 	
 	render(c,w,d); // render(c, w, remaining) "rt.raytracer.js"
 }

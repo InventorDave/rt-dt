@@ -15,6 +15,8 @@ var Data = {
 				PPM_refs: [], // contains the names of the associative indices of the PPM[] array, so you can just iterate through the light PPM_refs[] array to extract the filenames of all internal PPM objects. Then, if you get a match at, say, indice 2, you might do ppmObj = Data.PPM[Data.PPM_refs[2]];, it's vaguely more lightweight to iterate through a presumably small array of strings (PPM_refs), than try to iterate through a larger array of huge PPM objects to extract the filenames, plus the PPM[] object array is associative, so it's ugly to try and iterate through it without knowing what string to use as the indice reference.
 				PPM: [],
 				
+				bgImage: "",
+				
 				Maps:	{}, // keys mapped to PPM[] keys
 				Maps_refs: [],
 				
@@ -105,6 +107,7 @@ function sceneOptionSelected()	{
 	try {
 		
 		var fn = document.getElementById("predefined-scene-options").value;
+		//alert("fn = " + fn + "()")
 		var res = eval("var res2 = " + fn + "();");
 	}
 	catch(e)	{
@@ -171,6 +174,8 @@ function imageOptionsSelected(e)	{
 		if (s.id=="p_id_select")	{
 		
 			Data.PPM["bgImage"] = Data.PPM[s.value];
+			Data.bgImage = s.value;
+			
 			//alert("here! - " + s.value);
 			
 			return;
@@ -235,6 +240,8 @@ function init()	{
 	ctx.fillStyle = BGCOLOR
 	ctx.fillRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT)
 	populateSceneFunctionSelection();
+	
+	preLoadResources();
 }
 
 function populateSceneFunctionSelection()	{
@@ -260,6 +267,77 @@ function populateSceneFunctionSelection()	{
 			select.add(option)
 		}
 }
+
+
+function preLoadResources()	{
+
+		var url = "/rt-dt/img/"
+		var files = ["earthmap1k.jpg", "starfield.jpg", "2k_moon.jpg"];
+		var maps =  {earth: "earthmap1k.jpg", moon: "2k_moon.jpg"}
+		var bgImage = "starfield.jpg"
+		
+		var img_arr = []
+		
+		for (var i = 0; i < files.length; i++)	{
+			
+			img_arr[i] = new Image();
+			img_arr[i].fn = files[i];
+			img_arr[i].i = i;
+			
+			img_arr[i].onload = function() {
+				//alert(this.width + 'x' + this.height);
+				preLoadResourcesStage2(this.fn, this.i)
+			}
+			img_arr[i].src = url + files[i];
+			img_arr[i].id = "img" + i;
+			img_arr[i].style = "display: none;"
+		
+			document.body.appendChild(img_arr[i])
+			log("Loading Image File: " + img_arr[i].fn)
+		}
+		
+		//Data.Maps["earth"] = maps.earth
+
+			
+		for (key in maps)	{
+			
+			Data.Maps[key] = maps[key];
+			
+			log("Set " + maps[key] + " to '" + key + "' map.")
+		}
+		
+		populateMapsSelection()
+		populateMapsOptions()
+		
+		
+		Data.bgImage = bgImage;
+		log("Set bgImage to " + Data.bgImage + ".")
+}
+
+function preLoadResourcesStage2(fn, i)	{
+	
+	var imgCanvas = document.getElementById("imgCanvas")
+	var img       = document.getElementById("img" + i)
+	
+	imgCanvas.width = img.width;      // set canvas size big enough for the image
+	imgCanvas.height = img.height;
+	var ctx = imgCanvas.getContext("2d");
+	ctx.drawImage(img,0,0);
+	
+	var img_ = ctx.getImageData(0, 0, img.width, img.height);
+	
+	var width = img.width
+	var height = img.height
+	var pix = img_.data;
+	
+	log("Image File loaded.")
+	convertToPPM(pix, width, height, fn);	
+	
+	//document.removeChild(img);
+	//debugger;
+
+}
+
 
 /** END OF INIT */
 

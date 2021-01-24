@@ -38,7 +38,11 @@ function imageLoaded()	{
 	var height = img_.height
 	var pix = img.data;
 	
-	
+	if (img_.fn)	{
+		imgCanvas.fn = img_.fn
+		img_.fn = ""
+	}
+		
 	log("Image File Loaded.")
 	convertToPPM(pix, width, height, imgCanvas.fn);
 	//debugger;
@@ -58,5 +62,5 @@ function convertToPPM(data, width, height, fn)	{
 	Data.PPM[fn] = output;
 	Data.PPM_refs.push(fn);
 	
-	log("Converted Image To PPM.")
+	//log("Converted Image To PPM.")
 }

@@ -168,7 +168,7 @@ function my_pattern(TextureMap, owner)	{
 			
 			tm = this.TextureMap
 			var db_ = 1;
-			console.log("3rd");
+			//console.log("3rd");
 			//debugger;
 		}
 		
@@ -209,9 +209,13 @@ function TextureMap(uv_pattern, uv_map, s)	{
 		//console.log("Inside TextureMap() factory, IF clause.")
 		//debugger;
 		
-	
-		var arr = [];
+		var arr = []
 		
+		for (var key in uv_pattern)
+			//console.log(key);
+			arr[key] = {uv_pattern: uv_pattern[key], uv_map: uv_map[key], owner: s}
+		
+		/**
 		//{ uv_pattern_at: image_uv_pattern_at, c: c, pixel_at: image_pattern_pixel_at }
 		arr["left"] = {uv_pattern: uv_pattern["left"], uv_map: uv_map["left"], owner: s}
 		arr["right"] = {uv_pattern: uv_pattern["right"], uv_map: uv_map["right"], owner: s}
@@ -219,7 +223,7 @@ function TextureMap(uv_pattern, uv_map, s)	{
 		arr["down"] = {uv_pattern: uv_pattern["down"], uv_map: uv_map["down"], owner: s}
 		arr["front"] = {uv_pattern: uv_pattern["front"], uv_map: uv_map["front"], owner: s}
 		arr["back"] = {uv_pattern: uv_pattern["back"], uv_map: uv_map["back"], owner: s}
-		
+		*/
 		//debugger;
 		
 		return arr; // associative array of objects
@@ -228,7 +232,9 @@ function TextureMap(uv_pattern, uv_map, s)	{
 	
 	return { uv_pattern: uv_pattern, uv_map: uv_map, owner: s }
 	// eg uv_pattern = checkers_pattern(...) || align_check_pattern(...)
+	
 }
+
 
 function cylindrical_map(p)	{
 
@@ -610,3 +616,5 @@ function bgImage_uv_pattern_at(u, v)	{
 	
 	return colour(d[ppos]/255, d[ppos+1]/255, d[ppos+2]/255)
 }
+
+

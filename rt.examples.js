@@ -429,14 +429,14 @@ function earth()	{
 	
 	var tm = TextureMap(image_pattern(c), spherical_map, s)
 
-	debugger;
+	//debugger;
 	
 	//var tm = TextureMap(checkers_pattern(8, 4, colour(0,1,0),colour(0,0,1)), spherical_map)
 	
 	s.transform = m().scaling(2,2,2).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
 	s.material.pattern = my_pattern( tm, s )
 	
-	debugger;
+	//debugger;
 	
 	s.material.diffuse = 0.9
 	s.material.specular = 0.1
@@ -446,6 +446,9 @@ function earth()	{
 	var o = group()
 	o.addChild(s)
 	
+	
+	Data.PPM["bgImage"] = Data.PPM[Data.bgImage] // Total hack, program won't set auto-loaded image as 'bgImage', so func preLoadResources() sets 
+												// Data.bgImage with a string of the filename/Data.PPM[] key.
 	renderImage(l, o)	
 }
 
@@ -554,7 +557,7 @@ function system()	{
 	o.addChild(m,e)
 	renderImage(l,o)
 	
-	saveScene("system", Data.c, l, o, Data.PPM["bgImage2.ppm"])	
+	saveScene("system", Data.c, l, o)	
 }
 
 addFunction("Earth & Moon", "system")
