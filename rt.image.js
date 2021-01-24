@@ -46,7 +46,7 @@ function imageLoaded()	{
 
 function convertToPPM(data, width, height, fn)	{
 	
-	var output = { data: [], width: width, height: height, filename: fn }
+	var output = { data: [], width: width, height: height, filename: fn } // PPM Object
 	
 	for (var i = 0; i < data.length; i += 4)	{
 		

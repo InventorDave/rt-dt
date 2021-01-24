@@ -535,6 +535,33 @@ function cube(id2)	{
 			return vector(0,0,p.z)
 	};
 	
+	c.face = function(p)	{
+	
+		var abs_x = Math.abs(p.x)
+		var abs_y = Math.abs(p.y)
+		var abs_z = Math.abs(p.z)
+		var coord = Math.max(abs_x, abs_y, abs_z)
+
+		if(coord == p.x)
+			return "right"
+
+		if(coord == -p.x)
+			return "left"
+	  
+		if(coord == p.y)
+			return "up"
+		
+		if(coord == -p.y)
+			return "down"
+
+		if(coord == p.z)
+			return "front"
+
+		//the only option remaining!
+		return "back"
+	};
+	
+	
 	return c;
 }
 

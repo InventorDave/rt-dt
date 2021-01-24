@@ -126,14 +126,62 @@ function my_pattern(TextureMap, owner)	{
 	var tp = new Pattern()
 	tp.type = "TextureMap"
 	
+	tp.owner = owner
 	tp.TextureMap = TextureMap
 	
 	tp.owner = owner
 	
 	tp.algorithm = function(p)	{
 		
-		var uv = this.TextureMap.uv_map(p, this.owner)
-		var col = this.TextureMap.uv_pattern.uv_pattern_at(uv.u, uv.v)
+		
+		//console.log("1st");
+		
+		//debugger;
+		
+		var uv, col;
+		var tm;
+
+		var test;
+		try	{
+			test = this.TextureMap["left"].uv_pattern
+		}
+		catch(e)	{
+			
+			//console.log("test in my_pattern() failed.")
+		}
+		
+		if (test)	{
+			
+			var _temp = this.TextureMap;
+			
+			var res = this.owner.face(p);
+			
+			if (res!="left")	{
+			//debugger;
+			}
+			
+			tm = this.TextureMap[res] // 
+			console.log("2nd");
+			//debugger;
+		}
+		else	{
+			
+			tm = this.TextureMap
+			var db_ = 1;
+			console.log("3rd");
+			//debugger;
+		}
+		
+		//debugger;
+		uv = tm.uv_map(p, this.owner)
+		
+	if (res!="left")	{
+	//debugger
+	}
+			
+		col = tm.uv_pattern.uv_pattern_at(uv.u, uv.v)
+		
+		//var col = tm.uv_pattern_at(uv.u, uv.v)
 		
 		//console.log("r: " + col.x + ", g: " + col.y + ", b: " + col.z)
 		return col;
@@ -144,6 +192,39 @@ function my_pattern(TextureMap, owner)	{
 
 
 function TextureMap(uv_pattern, uv_map, s)	{
+	
+	var _test;
+	try	{
+		
+		_test = uv_pattern["left"].uv_pattern_at
+	}
+	catch(e)	{
+		
+		//console.log("In TextureMap(): no uv_pattern['left'].")
+		_test = 1
+	}
+	
+	if(_test!=1)	{
+	
+		//console.log("Inside TextureMap() factory, IF clause.")
+		//debugger;
+		
+	
+		var arr = [];
+		
+		//{ uv_pattern_at: image_uv_pattern_at, c: c, pixel_at: image_pattern_pixel_at }
+		arr["left"] = {uv_pattern: uv_pattern["left"], uv_map: uv_map["left"], owner: s}
+		arr["right"] = {uv_pattern: uv_pattern["right"], uv_map: uv_map["right"], owner: s}
+		arr["up"] = {uv_pattern: uv_pattern["up"], uv_map: uv_map["up"], owner: s}
+		arr["down"] = {uv_pattern: uv_pattern["down"], uv_map: uv_map["down"], owner: s}
+		arr["front"] = {uv_pattern: uv_pattern["front"], uv_map: uv_map["front"], owner: s}
+		arr["back"] = {uv_pattern: uv_pattern["back"], uv_map: uv_map["back"], owner: s}
+		
+		//debugger;
+		
+		return arr; // associative array of objects
+	}
+	//{ uv_pattern_at: image_uv_pattern_at, c: c, pixel_at: image_pattern_pixel_at }
 	
 	return { uv_pattern: uv_pattern, uv_map: uv_map, owner: s }
 	// eg uv_pattern = checkers_pattern(...) || align_check_pattern(...)
@@ -160,6 +241,13 @@ function cylindrical_map(p)	{
   var v = p.y - Math.floor(p.y)
 
   return { u: u, v: v }
+}
+
+function cube_map(p)	{
+	
+	var face = this.owner.face(p);
+     // this.owner.
+	// endgame: to return (u,v) pair for TextureMap algorithm to calc pixel
 }
 
 function planar_map(p)	{
@@ -285,12 +373,13 @@ function align_check_uv_pattern_at(u, v)	{
 }
 
 
-function CubeMap(c1, c2, c3, c4, c5, c6, c7, c8)	{
+function CubeMap(cr, c1, c2, c3, c4, c5, c6, c7, c8)	{
 	
 	var cm = new Pattern()
 	
 	cm.type = "CubeMap"
-		
+	
+	cm.cube_ref = cr
 	
 	cm.TextureMap = {"left": align_check_pattern(c2, c5, c1, c6, c3), "front": align_check_pattern(c5, c1, c2, c3, c4), "right": align_check_pattern(c1, c2, c7, c4, c8), "back": align_check_pattern(c4, c7, c5, c8, c6), "up": align_check_pattern(c3, c5, c7, c1, c2), "down": align_check_pattern(c7, c3, c4, c6, c8)}
 	
@@ -324,7 +413,10 @@ function CubeMap(c1, c2, c3, c4, c5, c6, c7, c8)	{
 	
 	cm.algorithm = function(p) {
 		
-		var face = this.face_from_point(p)
+		//var face = this.face_from_point(p)
+		
+		var face = this.cube_ref.face(p);
+		
 		// align_check_pattern(main, ul, ur, bl, br)
 		var uv = this.cube_uv[face](p)
 		
@@ -453,7 +545,6 @@ function skybox_uv_pattern_at(u, v)	{
 
 function skybox_pixel_at(x, y)	{
 	
-	//4 slots per pixel, r, g, b, alpha
 	// 3 for [] implementation
 	var ppos = 3 * (this.width * y + x);
   
@@ -478,6 +569,8 @@ function image_uv_pattern_at(u, v)	{
 	//flip v over so it matches the image layout, with y at the top
 	var v = 1 - v
 
+	//debugger;
+	
 	var x = u * (this.c.width - 1)
 	var y = v * (this.c.height - 1)
 

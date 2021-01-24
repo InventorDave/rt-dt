@@ -12,7 +12,7 @@ var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f")
 var Data = {
 				SkyBox: { top: "", bottom: "", left: "", right: "", front: "", back: "" },
 				
-				PPM_refs: [],
+				PPM_refs: [], // contains the names of the associative indices of the PPM[] array, so you can just iterate through the light PPM_refs[] array to extract the filenames of all internal PPM objects. Then, if you get a match at, say, indice 2, you might do ppmObj = Data.PPM[Data.PPM_refs[2]];, it's vaguely more lightweight to iterate through a presumably small array of strings (PPM_refs), than try to iterate through a larger array of huge PPM objects to extract the filenames, plus the PPM[] object array is associative, so it's ugly to try and iterate through it without knowing what string to use as the indice reference.
 				PPM: [],
 				
 				Maps:	{}, // keys mapped to PPM[] keys
@@ -206,12 +206,12 @@ function setSBParam(id, val)	{
 			Data.SkyBox.back = Data.PPM[val];
 			break;
 
-		case "sb_top_select":
-			Data.SkyBox.top = Data.PPM[val];
+		case "sb_up_select":
+			Data.SkyBox.up = Data.PPM[val];
 			break;
 
-		case "sb_bottom_select":
-			Data.SkyBox.bottom = Data.PPM[val];
+		case "sb_down_select":
+			Data.SkyBox.down = Data.PPM[val];
 			break;	
 
 		default:

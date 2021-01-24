@@ -81,30 +81,105 @@
 		</ul> <!-- cd-faq__group -->
 		
 		<ul id="advanced" class="cd-faq__group">
-			<li class="cd-faq__title"><h2>Using Advanced Built-in Scenes</h2></li>
+			<li class="cd-faq__title"><h2>Creating Custom Scenes</h2></li>
 			<li class="cd-faq__item">
-				<a class="cd-faq__trigger" href="#0"><span>How does syncing work?</span></a>
+				<a class="cd-faq__trigger" href="#0"><span>How do I create my own scene to render?</span></a>
 				<div class="cd-faq__content">
           <div class="text-component">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit quidem delectus rerum eligendi mollitia, repudiandae quae beatae. Et repellat quam atque corrupti iusto architecto impedit explicabo repudiandae qui similique aut iure ipsum quis inventore nulla error aliquid alias quia dolorem dolore, odio excepturi veniam odit veritatis. Quo iure magnam, et cum. Laudantium, eaque non? Tempore nihil corporis cumque dolor ipsum accusamus sapiente aliquid quis ea assumenda deserunt praesentium voluptatibus, accusantium a mollitia necessitatibus nostrum voluptatem numquam modi ab, sint rem.</p>
+            <p>This is where the Developer Console, available on the major browsers, comes in handy.<br>
+			Alternatively, you can place the custom function you will write at the end of file "rt.examples.js", or create a new file, and include a reference to it in "raytracer.html". It is best to place the reference to this file immediately after the reference to "rt.examples.js", as placing it too early will mean some necessary helper functions aren't available, as they haven't yet been loaded.<br>
+			<br>
+			Anyhoo, basically to build a custom scene, you create the scene programmatically in a javascript function, which you can then load into the developer console, and call it, for example entering "myScene()" at the console command line, if "myScene" were the name of your custom function.<br>
+			Depending on how you write the function, you may then need to manually initiate the render by going to menu option Render->Render! at the top of the UI.<br>
+			<br>
+			See subsequent answers in this FAQ section for details on how to write a scene function.
+			</p>
           </div>
 				</div> <!-- cd-faq__content -->
 			</li>
 
 			<li class="cd-faq__item">
-				<a class="cd-faq__trigger" href="#0"><span>How do I upload files from my phone or tablet?</span></a>
+				<a class="cd-faq__trigger" href="#0"><span>What goes in a raytracer scene?</span></a>
 				<div class="cd-faq__content">
           <div class="text-component">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi tempore, placeat quisquam rerum! Eligendi fugit dolorum tenetur modi fuga nisi rerum, autem officiis quaerat quos. Magni quia, quo quibusdam odio. Error magni aperiam amet architecto adipisci aspernatur! Officia, quaerat magni architecto nostrum magnam fuga nihil, ipsum laboriosam similique voluptatibus facilis nobis? Eius non asperiores, nesciunt suscipit veniam blanditiis veritatis provident possimus iusto voluptas, eveniet architecto quidem quos molestias, aperiam eum reprehenderit dolores ad deserunt eos amet. Vero molestiae commodi unde dolor dicta maxime alias, velit, nesciunt cum dolorem, ipsam soluta sint suscipit maiores mollitia assumenda ducimus aperiam neque enim! Quas culpa dolorum ipsam? Ipsum voluptatibus numquam natus? Eligendi explicabo eos, perferendis voluptatibus hic sed ipsam rerum maiores officia! Beatae, molestias!</p>
+            <p>In RT-DT, as in many raytracers, you populate an (initially inky-black) 3d space/environment with objects (typically called Shapes, as they are here). Then a you add light sources to illuminate the environment and the shapes in it, and finally add a virtual Camera, to "photograph" the scene from a specific angle. In RT-DT, currently only 1 light can be inserted into a scene (this will change), and at time of writing, the only option is a "point light" (this simply means the light eminates outward in all directions from a single "point" in the space, as opposed to an area light, which is where the light eminates from an area, even the small surface area of, say, a strip light. This is how real-world lights work.)<br>
+			<br>
+			RT-DT provides many of the primitives (fundamental shapes) you would expect: spheres, planes (2d surface that extends outwards to infinity in 2 dimensions), cones, cylinders, cubes and TRIANGLES (oh fun, we can create a detailed 3d model in many tools using triangles as facets).<br>
+			<br>
+			When you have defined your individual shapes, any groups of shapes (such as a triangle mesh, but a group can contain any combination of any of the supported primitives), your point light source, and your camera, you load all these elements into RT-DT's global object by calling the built-in helper functions (obviously you do this from within your custom function). Finally, if you want the render to start immediately as soon as your function that has done all the setup is complete, end your function with the easy "renderImage()", and your scene will immediately start to render in the raytracer window. Or, you can miss out the call to "renderImage()", and manually select Render->Render! from the raytracer UI menubar whenever you want to re-render your scene, thus allowing you to programmatically tweak your scene via the browser's developer console iterativelly, simply by peeking and poking the individual components in the RT-DT global object, and if and when you decide to reset your scene to it's default, simply call your function again in the console.<br>
+			<br>
+			See subsequent answers in this FAQ section for specific details on how to build your scene function.
+			</p>
           </div>
 				</div> <!-- cd-faq__content -->
 			</li>
 
 			<li class="cd-faq__item">
-				<a class="cd-faq__trigger" href="#0"><span>How do I link to a file or folder?</span></a>
+				<a class="cd-faq__trigger" href="#0"><span>How do I define single primitive Shapes or Groups of shapes for insertion into my scene?</span></a>
 				<div class="cd-faq__content">
           <div class="text-component">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis provident officiis, reprehenderit numquam. Praesentium veritatis eos tenetur magni debitis inventore fugit, magnam, reiciendis, saepe obcaecati ex vero quaerat distinctio velit.</p>
+            <p>Each type of Shape available has universal properties afforded all the available shapes (and thus groups of shapes). The universal properties are:<br>
+			<br>
+			(Applied combinatorially to a shape's "transform" property, *in the right order to achieve expected output*)<br>
+			<br>
+			1. "translation" - defines the shape's 'translation' (position relative to the virtual world's universal "origin"/center).<br>
+			2. "rotation" - note, the rotation is based on the shape's offset from the world origin, so if you simply want to rotate a shape/group, rather than rotate it around the world origin, apply the rotation BEFORE you apply the translation!!<br>
+			3. "scaling" - All primitive (fundamental) shapes available have a default size of '1', so for example, a sphere has a default radius of '1'. Obviously, if you want your shape to be bigger or smaller, you can scale it independently across all 3 axes/dimensions, but generally if you want to keep the shape's expected appearance, you would scale equally along all 3 axes (x, y, z).<br>
+			4. "shearing" - applying shearing to a shape means warping/pulling/stretching it's surface independently along 6 combinations of 2 dimensions. So, you can shear it along the xy, xz, yx, yz, zx and zy dimension-pairs.<br>
+			<br>
+			5. "material" - You can also define the surface appearance of a shape by applying a "material" to the shape. Options include a 'texture' (provided by an image file), a 'normal map' - this allows you to give the shape a non-smooth surface and is equivalent to what you may have heard of, a 'bump map', so-named for obvious reasons, it allows you to define how points on the surface of a shape/group are raised/lowered relative to other points on the surface. Remember, the higher-resolution the bump map, the more a shape can be scaled-up, or zoomed-in on without losing fidelity of the 'photo-realism' of the output image, or a 'pattern' (a mathematically-defined design of colour on the surface. There are some built-in patterns, but by all means, do the work to generate custom patterns). <br>
+			You can also independently 'transform' the texture or pattern you have applied to a shape (independently from the transformations you peform on the shape itself, although, the pattern/texture travels with the shape's transform, obviously, and that transform is applied first, so a pattern/texture transform is entirely optional, because for example, when testing and refining your scene, you may choose to want to rotate or scale the pattern, but not the shape itself.<br>
+			<br>
+			
+			How to define a 'normal map' to be applied to a shape:<br>
+			<br>
+			To attach a normal map to a shape, simply assign the PPM array 'normalMap' indice (referenced via global object 'Data') as so:<br>
+			<code>
+				myShape.material.normalMap = Data.PPM["normalMap"]<br>
+				// Data.PPM["normalMap"] is populated via menu option Options->Set/Unset Normal Map.<br>
+			</code>
+			This assumes the normal map file has been loaded into the raytracer (no option as yet to do this programmatically) as an image file. Internally, when an image file is loaded, the image data is immediately converted to an array of RGB pixel-values, which is essentially what the PPM file format looks like, so the data is stored as a PPM "object", which has the following structure:<br>
+			<br>
+			<pre>
+				{ 	data: [],
+					width: width_in_pixels,
+					height: height_in_pixels,
+					filename: filename_with_extension
+				}
+			</pre>where the 'data' array is (width*height) sets of rgb triplet bytes in range 0-255, representing the rgb value of a single pixel. So, the array's length when populated should be perfectly dividable by 3 - the length should be (width*height)*3. When testing, if a PPM object's 'data' array does not have a length that when divided by 3 is a positive integer, then your input image file is corrupt. Alpha (transparency) values for each pixel are currently ignored by the raytracer, but i'll fix that at some point.<br>
+			<br>
+			See "rt.image.js" for how a loaded image file is converted to a PPM object. It's nice and simple, and utilises the &lt;canvas&gt; object's built-in methods. See function 'imageLoaded()', which is a callback invoked when the image file is initially loaded into a built-in Image object by the preceding 'readImageFile(e)' function, which itself is invoked by the "Load File" dialog accessed via File->Load Image File. (The seperate File menu option to load an ASCII PPM file invokes a seperate flow, as PPM file data does not require the &lt;canvas&gt; object methods to convert the raw image data into a nice convenient array, and this flow can be found in "raytracer.js", lines 502-EOF.)<br>
+			<br>
+			Texture:<br>
+			<br>
+			A texture is an image file that is mapped onto a shape to be 'drawn' onto it's surface. For each type of primitive shape except triangle (sphere, cube, plane, cylinder), a specialised helper function is used to provide the maths for converting a point in a 2d array of texture data to a point on the surface of the host shape. These helper functions are:<br>
+			<br>
+			cylindrical_map<br>
+			planar_map<br>
+			spherical_map<br>
+			CubeMap<br>
+			<br>
+			
+			A texture is a sub-type of a shape's material's pattern, so is generated as a pattern internally. Following is an example of how to set the texture of a sphere to a loaded image file:<br>
+			<br>
+			<pre>
+				var s = sphere()
+				var c = Data.PPM["image1.jpg"]
+				
+				var tm = TextureMap(image_pattern(c), spherical_map, s) /* arg 'c' is a reference to an internal PPM object */
+
+				s.material.pattern = my_pattern( tm, s )
+			</pre>
+			The 2nd arg to TextureMap needs to be set to the appropriate map function. PLEASE NOTE: CubeMap() works slightly differently, and isn't completed. Currently, you can't use CubeMap as an argument to TextureMap(), it is used directly, as so:<br>
+			<br>
+			<pre>
+			  var cb = cube()
+			  cb.material.pattern = CubeMap(c1,c2,c3,c4,c5,c6,c7,c8)
+			</pre>
+			CubeMap() doesn't currently map images to a pattern object, either, although it will. Currently it takes 8 colour() tuples and generates a fixed pattern. All of the work has been done to create a cube_map, that is how the SkyBox functionality works. The only difference is, a Skybox has the camera *inside* the cube, rather than outside of it, so to produce an image-based pattern where each of the 6 sides of a cube are defined independently (nothing stopping any or all of the faces using the same image), simply create a SkyBox material, and apply it to a cube shape's material property.<br>
+				
+			
+			</p>
           </div>
 				</div> <!-- cd-faq__content -->
 			</li>

@@ -309,7 +309,34 @@ function cm_cube()	{
 	var c1 = colour(1,0,0), c2 = colour(1,1,0), c3 = colour(1,0.5,0), c4 = colour(0,1,0), c5 = colour(0,1,1), c6 = colour(0,0,1), c7 = colour(1,0,1), c8 = colour(1,1,1)
 	
 	var cb = cube()
-	cb.material.pattern = CubeMap(c1,c2,c3,c4,c5,c6,c7,c8)
+	
+	
+	var ip = [];
+	ip["left"] = image_pattern(Data.SkyBox["left"]); // { uv_pattern_at: image_uv_pattern_at, c: c, pixel_at: image_pattern_pixel_at } c == SkyBox.left
+	ip["right"] = image_pattern(Data.SkyBox["right"]);
+	ip["up"] = image_pattern(Data.SkyBox["up"]);
+	ip["down"] = image_pattern(Data.SkyBox["down"]);
+	ip["front"] = image_pattern(Data.SkyBox["front"]);
+	ip["back"] = image_pattern(Data.SkyBox["back"]);
+
+	var tm = {left: ip["left"], right: ip["right"], up: ip["up"], down: ip["down"], front: ip["front"], back: ip["back"]}
+	
+	var cube_maps = {left: cube_uv_left, right: cube_uv_right, up: cube_uv_up, down: cube_uv_down, front: cube_uv_front, back: cube_uv_back}
+	
+	console.log("cm_cube(): before TextureMap() call")
+	//debugger;
+
+	var tm2 = TextureMap(tm, cube_maps, cb)
+	
+	console.log("cm_cube(): after tm2")
+	//debugger;
+	
+	cb.material.pattern = my_pattern( tm2, cb )
+	console.log("cm_cube(): after pattern assign")
+	
+	//debugger;
+	
+	// cb.material.pattern = CubeMap(cb, c1,c2,c3,c4,c5,c6,c7,c8)
 	
 	cb.transform = m().scaling(2,2,2).rotation_z(Math.PI / 4, 1).rotation_y(Math.PI / 4, 1)
 	
@@ -323,7 +350,6 @@ function cm_cube()	{
 }
 
 addFunction("Cube", "cm_cube")
-
 
 
 function sceneBump()	{
@@ -384,9 +410,6 @@ function sceneBump()	{
 addFunction("Bump Scene", "sceneBump")
 
 
-
-
-
 function earth()	{
 	
 	prepCanvas()
@@ -401,11 +424,19 @@ function earth()	{
 		var a =2+3;
 		return false
 	}
-	var tm = TextureMap(image_pattern(c), spherical_map, s)
-	//var tm = TextureMap(checkers_pattern(8, 4, colour(0,1,0),colour(0,0,1)), spherical_map)
+	
 	var s = sphere()
+	
+	var tm = TextureMap(image_pattern(c), spherical_map, s)
+
+	debugger;
+	
+	//var tm = TextureMap(checkers_pattern(8, 4, colour(0,1,0),colour(0,0,1)), spherical_map)
+	
 	s.transform = m().scaling(2,2,2).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
 	s.material.pattern = my_pattern( tm, s )
+	
+	debugger;
 	
 	s.material.diffuse = 0.9
 	s.material.specular = 0.1
@@ -445,7 +476,6 @@ function endGame()	{
 addFunction("Test 1", "endGame")
 
 
-
 function mySkyBox()	{
 	
 	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
@@ -478,6 +508,7 @@ function mySkyBox()	{
 }
 
 addFunction("Sky Box Test", "mySkyBox")
+
 
 function system()	{
 	
@@ -527,5 +558,6 @@ function system()	{
 }
 
 addFunction("Earth & Moon", "system")
+
 
 addFunction("mandelbrot", "mandelbrot")
