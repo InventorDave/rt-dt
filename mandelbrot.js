@@ -1,14 +1,12 @@
 // https://rosettacode.org/wiki/Mandelbrot_set#JavaScript
 
+var R = 128
+var G = 90
+var B = 200
+
 function mandelbrot()	{
 	
 	var canvas_ = document.getElementById('canvas');
-	
-	/*
-	canvas_.width = 900;
-	canvas_.height = 600;
-	document.body.insertBefore(canvas_, document.body.childNodes[0])
-	*/
 	mandelbrot_(canvas_, -2, 1, -1, 1, 1000)
 }
 
@@ -29,24 +27,24 @@ function mandelbrot_(canvas, xmin, xmax, ymin, ymax, iterations) {
       var ppos = 4 * (width * iy + ix);
  
       if (i > iterations) {
-        pix[ppos] = 0;
-        pix[ppos + 1] = 0;
-        pix[ppos + 2] = 0;
+        pix[ppos] = R //0;
+        pix[ppos + 1] = G // 0;
+        pix[ppos + 2] = B //0;
       } else {
         var c = 3 * Math.log(i) / Math.log(iterations - 1.0);
  
         if (c < 1) {
           pix[ppos] = 	255 * c;
-          pix[ppos + 1]  = 0;
-          pix[ppos + 2]  = 0;
+          pix[ppos + 1]  = G //0;
+          pix[ppos + 2]  = B //0;
         }
         else if ( c < 2 ) {
-          pix[ppos] = 		255;
+          pix[ppos] = 		R // 255;
           pix[ppos + 1] = 	255 * (c - 1);
-          pix[ppos + 2] = 	0;
+          pix[ppos + 2] = 	B // 0;
         } else {
-          pix[ppos] = 		255;
-          pix[ppos + 1] = 	255;
+          pix[ppos] = 		R //255;
+          pix[ppos + 1] = 	G //255;
           pix[ppos + 2] = 	255 * (c - 2);
         }
       }

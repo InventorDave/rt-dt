@@ -156,10 +156,6 @@ function my_pattern(TextureMap, owner)	{
 			
 			var res = this.owner.face(p);
 			
-			if (res!="left")	{
-			//debugger;
-			}
-			
 			tm = this.TextureMap[res] // 
 			console.log("2nd");
 			//debugger;
@@ -174,10 +170,6 @@ function my_pattern(TextureMap, owner)	{
 		
 		//debugger;
 		uv = tm.uv_map(p, this.owner)
-		
-	if (res!="left")	{
-	//debugger
-	}
 			
 		col = tm.uv_pattern.uv_pattern_at(uv.u, uv.v)
 		
@@ -359,7 +351,7 @@ function align_check_pattern(main, ul, ur, bl, br)	{
 
 function align_check_uv_pattern_at(u, v)	{
 	
-	// remember: v=0 at the bottom, v=1 at the top
+	// remember: v=0 at the down, v=1 at the top
 	if (v > 0.8)	{
 		
 		if (u < 0.2)
@@ -482,13 +474,13 @@ function cube_uv_right(p)	{
 }
 
 
-function SkyBox(left, right, front, back, top, bottom)	{
+function SkyBox(left, right, front, back, up, down)	{
 	
 	var sb = new Pattern()
 	
 	sb.type = "SkyBox"
 		
-	sb.TextureMap = {"left": skybox_pattern(left.data, left.width, left.height), "front": skybox_pattern(front.data, front.width, front.height), "right": skybox_pattern(right.data, right.width, right.height), "back": skybox_pattern(back.data, back.width, back.height), "top": skybox_pattern(top.data, top.width, top.height), "bottom": skybox_pattern(bottom.data, bottom.width, bottom.height)}
+	sb.TextureMap = {"left": skybox_pattern(left.data, left.width, left.height), "front": skybox_pattern(front.data, front.width, front.height), "right": skybox_pattern(right.data, right.width, right.height), "back": skybox_pattern(back.data, back.width, back.height), "up": skybox_pattern(up.data, up.width, up.height), "down": skybox_pattern(down.data, down.width, down.height)}
 	
 	sb.face_from_point = function(p)	{
 	
@@ -504,10 +496,10 @@ function SkyBox(left, right, front, back, top, bottom)	{
 			return "left"
 	  
 		if(coord == p.y)
-			return "top"
+			return "up"
 		
 		if(coord == -p.y)
-			return "bottom"
+			return "down"
 
 		if(coord == p.z)
 			return "front"
@@ -516,7 +508,7 @@ function SkyBox(left, right, front, back, top, bottom)	{
 		return "back"
 	};
 	
-	sb.skybox_uv = {"front": cube_uv_front, "back": cube_uv_back, "left": cube_uv_left, "right": cube_uv_right, "top": cube_uv_up, "bottom": cube_uv_down}
+	sb.skybox_uv = {"front": cube_uv_front, "back": cube_uv_back, "left": cube_uv_left, "right": cube_uv_right, "up": cube_uv_up, "down": cube_uv_down}
 	
 	sb.algorithm = function(p) {
 		
@@ -560,7 +552,7 @@ function skybox_pixel_at(x, y)	{
 
 function getSkyBoxObject()	{
 	
-	return { left: Data.SkyBox.left, right: Data.SkyBox.right, front: Data.SkyBox.front, back: Data.SkyBox.back, top: Data.SkyBox.top, bottom: Data.SkyBox.bottom }
+	return { left: Data.SkyBox.left, right: Data.SkyBox.right, front: Data.SkyBox.front, back: Data.SkyBox.back, up: Data.SkyBox.up, down: Data.SkyBox.down }
 }
 
 

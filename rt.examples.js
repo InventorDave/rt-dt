@@ -422,16 +422,16 @@ function cm_cube()	{
 	
 	var cube_maps = {left: cube_uv_left, right: cube_uv_right, up: cube_uv_up, down: cube_uv_down, front: cube_uv_front, back: cube_uv_back}
 	
-	console.log("cm_cube(): before TextureMap() call")
+	//console.log("cm_cube(): before TextureMap() call")
 	//debugger;
 
 	var tm2 = TextureMap(tm, cube_maps, cb)
 	
-	console.log("cm_cube(): after tm2")
+	//console.log("cm_cube(): after tm2")
 	//debugger;
 	
 	cb.material.pattern = my_pattern( tm2, cb )
-	console.log("cm_cube(): after pattern assign")
+	//console.log("cm_cube(): after pattern assign")
 	
 	//debugger;
 	
@@ -523,7 +523,7 @@ function endGame()	{
 	
 	var cb = cube()
 	cb.transform = m().scaling(60,60,60).rotation_y(Math.PI/4, 1).rotation_z(Math.PI/4, 1)
-	cb.material = SkyBoxMaterial(SkyBox(skyBox.left, skyBox.right, skyBox.front, skyBox.back, skyBox.top, skyBox.bottom))
+	cb.material = SkyBoxMaterial(SkyBox(skyBox.left, skyBox.right, skyBox.front, skyBox.back, skyBox.up, skyBox.down))
 	
 	scene(cb)
 	
@@ -550,7 +550,7 @@ function mySkyBox()	{
 	
 	var cb = cube()
 	cb.transform = m().scaling(60,60,60)
-	cb.material = SkyBoxMaterial(SkyBox(skyBox.left, skyBox.right, skyBox.front, skyBox.back, skyBox.top, skyBox.bottom))
+	cb.material = SkyBoxMaterial(SkyBox(skyBox.left, skyBox.right, skyBox.front, skyBox.back, skyBox.up, skyBox.down))
 	
 	var s = glass_sphere()
 	s.transform = m().translation(0, -55, -50).scaling(5,5,5)

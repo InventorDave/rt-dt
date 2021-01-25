@@ -920,12 +920,12 @@ function Shape(type, id2)	{
 		return _keys
 	};
 	
-	this.setSide(name, ref)	{
+	this.setSide = function(name, ref)	{
 		
 		this.sides[name] = ref
 	};
 	
-	this.getSide(name)	{
+	this.getSide = function(name)	{
 		
 		return sides[name]
 	};

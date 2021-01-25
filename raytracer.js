@@ -10,7 +10,7 @@ var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f")
 /** GLOBAL OBJECTS */
 
 var Data = {
-				SkyBox: { top: "", bottom: "", left: "", right: "", front: "", back: "" },
+				SkyBox: { up: "", down: "", left: "", right: "", front: "", back: "" },
 				
 				PPM_refs: [], // contains the names of the associative indices of the PPM[] array, so you can just iterate through the light PPM_refs[] array to extract the filenames of all internal PPM objects. Then, if you get a match at, say, indice 2, you might do ppmObj = Data.PPM[Data.PPM_refs[2]];, it's vaguely more lightweight to iterate through a presumably small array of strings (PPM_refs), than try to iterate through a larger array of huge PPM objects to extract the filenames, plus the PPM[] object array is associative, so it's ugly to try and iterate through it without knowing what string to use as the indice reference.
 				PPM: [],
@@ -310,8 +310,7 @@ function preLoadResources()	{
 		populateMapsOptions()
 		
 		
-		//Data.bgImage = bgImage;
-		//log("Set bgImage to " + Data.bgImage + ".")
+
 }
 
 function preLoadResourcesStage2(fn, i)	{
@@ -331,7 +330,21 @@ function preLoadResourcesStage2(fn, i)	{
 	var pix = img_.data;
 	
 	log("Image File loaded.")
-	convertToPPM(pix, width, height, fn);	
+	convertToPPM(pix, width, height, fn);
+
+	if (fn=="earthmap1k.jpg")	{
+		
+		//Data.bgImage = bgImage;
+		//log("Set bgImage to " + Data.bgImage + ".")
+		Data.SkyBox.left = Data.PPM["earthmap1k.jpg"]
+		Data.SkyBox.right = Data.PPM["earthmap1k.jpg"]
+		Data.SkyBox.up = Data.PPM["earthmap1k.jpg"]
+		Data.SkyBox.down = Data.PPM["earthmap1k.jpg"]
+		Data.SkyBox.front = Data.PPM["earthmap1k.jpg"]
+		Data.SkyBox.back = Data.PPM["earthmap1k.jpg"]
+		
+		log("Set SkyBox walls to 'earthmap1k.jpg'.")
+	}
 	
 	//document.removeChild(img);
 	//debugger;
@@ -358,9 +371,9 @@ function verify_PPM(e)	{
 
 function verify_SkyBoxObj(skyBox)	{
 	
-	// { left: Data.SkyBox.left, right: Data.SkyBox.right, front: Data.SkyBox.front, back: Data.SkyBox.back, top: Data.SkyBox.top, bottom: Data.SkyBox.bottom }
+	// { left: Data.SkyBox.left, right: Data.SkyBox.right, front: Data.SkyBox.front, back: Data.SkyBox.back, up: Data.SkyBox.up, down: Data.SkyBox.down }
 	
-	return (skyBox.left &&  skyBox.right && skyBox.front && skyBox.back && skyBox.top && skyBox.bottom)
+	return (skyBox.left &&  skyBox.right && skyBox.front && skyBox.back && skyBox.up && skyBox.down)
 }
 
 function scene()	{
@@ -434,7 +447,7 @@ function camera(c)	{
 }
 
 
-var g_c, g_w, g_r, g_x, g_y, start, end;
+var g_c, g_w, g_r, g_x, g_y, start, end, initial_count = 0;
 
 function render(c, w, remaining)	{
 
@@ -483,6 +496,8 @@ function render2()	{
 				
 		g_x++
 		
+		initial_count++
+		
 	}
 
 	g_x = 0
@@ -497,8 +512,8 @@ function render2()	{
 		var time_sec = (end - start) / 1000
 		var time_min = time_sec / 60
 		
-		log("COMPLETED. This render took " + time_sec + " secs, " + time_min + " mins.")
-
+		log("COMPLETED. This render took " + time_sec + " secs, " + time_min + " mins. IC = " + initial_count + ".")
+		
 		return
 	}
 	
