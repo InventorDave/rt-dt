@@ -387,6 +387,9 @@ function system()	{
 	var o = group()
 	
 	o.addChild(m,e)
+	
+	Data.bgImage = "starfield.jpg"
+	
 	renderImage(l,o)
 	
 	saveScene("system", Data.c, l, o)	

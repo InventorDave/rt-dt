@@ -904,6 +904,32 @@ function Shape(type, id2)	{
 	
 	this.type = type // "sphere", "plane", etc
 	
+	this.sides = {}
+	
+	this.getSides = function()	{
+		
+		return this.sides
+	};
+	
+	this.getSidesKeys = function()	{
+		
+		var _keys = [], i = 0
+		for (var key in this.sides)	{
+			_keys[i++] = key
+		}
+		return _keys
+	};
+	
+	this.setSide(name, ref)	{
+		
+		this.sides[name] = ref
+	};
+	
+	this.getSide(name)	{
+		
+		return sides[name]
+	};
+	
 	this.u = undefined
 	this.v = undefined
 	

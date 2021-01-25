@@ -704,8 +704,12 @@ function renderImage(l, o, d)	{
 	w.light = Data.l
 	w.objects = [Data.o]
 	
-	if(!Data.PPM["bgImage"] && Data.bgImage)
+	//debugger;
+	
+	if(Data.bgImage)
 	 Data.PPM["bgImage"] = Data.PPM[Data.bgImage]
+	 
+	//debugger;
 	
 	render(c,w,d); // render(c, w, remaining) "rt.raytracer.js"
 }
