@@ -271,7 +271,7 @@ function populateSceneFunctionSelection()	{
 
 function preLoadResources()	{
 
-		var url = "/rt-dt/img/"
+		var url = "img/"
 		var files = ["earthmap1k.jpg", "starfield.jpg", "2k_moon.jpg"];
 		var maps =  {earth: "earthmap1k.jpg", moon: "2k_moon.jpg"}
 		var bgImage = "starfield.jpg"
@@ -310,8 +310,8 @@ function preLoadResources()	{
 		populateMapsOptions()
 		
 		
-		Data.bgImage = bgImage;
-		log("Set bgImage to " + Data.bgImage + ".")
+		//Data.bgImage = bgImage;
+		//log("Set bgImage to " + Data.bgImage + ".")
 }
 
 function preLoadResourcesStage2(fn, i)	{

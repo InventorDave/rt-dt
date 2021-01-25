@@ -108,7 +108,6 @@ function glass_test()	{
 addFunction("Refraction test", "glass_test")
 
 
-// Sample Scene 1
 function scene1()	{
 	
 	prepCanvas()
@@ -146,6 +145,7 @@ function scene1()	{
 }
 
 addFunction("Scene 1", "scene1")
+
 
 function scene1b()	{
 	
@@ -185,7 +185,7 @@ function scene1b()	{
 
 addFunction("Scene 1b", "scene1b")
 
-// Sample Scene 2
+
 function scene2()	{
 	
 	prepCanvas()
@@ -268,7 +268,8 @@ function scene2()	{
 }
 
 addFunction("Scene 2", "scene2")
-// Sample Scene 2
+
+
 function scene3()	{
 	
 	prepCanvas()
@@ -297,6 +298,101 @@ function scene3()	{
 }
 
 addFunction("Scene 3", "scene3")
+
+
+function earth()	{
+	
+	prepCanvas()
+	
+	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
+	Data.c.setCTransform(view_transform(point(0,0,-20), point(0,0,0), vector(0,1,0)));
+	
+	var c = Data.PPM[Data.Maps["earth"]];
+	if(!c)	{
+		
+		var b = alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
+		var a =2+3;
+		return false
+	}
+	
+	var s = sphere()
+	
+	var tm = TextureMap(image_pattern(c), spherical_map, s)
+
+	//debugger;
+	
+	//var tm = TextureMap(checkers_pattern(8, 4, colour(0,1,0),colour(0,0,1)), spherical_map)
+	
+	s.transform = m().scaling(2,2,2).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
+	s.material.pattern = my_pattern( tm, s )
+	
+	//debugger;
+	
+	s.material.diffuse = 0.9
+	s.material.specular = 0.1
+	s.material.shininess = 10
+	s.material.ambient = 0.9
+ 
+	var o = group()
+	o.addChild(s)
+	
+	
+	Data.PPM["bgImage"] = Data.PPM[Data.bgImage] // Total hack, program won't set auto-loaded image as 'bgImage', so func preLoadResources() sets 
+												// Data.bgImage with a string of the filename/Data.PPM[] key.
+	renderImage(l, o)	
+}
+
+addFunction("Earth", "earth")
+
+
+function system()	{
+	
+	prepCanvas()
+	
+	var l = new point_light(point(-40, 50, -100), colour(1,1,1)) 
+	Data.c.setCTransform(view_transform(point(0,0,-75), point(0,0,0), vector(0,1,0)));
+	
+
+	
+	var c;
+	
+	var e = sphere("earth")
+	e.transform = identity_matrix().translation(0,0,-40).scaling(2,2,2)
+	
+	if (!(c = Data.PPM[Data.Maps["earth"]]))	{
+		
+		var b = alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
+		return false
+	}
+	
+	tm = TextureMap(image_pattern(c), spherical_map, e)
+	e.material.pattern = my_pattern( tm, e )
+	e.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
+	e.material.normalMap = Data.PPM["normalMap"]
+	e.material.specular = 0.0
+	
+	var m = sphere("m")
+	m.transform = identity_matrix().translation(2,2,-55).scaling(0.7,0.7,0.7)
+	
+	if (!(c = Data.PPM[Data.Maps["moon"]]))	{
+		
+		var b = alert("Please set a 'moon' map first! (Hint: '2k_moon.ppm' is available in our PPM archive.)")
+		return false
+	}
+	tm = TextureMap(image_pattern(c), spherical_map)
+	m.material.pattern = my_pattern( tm )
+	m.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
+	m.material.specular = 0.0
+ 
+	var o = group()
+	
+	o.addChild(m,e)
+	renderImage(l,o)
+	
+	saveScene("system", Data.c, l, o)	
+}
+
+addFunction("Earth & Moon", "system")
 
 
 function cm_cube()	{
@@ -410,51 +506,6 @@ function sceneBump()	{
 addFunction("Bump Scene", "sceneBump")
 
 
-function earth()	{
-	
-	prepCanvas()
-	
-	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
-	Data.c.setCTransform(view_transform(point(0,0,-20), point(0,0,0), vector(0,1,0)));
-	
-	var c = Data.PPM[Data.Maps["earth"]];
-	if(!c)	{
-		
-		var b = alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
-		var a =2+3;
-		return false
-	}
-	
-	var s = sphere()
-	
-	var tm = TextureMap(image_pattern(c), spherical_map, s)
-
-	//debugger;
-	
-	//var tm = TextureMap(checkers_pattern(8, 4, colour(0,1,0),colour(0,0,1)), spherical_map)
-	
-	s.transform = m().scaling(2,2,2).rotation_y(Math.PI).rotation_x((Math.PI/2) * 0.7)
-	s.material.pattern = my_pattern( tm, s )
-	
-	//debugger;
-	
-	s.material.diffuse = 0.9
-	s.material.specular = 0.1
-	s.material.shininess = 10
-	s.material.ambient = 0.9
- 
-	var o = group()
-	o.addChild(s)
-	
-	
-	Data.PPM["bgImage"] = Data.PPM[Data.bgImage] // Total hack, program won't set auto-loaded image as 'bgImage', so func preLoadResources() sets 
-												// Data.bgImage with a string of the filename/Data.PPM[] key.
-	renderImage(l, o)	
-}
-
-addFunction("Earth", "earth")
-
-
 function endGame()	{
 	
 	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
@@ -476,7 +527,7 @@ function endGame()	{
 	renderImage(l)
 }
 
-addFunction("Test 1", "endGame")
+addFunction("Skybox 1", "endGame")
 
 
 function mySkyBox()	{
@@ -510,57 +561,7 @@ function mySkyBox()	{
 	renderImage()
 }
 
-addFunction("Sky Box Test", "mySkyBox")
-
-
-function system()	{
-	
-	prepCanvas()
-	
-	var l = new point_light(point(-40, 50, -100), colour(1,1,1)) 
-	Data.c.setCTransform(view_transform(point(0,0,-75), point(0,0,0), vector(0,1,0)));
-	
-
-	
-	var c;
-	
-	var e = sphere("earth")
-	e.transform = identity_matrix().translation(0,0,-40).scaling(2,2,2)
-	
-	if (!(c = Data.PPM[Data.Maps["earth"]]))	{
-		
-		var b = alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
-		return false
-	}
-	
-	tm = TextureMap(image_pattern(c), spherical_map, e)
-	e.material.pattern = my_pattern( tm, e )
-	e.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
-	e.material.normalMap = Data.PPM["normalMap"]
-	e.material.specular = 0.0
-	
-	var m = sphere("m")
-	m.transform = identity_matrix().translation(2,2,-55).scaling(0.7,0.7,0.7)
-	
-	if (!(c = Data.PPM[Data.Maps["moon"]]))	{
-		
-		var b = alert("Please set a 'moon' map first! (Hint: '2k_moon.ppm' is available in our PPM archive.)")
-		return false
-	}
-	tm = TextureMap(image_pattern(c), spherical_map)
-	m.material.pattern = my_pattern( tm )
-	m.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
-	m.material.specular = 0.0
- 
-	var o = group()
-	
-	o.addChild(m,e)
-	renderImage(l,o)
-	
-	saveScene("system", Data.c, l, o)	
-}
-
-addFunction("Earth & Moon", "system")
+addFunction("Sky Box 2", "mySkyBox")
 
 
 addFunction("mandelbrot", "mandelbrot")
