@@ -309,8 +309,6 @@ function preLoadResources()	{
 		populateMapsSelection()
 		populateMapsOptions()
 		
-		
-
 }
 
 function preLoadResourcesStage2(fn, i)	{

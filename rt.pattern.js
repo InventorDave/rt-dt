@@ -157,14 +157,14 @@ function my_pattern(TextureMap, owner)	{
 			var res = this.owner.face(p);
 			
 			tm = this.TextureMap[res] // 
-			console.log("2nd");
+			console.log("Shape has multiple surfaces. (It's a Cube.)");
 			//debugger;
 		}
 		else	{
 			
 			tm = this.TextureMap
 			var db_ = 1;
-			//console.log("3rd");
+			console.log("Shape has one surface.");
 			//debugger;
 		}
 		
