@@ -1,6 +1,10 @@
 // https://rosettacode.org/wiki/Mandelbrot_set#JavaScript
 // test
 
+function test_()  {
+
+    log("test!")
+}
 
 var R = 128
 var G = 90
