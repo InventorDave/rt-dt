@@ -1,3 +1,5 @@
+// TEST (mint, vscode)
+
 var CANVAS_WIDTH = 750, CANVAS_HEIGHT = 422;
 var WIDTH = CANVAS_WIDTH;
 var HEIGHT = CANVAS_HEIGHT;
