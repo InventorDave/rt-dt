@@ -51,7 +51,7 @@ function normalize(v)	{
 	if(!(mv = magnitude(v)))
 		return v
 	
-	var mv 
+	//var mv 
 	return new tuple(	v.x / mv,
 						v.y / mv,
 						v.z / mv,
