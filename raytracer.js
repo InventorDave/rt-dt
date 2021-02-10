@@ -516,7 +516,7 @@ function render2()	{
 		var time_sec = (end - start) / 1000
 		var time_min = time_sec / 60
 		
-		log("COMPLETED. This render took " + time_sec + " secs, " + time_min + " mins. PIXEL COUNT = " + initial_count + ".")
+		log("COMPLETED. This render took " + time_sec + " secs, " + time_min + " mins. PIXEL COUNT = (" + CANVAS_WIDTH + " x " + CANVAS_HEIGHT + "), " + initial_count + ".")
 		
 		initial_count = 0
 		
