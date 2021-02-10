@@ -74,25 +74,27 @@ function _triangle(xs, ys, xf, yf, _color)	{
 }
 
 
-
-// C-program for circle drawing
+// program for circle drawing
 // using Bresenham’s Algorithm
 // in computer-graphics
  
 // Function to put pixels
 // at subsequence points
-function drawCircle(xc, yc, x, y, _color)
-{
-    setPixel(xc+x, yc+y, _color || "red");
-    setPixel(xc-x, yc+y, _color || "red");
-    setPixel(xc+x, yc-y, _color || "red");
-    setPixel(xc-x, yc-y, _color || "red");
-    setPixel(xc+y, yc+x, _color || "red");
-    setPixel(xc-y, yc+x, _color || "red");
-    setPixel(xc+y, yc-x, _color || "red");
-    setPixel(xc-y, yc-x, _color || "red");
+function drawCircle(xc, yc, x, y, _color)	{
+	
+	_color = _color || "red"
+	
+    setPixel(xc+x, yc+y, _color);
+    setPixel(xc-x, yc+y, _color);
+    setPixel(xc+x, yc-y, _color);
+    setPixel(xc-x, yc-y, _color);
+    setPixel(xc+y, yc+x, _color);
+    setPixel(xc-y, yc+x, _color);
+    setPixel(xc+y, yc-x, _color);
+    setPixel(xc-y, yc-x, _color);
 }
- 
+
+
 // Function for circle-generation
 // using Bresenham's algorithm
 function circleBres(xc, yc, r, _color)	{
@@ -102,8 +104,8 @@ function circleBres(xc, yc, r, _color)	{
 	
     drawCircle(xc, yc, x, y, _color);
 	
-    while (y >= x)
-    {
+    while (y >= x)	{
+		
         // for each pixel we will
         // draw all eight pixels
          
@@ -127,7 +129,6 @@ function circleBres(xc, yc, r, _color)	{
 }
 
 
-
 function draw(shape, xs, ys, xf, yf, _color)	{
 	
 	if (shape=="square")
@@ -136,13 +137,11 @@ function draw(shape, xs, ys, xf, yf, _color)	{
 	else if (shape=="triangle")
 		_triangle(xs,ys,xf,yf,_color)
 	
-	else if (shape="circle")	{
-	
-		//var x_m = 0;
+	else if (shape="circle")	{ // https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
 		
 		var radius = 0.5 * (xf-xs) // dist2d({x: xs, y: ys}, {x: xf, y: yf}) / 2;
 		
-		console.log("radius == " + radius + ", xs+radius == " + new Number(xs+radius))
+		console.log("draw('circle', ...) : radius == " + radius)
 		
 		circleBres(xs+radius,ys+radius, radius, _color)
 	}	
