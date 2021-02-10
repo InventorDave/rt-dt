@@ -475,7 +475,7 @@ function sceneBump()	{
 	s.material.normalMap = Data.PPM["normalMap"]
 	if(!s.material.normalMap)	{
 		
-		var b = alert("Please set a Normal Map first! (Hint: 'normalMap.ppm' is available in our PPM archive.)")
+		var b = alert("Please set a Normal Map first! (Hint: 'normalMap.ppm' is available in our PPM archive - remember to go to Options->Set/Unset Normal Map, and select the 'normalMap.ppm' entry AFTER it has loaded!!)")
 		var a = 1+2;
 		return false
 	}	
