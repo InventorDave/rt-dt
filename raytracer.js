@@ -523,7 +523,7 @@ function render2()	{
 		return 0;
 	}
 	
-	to = setTimeout(render2, 50)	
+	to = setTimeout(render2, 0)	
 }
 
 
