@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 
 Array.prototype.translation = function(x, y, z)	{
 	

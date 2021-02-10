@@ -466,6 +466,8 @@ function render(c, w, remaining)	{
 
 function render2()	{
 
+	//console.log("render2()")
+	
 	g_x =0;
 	while(g_x != WIDTH) {
 		
@@ -505,7 +507,7 @@ function render2()	{
 	g_x = 0
 	g_y++
 			
-	if (g_y === HEIGHT)	{
+	if (g_y > HEIGHT)	{
 				
 		clearTimeout(to)
 		
@@ -516,7 +518,9 @@ function render2()	{
 		
 		log("COMPLETED. This render took " + time_sec + " secs, " + time_min + " mins. IC = " + initial_count + ".")
 		
-		return
+		initial_count = 0
+		
+		return 0;
 	}
 	
 	to = setTimeout(render2, 0)	
