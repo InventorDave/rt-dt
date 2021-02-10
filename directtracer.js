@@ -18,43 +18,41 @@ function eq(a,b, threshold)	{
 	return (Math.abs(a-b) <= (threshold || 0.1))
 }
 
-function drawLine(xs,ys,xf,yf, _color)	{
+function drawLine(xs,ys,xf,yf, _color)	{ // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm , scroll down...
 	
 	var _COL = "#ffffff"
 	
-	var deltax = xf - xs
-    var deltay = yf - ys
-    var deltaerr = Math.abs(deltay / deltax)    // Assume deltax != 0 (line is not vertical),
-          // note that this division needs to be done in a way that preserves the fractional part
-    var error = 0.0 // No error at start
-    var y = ys
+    var dx =  Math.abs(xf-xs)
+    var dy = -Math.abs(yf-ys)
 	
-	if (deltax)	{
-		
-		for (var i = xs; i <= xf; i++)	{
-			
-			setPixel(i, y, _color || _COL)
-			error = error + (deltaerr || 0)
-			
-			if (error >= 0.5)	{
-				
-				y = y + ((deltay < 0) ? -1 : +1)
-				error = error - 1.0
-			}
-		}
-	}
-	else	{ // line is vertical
-		
-		for (var j = ys; j <= yf; j++)	{
-			
-			setPixel(xs, j, _color || _COL)
-			setPixel(xf, j, _color || _COL)
-		}
-	}
+	var sx = xs<xf ? 1 : -1;
+    var sy = ys<yf ? 1 : -1;
 	
+	var e2;
+	
+    var err = dx+dy
+	
+    while (true)	{
+
+        setPixel(xs, ys, _color || _COL)
+		
+        if (xs == xf && ys == yf)
+			break;
+			
+        e2 = 2*err;
+		
+        if (e2 >= dy) {
+            err += dy;
+            xs += sx;
+        }
+        if (e2 <= dx)	{
+            err += dx;
+            ys += sy;
+		}
+        
+	}
 	
 	console.log("DRAWLINE() COMPLETE.")
-	
 }
 
 function _square(xs, ys, xf, yf, _color)	{
@@ -70,10 +68,65 @@ function _triangle(xs, ys, xf, yf, _color)	{
 	
 	var _ys = new Number(ys), _yf = new Number(yf)
 	
-	drawLine(xs+(0.5*(xf-xs)), ys, xf, yf, _color) // top -> br
-	//drawLine(xs+(0.5*(xf-xs)), ys, xs, yf, _color) // top -> bl
+	drawLine(xs+((xf-xs)/2), ys, xf, yf, _color) // top -> br
+	drawLine(xs+(0.5*(xf-xs)), ys, xs, yf, _color) // top -> bl
 	drawLine(xs, _yf, xf, _yf, _color)               // bl -> br
 }
+
+
+
+// C-program for circle drawing
+// using Bresenham’s Algorithm
+// in computer-graphics
+ 
+// Function to put pixels
+// at subsequence points
+function drawCircle(xc, yc, x, y, _color)
+{
+    setPixel(xc+x, yc+y, _color || "red");
+    setPixel(xc-x, yc+y, _color || "red");
+    setPixel(xc+x, yc-y, _color || "red");
+    setPixel(xc-x, yc-y, _color || "red");
+    setPixel(xc+y, yc+x, _color || "red");
+    setPixel(xc-y, yc+x, _color || "red");
+    setPixel(xc+y, yc-x, _color || "red");
+    setPixel(xc-y, yc-x, _color || "red");
+}
+ 
+// Function for circle-generation
+// using Bresenham's algorithm
+function circleBres(xc, yc, r, _color)	{
+	
+    var x = 0, y = r;
+    var d = 3 - 2 * r;
+	
+    drawCircle(xc, yc, x, y, _color);
+	
+    while (y >= x)
+    {
+        // for each pixel we will
+        // draw all eight pixels
+         
+        x++;
+ 
+        // check for decision parameter
+        // and correspondingly 
+        // update d, x, y
+        if (d > 0)
+        {
+            y--; 
+            d = d + 4 * (x - y) + 10;
+        }
+        else
+            d = d + 4 * x + 6;
+			
+        drawCircle(xc, yc, x, y, _color);  
+
+    }
+	
+}
+
+
 
 function draw(shape, xs, ys, xf, yf, _color)	{
 	
@@ -82,7 +135,18 @@ function draw(shape, xs, ys, xf, yf, _color)	{
 	
 	else if (shape=="triangle")
 		_triangle(xs,ys,xf,yf,_color)
+	
+	else if (shape="circle")	{
+	
+		//var x_m = 0;
 		
+		var radius = 0.5 * (xf-xs) // dist2d({x: xs, y: ys}, {x: xf, y: yf}) / 2;
+		
+		console.log("radius == " + radius + ", xs+radius == " + new Number(xs+radius))
+		
+		circleBres(xs+radius,ys+radius, radius, _color)
+	}	
+	
 	else
 		console.log("Shape not implemented yet!: " + shape)
 	
