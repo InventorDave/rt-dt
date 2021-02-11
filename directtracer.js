@@ -3,12 +3,13 @@ function getCanvas()	{
 	return document.getElementById("canvas")
 }
 
-function setPixel(x,y, _color)	{
+function setPixel(x,y, _color, thickness)	{
 	
 		//var c = getCanvas()
 		ctx.fillStyle = _color || "#000000"
 		
-		ctx.fillRect(x,y,1,1)
+		thickness = thickness || 1
+		ctx.fillRect(x,y,thickness,thickness)
 		
 		//return c
 }
@@ -80,29 +81,29 @@ function _triangle(xs, ys, xf, yf, _color)	{
  
 // Function to put pixels
 // at subsequence points
-function drawCircle(xc, yc, x, y, _color)	{
+function drawCircle(xc, yc, x, y, _color, thickness)	{
 	
 	_color = _color || "red"
 	
-    setPixel(xc+x, yc+y, _color);
-    setPixel(xc-x, yc+y, _color);
-    setPixel(xc+x, yc-y, _color);
-    setPixel(xc-x, yc-y, _color);
-    setPixel(xc+y, yc+x, _color);
-    setPixel(xc-y, yc+x, _color);
-    setPixel(xc+y, yc-x, _color);
-    setPixel(xc-y, yc-x, _color);
+    setPixel(xc+x, yc+y, _color, thickness);
+    setPixel(xc-x, yc+y, _color, thickness);
+    setPixel(xc+x, yc-y, _color, thickness);
+    setPixel(xc-x, yc-y, _color, thickness);
+    setPixel(xc+y, yc+x, _color, thickness);
+    setPixel(xc-y, yc+x, _color, thickness);
+    setPixel(xc+y, yc-x, _color, thickness);
+    setPixel(xc-y, yc-x, _color, thickness);
 }
 
 
 // Function for circle-generation
 // using Bresenham's algorithm
-function circleBres(xc, yc, r, _color)	{
+function circleBres(xc, yc, r, _color, thickness)	{
 	
     var x = 0, y = r;
     var d = 3 - 2 * r;
 	
-    drawCircle(xc, yc, x, y, _color);
+    drawCircle(xc, yc, x, y, _color, thickness || 1);
 	
     while (y >= x)	{
 		
@@ -114,22 +115,22 @@ function circleBres(xc, yc, r, _color)	{
         // check for decision parameter
         // and correspondingly 
         // update d, x, y
-        if (d > 0)
-        {
+        if (d > 0)	{
+			
             y--; 
             d = d + 4 * (x - y) + 10;
         }
         else
             d = d + 4 * x + 6;
 			
-        drawCircle(xc, yc, x, y, _color);  
+        drawCircle(xc, yc, x, y, _color, thickness || 1);  
 
     }
 	
 }
 
 
-function draw(shape, xs, ys, xf, yf, _color)	{
+function draw(shape, xs, ys, xf, yf, _color, thickness)	{
 	
 	if (shape=="square")
 		_square(xs,ys,xf,yf,_color)
@@ -137,13 +138,13 @@ function draw(shape, xs, ys, xf, yf, _color)	{
 	else if (shape=="triangle")
 		_triangle(xs,ys,xf,yf,_color)
 	
-	else if (shape="circle")	{ // https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
+	else if (shape=="circle")	{ // https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
 		
 		var radius = 0.5 * (xf-xs) // dist2d({x: xs, y: ys}, {x: xf, y: yf}) / 2;
 		
 		console.log("draw('circle', ...) : radius == " + radius)
 		
-		circleBres(xs+radius,ys+radius, radius, _color)
+		circleBres(xs+radius,ys+radius, radius, _color, thickness)
 	}	
 	
 	else
