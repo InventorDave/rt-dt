@@ -183,7 +183,7 @@ function parse_obj_file(fn, normalizeMesh)	{
 			}
 		}
 	}
-	log("Parsed Object File: " + (lines.length-ignored_lines) + " lines of data.")
+	_log("Parsed Object File: " + (lines.length-ignored_lines) + " lines of data.")
 	
 			
 			var bbox = new BB();
@@ -233,5 +233,5 @@ function parse_obj_file(fn, normalizeMesh)	{
 	Data.v = []
 	Data.vn = []
 	
-	log("Generated triangle mesh.")
+	_log("Generated triangle mesh.")
 }

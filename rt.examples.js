@@ -263,7 +263,7 @@ function scene2()	{
 	Data.l = l
 	
 	
-	//log("Select Render->Render!.")
+	//_log("Select Render->Render!.")
 	renderImage()
 }
 
@@ -293,7 +293,7 @@ function scene3()	{
 	Data.o = o
 	Data.l = l
 	
-	//log("Select Render->Render!.")
+	//_log("Select Render->Render!.")
 	renderImage()
 }
 

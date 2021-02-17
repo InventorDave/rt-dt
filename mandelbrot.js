@@ -3,7 +3,7 @@
 
 function test_()  {
 
-    log("test!")
+   _log("test!")
 }
 
 var R = 128

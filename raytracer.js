@@ -14,6 +14,10 @@ var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f")
 /** GLOBAL OBJECTS */
 
 var Data = {
+				yaml: {},
+				
+				//YAML: [], // each indice contains { type: '..', key: [], value: [] }
+				
 				SkyBox: { up: "", down: "", left: "", right: "", front: "", back: "" },
 				
 				PPM_refs: [], // contains the names of the associative indices of the PPM[] array, so you can just iterate through the light PPM_refs[] array to extract the filenames of all internal PPM objects. Then, if you get a match at, say, indice 2, you might do ppmObj = Data.PPM[Data.PPM_refs[2]];, it's vaguely more lightweight to iterate through a presumably small array of strings (PPM_refs), than try to iterate through a larger array of huge PPM objects to extract the filenames, plus the PPM[] object array is associative, so it's ugly to try and iterate through it without knowing what string to use as the indice reference.
@@ -128,7 +132,7 @@ function camPresetSelected()	{
 	var el = document.getElementById("cameraDetails")
 	
 	el.innerText = Data.presets.camera[v.selectedIndex].str + " : " + Data.c.string;
-	log("Set Camera to preset " + (v.selectedIndex+1) + ".")
+	_log("Set Camera to preset " + (v.selectedIndex+1) + ".")
 }
 
 function mapsOptionsSelected(e)	{
@@ -237,7 +241,7 @@ var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
 var loop;
 
-function init()	{
+function rtdtinit()	{
 
 	Data.c.setCTransform(Data.presets.camera[0].vt);
 	
@@ -279,6 +283,7 @@ function preLoadResources()	{
 		var files = ["earthmap1k.jpg", "starfield.jpg", "2k_moon.jpg"];
 		var maps =  {earth: "earthmap1k.jpg", moon: "2k_moon.jpg"}
 		var bgImage = "starfield.jpg"
+		var sb_cube_img = "earthmap1k.jpg"
 		
 		var img_arr = []
 		
@@ -290,14 +295,14 @@ function preLoadResources()	{
 			
 			img_arr[i].onload = function() {
 				//alert(this.width + 'x' + this.height);
-				preLoadResourcesStage2(this.fn, this.i)
+				preLoadResourcesStage2(this.fn, this.i, sb_cube_img)
 			}
 			img_arr[i].src = url + files[i];
 			img_arr[i].id = "img" + i;
 			img_arr[i].style = "display: none;"
 		
 			document.body.appendChild(img_arr[i])
-			log("Loading Image File: " + img_arr[i].fn)
+			_log("Loading Image File: " + img_arr[i].fn)
 		}
 		
 		//Data.Maps["earth"] = maps.earth
@@ -307,7 +312,7 @@ function preLoadResources()	{
 			
 			Data.Maps[key] = maps[key];
 			
-			log("Set " + maps[key] + " to '" + key + "' map.")
+			_log("Set " + maps[key] + " to '" + key + "' map.")
 		}
 		
 		populateMapsSelection()
@@ -315,7 +320,7 @@ function preLoadResources()	{
 		
 }
 
-function preLoadResourcesStage2(fn, i)	{
+function preLoadResourcesStage2(fn, i, sb_cube_img)	{
 	
 	var imgCanvas = document.getElementById("imgCanvas")
 	var img       = document.getElementById("img" + i)
@@ -331,13 +336,13 @@ function preLoadResourcesStage2(fn, i)	{
 	var height = img.height
 	var pix = img_.data;
 	
-	log("Image File loaded.")
+	_log("Image File loaded.")
 	convertToPPM(pix, width, height, fn);
 
-	if (fn=="earthmap1k.jpg")	{
+	if (fn==sb_cube_img)	{
 		
 		//Data.bgImage = bgImage;
-		//log("Set bgImage to " + Data.bgImage + ".")
+		//_log("Set bgImage to " + Data.bgImage + ".")
 		Data.SkyBox.left = Data.PPM["earthmap1k.jpg"]
 		Data.SkyBox.right = Data.PPM["earthmap1k.jpg"]
 		Data.SkyBox.up = Data.PPM["earthmap1k.jpg"]
@@ -345,7 +350,7 @@ function preLoadResourcesStage2(fn, i)	{
 		Data.SkyBox.front = Data.PPM["earthmap1k.jpg"]
 		Data.SkyBox.back = Data.PPM["earthmap1k.jpg"]
 		
-		log("Set SkyBox walls to 'earthmap1k.jpg'.")
+		_log("Set SkyBox walls to '" + fn + "'.")
 	}
 	
 	//document.removeChild(img);
@@ -410,7 +415,7 @@ function loadScene(name)	{
 	
 	if(!scene_)	{
 	
-		log("Couldn't find scene in cache!")
+		_log("Couldn't find scene in cache!")
 		return false
 	}
 	
@@ -428,7 +433,7 @@ function loadScene(name)	{
 	else
 		Data.PPM["bgImage"] = 0
 	
-	log("To render scene, type 'renderImage()' into browser console")
+	_log("To render scene, type 'renderImage()' into browser console")
 	
 	return true
 }
@@ -449,7 +454,7 @@ function camera(c)	{
 }
 
 
-var g_c, g_w, g_r, g_x, g_y, start, end, initial_count = 0;
+var g_c, g_w, g_r, g_x, g_y, start, end, pixel_count = 0, bgImageSet = false;
 
 function render(c, w, remaining)	{
 
@@ -459,6 +464,8 @@ function render(c, w, remaining)	{
 	g_r = remaining;
 	g_x = 0
 	g_y = 0
+	
+	bgImageSet = (!!Data.PPM["bgImage"] || false)
 	
 	start = Date.now()
 	render2();
@@ -471,6 +478,8 @@ function render2()	{
 	g_x =0;
 	while(g_x != WIDTH) {
 		
+		pixel_count++
+		
 		var r = g_c.ray_for_pixel(g_x, g_y);
 				
 		var c = color_at(g_w, r, g_r)
@@ -478,7 +487,7 @@ function render2()	{
 		
 		if ((c.x==0)&&(c.y==0)&&(c.z==0))	{
 			// render bg image
-			if(!Data.PPM["bgImage"])	{
+			if(!bgImageSet)	{
 			
 				//console.log("bgimage not set.")
 				c = RENDER_BG_COLOR
@@ -490,8 +499,7 @@ function render2()	{
 			
 		}
 		
-		c = convert(c)
-		ctx.fillStyle = c
+		ctx.fillStyle = convert(c)
 		
 		var x = g_x + ((CANVAS_WIDTH/2) - WIDTH/2)
 		var y = g_y + ((CANVAS_HEIGHT/2) - HEIGHT/2)
@@ -500,14 +508,13 @@ function render2()	{
 				
 		g_x++
 		
-		initial_count++
-		
 	}
 
-	g_x = 0
+	//pixel_count--
+	
 	g_y++
 			
-	if (g_y > HEIGHT)	{
+	if (g_y == HEIGHT)	{
 				
 		clearTimeout(to)
 		
@@ -516,9 +523,13 @@ function render2()	{
 		var time_sec = (end - start) / 1000
 		var time_min = time_sec / 60
 		
-		log("COMPLETED. This render took " + time_sec + " secs, " + time_min + " mins. PIXEL COUNT = (" + CANVAS_WIDTH + " x " + CANVAS_HEIGHT + "), " + initial_count + ".")
+		var msg = "COMPLETED... This render took " + time_sec + " secs, " + time_min + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "), " + pixel_count + "."
 		
-		initial_count = 0
+		_log(msg);
+		
+		console.log(msg)
+		
+		pixel_count = 0
 		
 		return 0;
 	}
@@ -623,6 +634,10 @@ function readFile(e)	{
 	
 	else if (Data.openFileType=="MESH")
 		readObjectFile(e)
+	
+	else if (Data.openFileType=="YAML")
+		readYAMLFile(e)
+		
 	else
 		alert("Do not know what type of file to read!")
 }
@@ -663,27 +678,77 @@ function readPPMFile(e)	{
 		
 		
 		FILECONTENTS = e.target.result
-		parseFileContents(file.name)
+		parseFileContents(file.name, "PPM")
 	}
 	
 	reader.readAsText(file)
 }
 
-function parseFileContents(fn)	{
+function readYAMLFile(e)	{
+	
+	//alert("inside loadYAML!")
+	
+	var file = e.target.files[0]
+	
+	if (!file)	{
+		alert("No File identified!")
+		return
+	}
+	
+	var reader = new FileReader()
+	
+	reader.onload = function(e)	{
+		
+		
+		FILECONTENTS = e.target.result
+		parseFileContents(file.name, "YAML")
+	}
+	
+	reader.readAsText(file)
+}
+
+function parseYAML(fn)	{
+	
+	
+	document.getElementById("source").value = FILECONTENTS
+	
+	testYAML();
+	
+	_log("Parsed YAML file: " + fn)
+
+	return true
+}
+
+function testYAML()	{
+	
+	var src = document.getElementById("source").value
+	//debugger
+	
+    var doc = jsyaml.load(src);
+	Data.yaml = doc
+	
+	//debugger;
+}
+
+function parseFileContents(fn, type)	{
 	
 	//alert(fn)
 	
 	try	{
-		// if file ext == ".rdt" then
-		//eval("I = " + FILECONTENTS + ";")
-		// else if file ext == ".ppm"
 		
-		if(!parsePPM(fn)) 
-			throw new Error("parseFileContents() FAILED!")
+		if(type=="PPM")	{
+			
+			if(!parsePPM(fn)) 
+				throw new Error("parseFileContents() FAILED for PPM file!")
+		}
+				
 	} catch(e)	{
-		log("Error loading file.")
+		_log("Error loading file: " + e.message)
 	}
 	
+	if (type=="YAML")
+		if(!parseYAML(fn))
+			_log("parseFileContents() FAILED for YAML file!")
 	// else
 	
 }
@@ -712,7 +777,7 @@ function parsePPM(fn)	{
 	
 	
 
-	//log("Completed Stage 1 of parsing PPM file.")
+	//_log("Completed Stage 1 of parsing PPM file.")
 	
 	var width = arr[1]
 	var height = arr[2]
@@ -737,7 +802,7 @@ function parsePPM(fn)	{
 	Data.PPM[fn] = c;
 	Data.PPM_refs.push(fn)
 
-	log("PPM file '" + fn + "' processed.")
+	_log("PPM file '" + fn + "' processed.")
 	
 	return true;
 }

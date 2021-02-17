@@ -144,6 +144,17 @@ function rotation_z(r, dir)	{ // r is in radians units, if dir is set to 1/true,
 	return m // returns rotation matrix, which must be multiplied with original point to get translated/rotated co-ords
 }
 
+Array.prototype.shearing = function(xy, xz, yx, yz, zx, zy)	{
+	
+	var m = identity_matrix()
+	
+	m[0][1] = xy;	m[0][2] = xz
+	m[1][0] = yx;	m[1][2] = yz
+	m[2][0] = zx;	m[2][1] = zy
+	
+	return m_multiply(this, m)
+}
+
 
 function shearing(xy, xz, yx, yz, zx, zy)	{ // p53. returns shearing matrix for shearing operation
 	

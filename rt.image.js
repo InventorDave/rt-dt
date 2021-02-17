@@ -43,7 +43,7 @@ function imageLoaded()	{
 		img_.fn = ""
 	}
 		
-	log("Image File Loaded.")
+	_log("Image File Loaded.")
 	convertToPPM(pix, width, height, imgCanvas.fn);
 	//debugger;
 }
@@ -62,5 +62,5 @@ function convertToPPM(data, width, height, fn)	{
 	Data.PPM[fn] = output;
 	Data.PPM_refs.push(fn);
 	
-	//log("Converted Image To PPM.")
+	//_log("Converted Image To PPM.")
 }

@@ -172,6 +172,7 @@
 	  <a onclick="Data.openFileType = 'PPM'; option('load-ppm-file'); return false;">Load PPM File</a>
 	  <a onclick="option('load-server-PPM'); return false;" style="color: #22ff22;">Get PPM Files From Server.</a>
 	  <a onclick="Data.openFileType = 'MESH'; option('load-mesh-file'); return false;">Load Mesh (.obj) File</a>
+	  <a onclick="Data.openFileType = 'YAML'; option('load-yaml-file'); return false;">Load .YAML File</a>
 	  <a onclick="option('close-proj'); return false;">Unload Project Files</a>
     </div>
   </div> 
@@ -341,6 +342,9 @@ window.onclick = function(e) {
 }
 </script>
 <br>
+
+
+
 <p style="position: fixed; right: 50px;">
 
     <div>
@@ -363,7 +367,7 @@ window.onclick = function(e) {
 	  
 	</span>
 	
-      <button class="buttonCamera" onclick="option('cameraOptions'); return false;">Camera</button>
+      <button class="buttonCamera" id="button_camera" onclick="option('cameraOptions');">Camera</button>
       <button class="buttonLights" onclick="option('lightsOptions'); return false;">Lights</button>
       <button class="buttonScene" onclick="option('sceneOptions'); return false;">Scene</button>
     </div>
@@ -379,6 +383,11 @@ window.onclick = function(e) {
   <canvas id="imgCanvas" width="1" height="1" style="visibility: hidden; display: none;"></canvas>
   
 </div>
+
+<textarea id="source" style="display: none;">source TA</textarea>
+<textarea style="display: none;" id="result">result TA</textarea>
+<!-- a href="#yaml=" id="permalink">P</a -->
+
 
 <!-- The Modals -->
 <div id="myModal" class="modal">
@@ -680,6 +689,8 @@ window.onclick = function(e) {
 
 <script src="directtracer.js"></script>
 
+<script src="js-yaml.js"></script>
+
 <script>
 function prepCanvas()	{
 	
@@ -786,7 +797,7 @@ function option(opt)	{
 		sceneModal.style.display = "block"
 	}
 	
-	if ((opt=="load-file") || (opt=="load-ppm-file") || (opt=="load-mesh-file"))	{
+	if ((opt=="load-file") || (opt=="load-ppm-file") || (opt=="load-mesh-file") || (opt=='load-yaml-file'))	{
 	
 		openFileModal.style.display = "block"
 	}
@@ -895,12 +906,12 @@ span_mapsModal.onclick = function()	{
 document.getElementById('file-input2')
   .addEventListener('change', readFile, false);
 
-function log(str)	{
+function _log(str)	{
 
 	document.getElementById("msg-output").value = (document.getElementById("msg-output").value + '\n' + str)
 }
 
-init();
+rtdtinit();
 //addFunction("mandelbrot", "mandelbrot")
 </script>
 </body>
