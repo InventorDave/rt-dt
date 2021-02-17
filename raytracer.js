@@ -116,7 +116,8 @@ function sceneOptionSelected()	{
 		
 		var fn = document.getElementById("predefined-scene-options").value;
 		//alert("fn = " + fn + "()")
-		var res = eval("var res2 = " + fn + "();");
+		//console.log("firing eval()!")
+		eval(fn + "()");
 	}
 	catch(e)	{
 		alert("error!")
@@ -468,6 +469,9 @@ function render(c, w, remaining)	{
 	bgImageSet = (!!Data.PPM["bgImage"] || false)
 	
 	start = Date.now()
+	
+	//console.log("test: render(...) fired.")
+	
 	render2();
 }
 
@@ -523,7 +527,31 @@ function render2()	{
 		var time_sec = (end - start) / 1000
 		var time_min = time_sec / 60
 		
-		var msg = "COMPLETED... This render took " + time_sec + " secs, " + time_min + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "), " + pixel_count + "."
+		/**
+		// a funsies method for rounding a fractional number to 3dp, before I discovered .toFixed()
+		
+		var lhs_dc = 0, n = Math.round(time_min)
+		
+		while(!(n < 1))	{
+			
+			lhs_dc++
+			n /= 10
+		}
+		
+		time_min = time_min.toPrecision(lhs_dc + 3)
+		
+		lhs_dc = 0, n = Math.round(time_sec)
+		
+		while(!(n < 1))	{
+			
+			lhs_dc++
+			n /= 10
+		}
+
+		time_sec = time_sec.toPrecision(lhs_dc + 3)
+		*/
+		
+		var msg = "(test) COMPLETED... This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "), " + pixel_count + "."
 		
 		_log(msg);
 		
@@ -536,6 +564,99 @@ function render2()	{
 	
 	to = setTimeout(render2, 0)	
 }
+
+function render2b()	{
+
+	//console.log("render2b()")
+	var cond = true
+	
+	while(cond)	{
+			
+		g_x =0;
+		while(g_x != WIDTH) {
+			
+			pixel_count++
+			
+			var r = g_c.ray_for_pixel(g_x, g_y);
+					
+			var c = color_at(g_w, r, g_r)
+			
+			
+			if ((c.x==0)&&(c.y==0)&&(c.z==0))	{
+				// render bg image
+				if(!bgImageSet)	{
+				
+					//console.log("bgimage not set.")
+					c = RENDER_BG_COLOR
+				}
+				else	{
+					//console.log("bgimage set.")
+					c = bgImage_uv_pattern_at(g_x/WIDTH, g_y/HEIGHT)
+				}
+				
+			}
+			
+			ctx.fillStyle = convert(c)
+			
+			var x = g_x + ((CANVAS_WIDTH/2) - WIDTH/2)
+			var y = g_y + ((CANVAS_HEIGHT/2) - HEIGHT/2)
+			
+			ctx.fillRect(x,y,1,1)
+					
+			g_x++
+			
+		}
+
+		//pixel_count--
+		
+		g_y++
+				
+		if (g_y == HEIGHT)	{
+			
+			end = Date.now()
+
+			var time_sec = (end - start) / 1000
+			var time_min = time_sec / 60
+			
+			/**
+			// a funsies method for rounding a fractional number to 3dp, before I discovered .toFixed()
+			
+			var lhs_dc = 0, n = Math.round(time_min)
+			
+			while(!(n < 1))	{
+				
+				lhs_dc++
+				n /= 10
+			}
+			
+			time_min = time_min.toPrecision(lhs_dc + 3)
+			
+			lhs_dc = 0, n = Math.round(time_sec)
+			
+			while(!(n < 1))	{
+				
+				lhs_dc++
+				n /= 10
+			}
+
+			time_sec = time_sec.toPrecision(lhs_dc + 3)
+			*/
+			
+			var msg = "COMPLETED... This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "), " + pixel_count + "."
+			
+			_log(msg);
+			
+			console.log(msg)
+			
+			pixel_count = 0
+			
+			cond = false;
+		}
+	}
+	
+	return 0;
+}
+
 
 
 function convert(c)	{

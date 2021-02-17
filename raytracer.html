@@ -183,9 +183,9 @@
     </button>
     <div class="dropdown-content" id="myDropdownRender">
 	
-      <a onclick="option('render'); return false;">Render!</a>
-      <a onclick="option('gen-bvh'); return false;">Generate BVH</a>
-      <a onclick="option('gen-divide'); return false;">Set BVH divide()</a>
+      <a onclick="option('render');">Render!</a>
+      <a onclick="option('gen-bvh');">Generate BVH</a>
+      <a onclick="option('gen-divide');">Set BVH divide()</a>
 
     </div>
   </div>
@@ -350,7 +350,7 @@ window.onclick = function(e) {
     <div>
     <span>
 	  
-      <select id="predefined-scene-options" name="options2" onchange="sceneOptionSelected(); return false;">
+      <select id="predefined-scene-options" name="options2"> <!-- onchange="sceneOptionSelected();", set in 'populateSceneFunctionSelection()':rt.raytracer.js -->
 	  <!--
         <option value="mySkyBox">mySkyBox</option>
         <option value="endGame" selected>endGame</option>
@@ -722,7 +722,7 @@ function renderImage(l, o, d)	{
 	if(Data.bgImage)
 	 Data.PPM["bgImage"] = Data.PPM[Data.bgImage]
 	 
-	//debugger;
+	//console.log("renderImage() fired!")
 	
 	render(c,w,d); // render(c, w, remaining) "rt.raytracer.js"
 }
