@@ -690,6 +690,7 @@ window.onclick = function(e) {
 <script src="directtracer.js"></script>
 
 <script src="js-yaml.js"></script>
+<script src="rt.exp.js"></script>
 
 <script>
 function prepCanvas()	{
@@ -738,12 +739,12 @@ function option(opt)	{
 			if(Data.o.s.length)
 				renderImage()
 			else
-				log("No scene in memory!")
+				_log("No scene in memory!")
 		}
 		
 		catch(e)	{
 		
-			log("line 588, no scene loaded.")
+			_log("line 588, no scene loaded.")
 		}
 		
 	}

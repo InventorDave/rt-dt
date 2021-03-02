@@ -1,0 +1,45 @@
+The STANDARD approach to define a scene, then render:
+
+	Create a light object, a camera object, and shapes to place in the scene
+
+	var l = new point_light(point(-10, 10, -50), colour(1,1,1)) 
+	Data.c.setCTransform(view_transform(point(0,0,-20), point(0,0,0), vector(0,1,0)));
+	
+	/**
+	Optionally, you can set a camera via the camera() function - "raytracer.js"
+	
+	camera(c)
+	*/
+	
+	var cb = cube()
+	...
+	
+	Add the shapes to the scene via the scene(...) function, which is in "rt.raytracer.js":
+	
+	scene(cb)
+	
+	------------
+	function scene()	{
+	
+	var o = group()
+	for (var i = 0; i < arguments.length; i++)
+		o.addChild(arguments[i])
+	
+	Data.o = o
+	
+	return o
+	}
+	
+	------------
+	
+	Either add the light to the scene via the Data object:
+	
+	Data.l = l
+	
+	Or, you can pass the light to the renderImage(...) function - "raytracer.html"
+	
+	renderImage(l, o, d) // l = light, o = scene group, d = recursion depth
+	
+	Or, via the lights() function ("raytracer.js"):
+	
+	lights(l)

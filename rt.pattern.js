@@ -444,7 +444,7 @@ function cube_uv_back(p)	{
 function cube_uv_up(p)	{
 	
 	var u = ((p.x + 1) % 2.0) / 2.0
-	var v = ((1 - p.z) % 2.0) / 2.0
+	var v = 1 - (((1 - p.z) % 2.0) / 2.0) // ((1 - p.z) % 2.0) / 2.0
 
 	return {u: u, v: v}
 }
@@ -452,14 +452,14 @@ function cube_uv_up(p)	{
 function cube_uv_down(p)	{
 	
 	var u = ((p.x + 1) % 2.0) / 2.0
-	var v = ((p.z + 1) % 2.0) / 2.0
+	var v = 1 - (((p.z + 1) % 2.0) / 2.0) // ((p.z + 1) % 2.0) / 2.0
 
 	return {u: u, v: v}
 }
 
 function cube_uv_left(p)	{
 	
-	var u = ((p.z + 1) % 2.0) / 2.0
+	var u = 1 - (((p.z + 1) % 2.0) / 2.0) // ((p.z + 1) % 2.0) / 2.0
 	var v = ((p.y + 1) % 2.0) / 2.0
 
 	return {u: u, v: v}
@@ -467,7 +467,7 @@ function cube_uv_left(p)	{
 
 function cube_uv_right(p)	{
 	
-	var u = ((1 - p.z) % 2.0) / 2.0
+	var u = 1 - (((1 - p.z) % 2.0) / 2.0) // ((1 - p.z) % 2.0) / 2.0
 	var v = ((p.y + 1) % 2.0) / 2.0
 
 	return {u: u, v: v}
@@ -501,7 +501,7 @@ function SkyBox(left, right, front, back, up, down)	{
 		if(coord == -p.y)
 			return "down"
 
-		if(coord == p.z)
+		if(coord == -p.z)
 			return "front"
 
 		//the only option remaining!

@@ -127,7 +127,7 @@ function scene1()	{
 	
 	var cb = cube()
 	cb.material.color = colour(135/255,206/255,250/255)
-	cb.transform = m().translation(4, 0, -2)
+	cb.transform = m().rotation_x(Math.PI/4).translation(4, 0, -2)
 	
 	var o = group()
 	o.addChild(s)

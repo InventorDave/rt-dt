@@ -1,0 +1,165 @@
+{\rtf1\ansi\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset161 Calibri;}{\f2\fnil\fcharset1 Cambria Math;}}
+{\*\generator Riched20 10.0.18362}{\*\mmathPr\mmathFont2\mwrapIndent1440 }\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Tracer: Animation\par
+Phase 1: Camera\par
+\par
+Requirements\par
+The graphics app requires the enhancement of animation. Animation simply involves the time-based updating of image frames where the elements of a scene are updated. This is typically in the form of updated translation (transposition and rotation). The elements in a scene are the Shapes (primitives, meshes and groups), the Light source and the Camera. In the 1st phase, I will design a feature to move the Camera, and generate a new image (frame) for each step-change in the animation sequence. Repeating this process will result in the output of 'frames', which when spliced together produce an animation. For smooth animation, an output image frame should represent the passage of time of 1/24th of a second. The user can provide a start-point (including orientation) for the Camera, and an end-point. The 2nd piece of information is how much time passes between the 2 'points' (0 -> n secs). Then, the module will simply multiply n by 24, for the frame-count, and transmute between the Camera start-point (S) and the Camera end-point (E) in increments of (length(E-S))/framecount. The method will involve the "to" parameter of the Camera representing the origin of a sphere, and the "from" parameter representing a point on the surface of that sphere. magnitude("from"-"to") is the diameter of the sphere.\par
+\par
+Research\par
+In Trigonometry, 2 points on a sphere (a point for the Camera to jump from, and a point to jump to), can be considered to form a triangle with the 3rd point of the triangle being at the origin of the sphere. If the movement of the Camera along the surface of the sphere requires no change in the y-component, I can treat the start and end points as both positioned with the y-component == 0, then simple trigonometry will allow us to calculate the x- & z-component of the end point on the surface of the triangle (the 'end' point to jump to on the sphere's surface, from the 'start' point). Then simply set the y-component of the end point to the y-component of the start point). Things get slightly trickier when the translation of the camera involves a change in the y-component, but all we have to do is initially ignore the y-component when making the calculations, and then when we have calculated new x- and z-components, we simply make triangle\sub 3rd-point,y\nosupersub  := triangle\sub 2nd-point,y\nosupersub  + change in y-component, which is := (Camera\sub end\nosupersub .y - Camera\sub start\nosupersub .y)/(framecount/frame) - this gets more complicated for non-linear paths. (remember, triangle\sub 2nd-point\nosupersub  is the triangle\sub 3rd-point\nosupersub  from the previous frame's triangle). The very first triangle, at t=0, has it's 2nd point set by the initial position of the Camera set by the user.\par
+The sphere's origin (which is also Camera.to) is P0. The Camera start position (for any given frame) is P2. The jump-to point is P3. Then, at the start of calculating the next frame, P2 is set to the previous frame's P3. P0 never changes, and is actually set to the universal origin (P0 - P0). Thus, P2 is offset by P0 (P2 := P2 - P0). After P3 is calculated, P3 := P3 + P0.\par
+Note that for nonlinear flight-paths, a new interim pair of (Camera\sub from\nosupersub , Camera\sub to\nosupersub ) is needed for each change of gradient in the change of the y-component. This is necessary for sinusoidal paths, for example.\par
+As an example, any path expression such as:  y-change == y\sub end\nosupersub  := (y\sub start\nosupersub  * a) + b, every time y\sub start\nosupersub  is set to a new value, a new interim Camera pair would need to be generated, as the rate of change would shift each time; y-change would shift.\par
+\par
+For non-linear paths, the change in the y-component is := Y[q] , where Y[q] is the accumulated step-changes in the y-component since t=0, which are specific for each iteration of stepping through the path, and thus must be accumulated.\par
+With non-linear paths, such as sinusoidal or algebraic paths, an end-point cannot be set in advance, although a threshold can be defined.\par
+\par
+The above assumes the distance (vector length) between the camera and the origin stays the same as we step from P2 to P3. For a camera path that moves closer to, or further away from the "to" (the origin of the sphere), this implies the diameter of the sphere shrinks or grows. This being the case, a 2nd sphere representing the new camera-origin sphere requires a 2nd triangle between sphere\sub prev,start\nosupersub  , sphere\sub prev,end\nosupersub  and sphere\sub next,p\nosupersub  , which involves the new triangle's opp\sub length\nosupersub  being:\par
+ max(diameter(sphere\sub prev\nosupersub ), diameter(sphere\sub next\nosupersub )) - min(diameter(sphere\sub prev\nosupersub ), diameter(sphere\sub next\nosupersub )). \par
+This can be read the same as sphere\sub next,p\nosupersub  is:\par
+P3 - vector(the point P3 on sphere\sub prev\nosupersub  - equivalent point on sphere\sub next\nosupersub ).\par
+This all assumes\par
+\par
+So, for 2 concentric spheres, how do you calculate an equivalent point on the 2nd sphere, starting with a point on the 1st sphere? If you can convert the point on the 1st sphere to a (u,v,d) tuple, the equivalent point on the 2nd sphere is (u,v,diameter(2nd sphere)).\par
+\par
+Notes\par
+c := Camera object\par
+M\sub sphere\nosupersub  := magnitude(sphere\sub camera\nosupersub ), or diameter(sphere).\par
+If M\sub sphere\nosupersub  = (c.from - c.to), and we place the origin of the sphere at (0,0,0), then magnitude(from\sub modified)\nosupersub  := (from - to), or, M\sub sphere\nosupersub .\par
+\par
+*Imagine that a path for the Camera is defined as a start (u,v) and end (u,v) point on a sphere around a "to" world point, which would be normalised to the universal origin. Things get complicated when the start (u,v) point is on a different sphere (distance from the "to"), than the end (u, v) point. This could be defined by a 3rd d-component on the tuples representing the diameter of the given sphere - (u,v,d). Perhaps these tuples could be calculated from an (x,y,z) start point and end point in world space (trivially convertible to/from object space).\par
+Q: So, how do you calculate a (u,v,d) tuple from an (x,y,z) tuple? Our raytracer has the functionality to calculate an (x,y,z) tuple - a point on the surface of a shape - from a (u,v) tuple, with d simply being the length of the vector from an origin to a point on the surface of a shape, calculated I guess by magnitude(tuple(x,y,z)) *\par
+\par
+\par
+\par
+function spherical_map(p)\par
+  # compute the azimuthal angle\par
+  # -\f1\lang1032\'f0 < theta <= \'f0\par
+  # angle increases clockwise as viewed from above,\par
+  # which is opposite of what we want, but we'll fix it later.\par
+  let theta \f2\u8592?\f0  arctan2(p.x, p.z)\par
+\par
+  # vec is the vector pointing from the sphere's origin (the world origin)\par
+  # to the point, which will also happen to be exactly equal to the sphere's\par
+  # radius.\par
+  let vec \f2\u8592?\f0  vector(p.x, p.y, p.z)\par
+  let radius \f2\u8592?\f0  magnitude(vec)\par
+\par
+  # compute the polar angle\par
+  # 0 <= phi <= \f1\lang1032\'f0\par
+  let phi \f2\u8592?\f0  arccos(p.y / radius)\par
+\par
+  # -0.5 < raw_u <= 0.5\par
+  let raw_u \f2\u8592?\f0  theta / (2 * \f1\lang1032\'f0)\par
+\par
+  # 0 <= u < 1\par
+  # here's also where we fix the direction of u. Subtract it from 1,\par
+  # so that it increases counterclockwise as viewed from above.\par
+  let u \f2\u8592?\f0  1 - ((arctan2(p.x, p.z) / (2 * \f1\lang1032\'f0)\f0 ) + 0.5)\par
+\par
+  # we want v to be 0 at the south pole of the sphere,\par
+  # and 1 at the north pole, so we have to "flip it over"\par
+  # by subtracting it from 1.\par
+  let v \f2\u8592?\f0  1 - phi / \f1\lang1032\'f0\par
+\par
+  return (u, v)\par
+end function\par
+\par
+\f0\lang2057 u = 0.2, v = 0.3, d = 2.5\par
+\f1\lang1032\par
+\f0\lang2057 v1 = phi / pi\par
+phi = arccos(a = p.y / d), phi = inv_arccos(p.y * d), we know d, so use method for estimating p.y\par
+v = cos(p.y * 2.5) / PI\par
+\par
+u = 1 - ((angle = arctan2(p.x, p.z) / (2 * \f1\lang1032\'f0)\f0\lang2057 ) + 0.5)  //p.x == dy, p.z == dx, see below\par
+angle = atan2(d * sin(angle *PI/180), d * cos(angle *PI/180) )\par
+\par
+PI/180 = 0.01745329251994329576\par
+-----\par
+UPPER = 1, LOWER = 0, MIDDLE = (UPPER+LOWER)/2\par
+input\sub prev\nosupersub  = MIDDLE\par
+input\sub curr\nosupersub  = atan2(d * sin(input\sub prev\nosupersub  * PI/180), d * cos(input\sub prev\nosupersub  * PI/180) )\par
+if (input\sub curr\nosupersub  != input\sub prev\nosupersub )\par
+\tab input\sub prev\nosupersub  = input\sub curr\nosupersub\par
+\tab input\sub curr\nosupersub  = atan2(d * sin(input\sub prev\nosupersub  * PI/180), d * cos(input\sub prev\nosupersub  * PI/180) )\par
+angle = input\sub curr\nosupersub\par
+u = 1 - (angle + 0.5)\par
+\par
+!!We know xyz!!\par
+\par
+***If we know the quadrant, there is a unique value for atan2(x,z), therefore we can look-up x,z within a certain precision***\par
++++Then, flip u,v pair according to quadrant+++\par
+O1,O2 -> UPPER_RIGHT\par
+O4, O3 -> UPPER_LEFT\par
+O5, O6 -> BOTTOM_RIGHT\par
+O8, O7 -> BOTTOM_LEFT\par
+...\par
+Q1 = UPPER_RIGHT\par
+Q2 = UPPER_LEFT\par
+Q3 = BOTTOM_RIGHT\par
+Q4 = BOTTOM_LEFT\par
+\par
+if (Q1)\par
+\tab u;\par
+\tab v;\par
+else if (Q2)\par
+\tab u = -u\par
+else if (Q3)\par
+\tab v = -v\par
+else if (Q4)\par
+\tab u = -u\par
+\tab v = -v\par
+\par
+\par
+...\par
+To calc octrant:\par
+O1 = x (0 -> r), y (0 -> r), z (0 -> r)\par
+O2 = x (0 -> r), y (0 -> r), z (r -> d)\par
+O3 = x (0 -> -r), y (0 -> r), z (r -> d)\par
+O4 = x (0 -> -r), y (y -> r), z (0 -> r)\par
+\par
+O5 = x (0 -> r), y (0 -> -r), z (0 -> r)\par
+O6 =  x (0 -> r), y (0 -> -r), z (r -> d)\par
+O7 = x (0 -> -r), y (0 -> -r), z (r -> d)\par
+O8 = x (0 -> -r), y (0 -> -r), z (0 -> r)\par
+\par
+\par
+ \par
+QUADRANT-based. ??Know the quadrant in advance?? You know the quadrant by :\par
+u < 0.5, v < 0.5, quadrant 1 (TL)\par
+u > 0.5, v < 0.5, quadrant 2 (TR)\par
+u < 0.5, v > 0.5, quadrant 3 (BL)\par
+u > 0.5, v > 0.5, quadrant 4 (BR)\par
+Quadrant is based\par
+\par
+\par
+except that the signs of both arguments are used to determine the quadrant of the result. The result is an angle expressed in radians, \par
+therefore, we calc the quadrant and map initial u,v to quadrant. so, uv pair is in 1st quadrant, convert to subsequent quadrant\par
+\par
+\par
+u = 1 - ((angle = arctan2(p.x, p.z) / (2 * \f1\lang1032\'f0)\f0\lang2057 ) + 0.5)  \par
+........\par
+v = cos(p.y * 2.5) / PI      // as above, but replace formula, use eq(a,b) for != test\par
+-----------\par
+UPPER, LOWER (for [u,v] pairings, U = 1, L = 0)\par
+MIDDLE = mid(UPPER - LOWER) = (UPPER+LOWER)/2\par
+\par
+Try INPUT = MIDDLE. IF OUTPUT < INPUT, UPPER = MIDDLE,\par
+\tab\tab\tab ELSEIF OUTPUT > INPUT, LOWER = MIDDLE\par
+\par
+TRY AGAIN UNTIL RESULT == eq(INPUT, OUTPUT)\par
+-----------\par
+\par
+recursively try values of angle until we get a correct solution, using binary split approximation method\par
+----\par
+local theta = angle * pi / 180\par
+local dx = len * cos(theta)\par
+local dy = len * sin(theta)\par
+----\par
+\par
+\par
+\lang9\par
+\par
+}
+ 

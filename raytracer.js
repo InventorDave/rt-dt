@@ -9,7 +9,7 @@ var HEIGHT = CANVAS_HEIGHT;
 var BGCOLOR = "#2222cc";
 
 var RENDER_FG_COLOR = colour(1, 0.5, 0.5)
-var RENDER_BG_COLOR = colour(0,0,0)//convHexClr("d6b96f")
+var RENDER_BG_COLOR = convHexClr("d6b96f")
 
 /** GLOBAL OBJECTS */
 
@@ -553,7 +553,7 @@ function render2()	{
 		
 		var msg = "(test) COMPLETED... This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "), " + pixel_count + "."
 		
-		_log(msg);
+		// _log(msg);
 		
 		console.log(msg)
 		
@@ -644,7 +644,7 @@ function render2b()	{
 			
 			var msg = "COMPLETED... This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "), " + pixel_count + "."
 			
-			_log(msg);
+			// _log(msg);
 			
 			console.log(msg)
 			

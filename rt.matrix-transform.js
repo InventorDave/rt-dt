@@ -1,14 +1,36 @@
 // "use strict";
 
+Array.prototype.t ={ x: 0, y: 0, z: 0, w: 1 };
+
 Array.prototype.translation = function(x, y, z)	{
 	
 	var m = identity_matrix();
+	
+	var p = point(x || this.t.x, y || this.t.y, z || this.t.z)
+	this.t = p
 	
 	m[0][3] = x;
 	m[1][3] = y;
 	m[2][3] = z;
 	
 	return m_multiply(this, m)
+}
+
+Array.prototype.trans2 = function(x, y, z)	{
+	
+	var p = point(this.t.x || x, this.t.y || y, this.t.z || z);
+	
+	var m2 = identity_matrix()
+	m2[0][3] = x;
+	m2[1][3] = y;
+	m2[2][3] = z;
+	
+	var res = m_multiply(this, m2);
+	
+	var p2 = multiply_matrix_by_tuple(res, p)
+	this.t = p2;
+	
+	return res
 }
 
 function translation(x, y, z)	{
@@ -184,6 +206,27 @@ function reflect_around_axis(p, axis, scale)	{
 	return multiply_matrix_by_tuple(scaling(x, y, z), p)
 }
 
+Array.prototype.reflect_around_axis = function(axis, scale)	{
+	
+	if (!scale)
+		scale = 1
+
+	if (!axis)
+		axis = "x"
+	
+	var x = scale
+	var y = scale
+	var z = scale
+	
+	axis == "x" ? x = -x : axis == "y" ? y = -y : axis == "z" ? z = -z : x = -x ;
+	
+	var p = multiply_matrix_by_tuple(scaling(x, y, z), this.t)
+	
+	// this.t = p; // superfluous op.
+	
+	return this.translation(p.x,p.y,p.z)
+
+}
 
 function multiply_matrix_by_tuple(m, t)	{
 	

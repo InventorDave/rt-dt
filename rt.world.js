@@ -114,11 +114,11 @@ function intersect_world(w, r)	{
 	return res;
 }
 
-function view_transform(from, to, up)	{
+function view_transform(from, to /**, up*/)	{
 	
 	var forward = normalize(subtract(to, from));
-	var upn = normalize(up);
-	var left = cross(forward, upn);
+	//var upn = normalize(up);
+	var left = cross(forward, /**upn*/vector(0,1,0));
 	var true_up = cross(left, forward);
 	
 	var orientation = initArray(4,4);
