@@ -9,6 +9,11 @@ The STANDARD approach to define a scene, then render:
 	Optionally, you can set a camera via the camera() function - "raytracer.js"
 	
 	camera(c)
+	
+	To create a Camera object, use "new Camera(hsize, vsize, fov)", in file "rt.world.js"
+	
+	To modify it's transform, use member method "Camera.setCTransform(m)", where m is a matrix created by
+	function "view_transform(from, to, up)", also in "rt.world.js"
 	*/
 	
 	var cb = cube()

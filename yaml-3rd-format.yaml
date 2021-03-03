@@ -1,0 +1,707 @@
+# ======================================================
+
+#
+
+# dice.yml
+
+#
+
+# This scene demonstrates the CSG operations of the renderer
+
+#
+
+# ======================================================
+
+
+
+# ======================================================
+
+# the camera
+
+# ======================================================
+
+
+
+- add: camera
+
+  width: 400
+
+  height: 400
+
+  field-of-view: 1.047
+
+  from: [3, 3, -3]
+
+  to: [0, 1, 0]
+
+  up: [0, 1, 0]
+
+
+
+# ======================================================
+
+# the light
+
+# ======================================================
+
+
+
+- add: light
+
+  at: [5, 5, -5]
+
+  intensity: [1, 1, 1]
+
+
+
+# ======================================================
+
+# defininitions
+
+# ======================================================
+
+
+
+- define: red
+
+  value:
+
+    ambient: 0.2
+
+    diffuse: .75
+
+    specular: .8
+
+    reflective: 0
+
+    color: [ 0.7, 0.1, 0.1]
+
+
+
+- define: die-cube
+
+  value:
+
+    add: cube
+
+    transform:
+
+      - [translate, 0, 1, 0]
+
+    material:
+
+      ambient: 0.2
+
+      diffuse: .75
+
+      specular: .8
+
+      reflective: .1
+
+      color: [ 0.7, 0.1, 0.1]
+
+
+
+- define: pip
+
+  value:
+
+    add: sphere
+
+    transform:
+
+      - [scale, 0.18, 0.18, 0.18]
+
+      - [translate, 0, 1, 0]
+
+
+
+#1 on front face
+
+- define: pip1
+
+  value:
+
+    add: pip
+
+    transform:
+
+      - [translate, 0, 0, -1]
+
+
+
+#2 on bottom face
+
+- define: pip2
+
+  value:
+
+    add: group
+
+    children:
+
+      - add: pip
+
+        transform:
+
+          - [translate, -.5, -1, -.5]
+
+      - add: pip
+
+        transform:
+
+          - [translate, .5, -1, .5]
+
+
+
+#3 on right face
+
+- define: pip3
+
+  value:
+
+    add: group
+
+    children:
+
+      - add: pip
+
+        transform:
+
+          - [translate, 1, 0, 0]
+
+      - add: pip
+
+        transform:
+
+          - [translate, 1, 0.5, -0.5]
+
+      - add: pip
+
+        transform:
+
+          - [translate, 1, -0.5, 0.5]
+
+
+
+#4 on left face
+
+- define: pip4
+
+  value:
+
+    add: group
+
+    children:
+
+      - add: pip
+
+        transform:
+
+          - [translate, -1, -0.5, -.5]
+
+      - add: pip
+
+        transform:
+
+          - [translate, -1, .5, .5]
+
+      - add: pip
+
+        transform:
+
+          - [translate, -1, -.5, .5]
+
+      - add: pip
+
+        transform:
+
+          - [translate, -1, .5, -.5]
+
+
+
+#5 on top face
+
+- define: pip5
+
+  value:
+
+    add: group
+
+    children:
+
+      - add: pip
+
+        transform:
+
+          - [translate, -.5, 1, -.5]
+
+      - add: pip
+
+        transform:
+
+          - [translate, .5, 1, .5]
+
+      - add: pip
+
+        transform:
+
+          - [translate, -.5, 1, .5]
+
+      - add: pip
+
+        transform:
+
+          - [translate, .5, 1, -.5]
+
+      - add: pip
+
+        transform:
+
+          - [translate, 0, 1, 0]
+
+
+
+#6 on the back face
+
+- define: pip6
+
+  value:
+
+    add: group
+
+    children:
+
+      - add: pip
+
+        transform:
+
+          - [translate, -0.5, -.5, 1]
+
+      - add: pip
+
+        transform:
+
+          - [translate, .5, .5, 1]
+
+      - add: pip
+
+        transform:
+
+          - [translate, -.5, .5, 1]
+
+      - add: pip
+
+        transform:
+
+          - [translate, .5, -.5, 1]
+
+      - add: pip
+
+        transform:
+
+          - [translate, -.5, 0, 1]
+
+      - add: pip
+
+        transform:
+
+          - [translate, .5, 0, 1]
+
+
+
+- define: pips
+
+  value:
+
+    add: group
+
+    children:
+
+      - add: pip1
+
+      - add: pip2
+
+      - add: pip3
+
+      - add: pip4
+
+      - add: pip5
+
+      - add: pip6
+
+
+
+- define: makecutcylinder
+
+  value:
+
+    add: cylinder
+
+    closed: true
+
+    min: -1.1
+
+    max: 1.1
+
+    transform:
+
+      - [scale, 0.18, 1, 0.18]
+
+      - [translate, 0, 1, 0]
+
+
+
+- define: cutcylinderygroup
+
+  value:
+
+    add: group
+
+    children:
+
+      - add: makecutcylinder
+
+        transform:
+
+          - [translate, -1, 0, -1]
+
+      - add: makecutcylinder
+
+        transform:
+
+          - [translate, -1, 0, 1]
+
+      - add: makecutcylinder
+
+        transform:
+
+          - [translate, 1, 0, -1]
+
+      - add: makecutcylinder
+
+        transform:
+
+          - [translate, 1, 0, 1]
+
+
+
+- define: cutcylinderxgroup
+
+  value:
+
+    add: cutcylinderygroup
+
+    transform:
+
+      - [translate, 0, -1, 0]
+
+      - [rotate-z, 1.5707963]
+
+      - [translate, 0, 1, 0]
+
+
+
+- define: cutcylinderzgroup
+
+  value:
+
+    add: cutcylinderygroup
+
+    transform:
+
+      - [translate, 0, -1, 0]
+
+      - [rotate-x, 1.5707963]
+
+      - [translate, 0, 1, 0]
+
+
+
+- define: cutgroup
+
+  value:
+
+    add: csg
+
+    operation: union
+
+    left:
+
+      add: csg
+
+      operation: union
+
+      left:
+
+        add: cutcylinderygroup
+
+      right:
+
+        add: cutcylinderzgroup
+
+    right:
+
+      add: cutcylinderxgroup
+
+
+
+- define: makeaddcylinder
+
+  value:
+
+    add: cylinder
+
+    closed: false
+
+    min: -.82
+
+    max: .82
+
+    transform:
+
+      - [scale, 0.18, 1, 0.18]
+
+      - [translate, 0, 1, 0]
+
+    material:
+
+      ambient: 0.2
+
+      diffuse: .75
+
+      specular: .8
+
+      reflective: .1
+
+      color: [ 0.7, 0.1, 0.1]
+
+
+
+- define: addcylinderygroup
+
+  value:
+
+    add: group
+
+    children:
+
+      - add: makeaddcylinder
+
+        transform:
+
+          - [translate, .82, 0, .82]
+
+      - add: makeaddcylinder
+
+        transform:
+
+          - [translate, .82, 0, -.82]
+
+      - add: makeaddcylinder
+
+        transform:
+
+          - [translate, -.82, 0, .82]
+
+      - add: makeaddcylinder
+
+        transform:
+
+          - [translate, -.82, 0, -.82]
+
+
+
+- define: addcylinderxgroup
+
+  value:
+
+    add: addcylinderygroup
+
+    transform:
+
+      - [translate, 0, -1, 0]
+
+      - [rotate-z, 1.5707963]
+
+      - [translate, 0, 1, 0]
+
+
+
+- define: addcylinderzgroup
+
+  value:
+
+    add: addcylinderygroup
+
+    transform:
+
+      - [translate, 0, -1, 0]
+
+      - [rotate-x, 1.5707963]
+
+      - [translate, 0, 1, 0]
+
+
+
+- define: addcylindergroup
+
+  value:
+
+    add: group
+
+    children:
+
+      - add: addcylinderygroup
+
+      - add: addcylinderxgroup
+
+      - add: addcylinderzgroup
+
+
+
+- define: addsphere
+
+  value:
+
+    add: sphere
+
+    transform:
+
+      - [scale, .18, .18, .18]
+
+      - [translate, 0, 1, 0]
+
+
+
+- define: addspheregroup
+
+  value:
+
+    add: group
+
+    children:
+
+      - add: addsphere
+
+        transform:
+
+        - [translate, .82, .82, .82]
+
+      - add: addsphere
+
+        transform:
+
+        - [translate, .82, .82, -.82]
+
+      - add: addsphere
+
+        transform:
+
+        - [translate, -.82, .82, .82]
+
+      - add: addsphere
+
+        transform:
+
+        - [translate, -.82, .82, -.82]
+
+      - add: addsphere
+
+        transform:
+
+        - [translate, .82, -.82, .82]
+
+      - add: addsphere
+
+        transform:
+
+        - [translate, .82, -.82, -.82]
+
+      - add: addsphere
+
+        transform:
+
+        - [translate, -.82, -.82, .82]
+
+      - add: addsphere
+
+        transform:
+
+        - [translate, -.82, -.82, -.82]
+
+
+
+- define: addgroup
+
+  value:
+
+    add: group
+
+    children:
+
+      - add: addspheregroup
+
+      - add: addcylindergroup
+
+
+
+- define: makeroundedcube
+
+  value:
+
+    add: csg
+
+    operation: union
+
+    left:
+
+      add: csg
+
+      operation: difference
+
+      left:
+
+        add: die-cube
+
+      right:
+
+        add: cutgroup
+
+    right:
+
+      add: addgroup
+
+
+
+- define: red_die
+
+  value:
+
+    add: csg
+
+    operation: difference
+
+    left:
+
+      add: makeroundedcube
+
+      material: red
+
+    right:
+
+      add: pips
+
+
+
+# ======================================================
+
+# the scene
+
+# ======================================================
+
+
+
+#a die
+
+- add: red_die

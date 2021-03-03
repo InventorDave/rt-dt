@@ -17,6 +17,8 @@ function lighting(_material, _light, obj, _point, eyev, normalv, in_shadow, f)	{
 	
 	if (_material.pattern)	{
 		
+		//debugger;
+		
 		clr = _material.pattern.color_at_object(obj, _point)
 		
 		//console.log("LIGHTING: r: " + clr.x + ", g: " + clr.y + ", b: " + clr.z)

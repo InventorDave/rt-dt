@@ -6,6 +6,79 @@ function ray(origin, direction)	{
 	this.direction = direction;
 }
 
+function fir_branch(id2)	{
+	
+	var fb = new Shape("fir_branch", id2 || 0)
+	
+	var length = 2.0
+    var radius = 0.025
+    var segments = 20
+    var per_segment = 24
+ 
+	var cyl = cylinder()
+	cylinder.min = 0
+	cyl.max = length
+	cyl.closed = true
+	
+	var branch = cyl
+	branch.transform = m().scaling(radius, 1, radius)
+
+	branch.material = new material()
+	branch.material.color = colour(0.5, 0.35, 0.26)
+	branch.material.ambient = 0.2
+	branch.material.specular = 0.0
+	branch.material.diffuse = 0.6
+	
+	var seg_size = length / (segments - 1)
+	var theta = 2.1 * Math.PI / per_segment
+	var max_length = 20.0 * radius
+	var obj = group(branch)
+	
+	for (var y = 0; y < segments; y++)	{
+	
+		var subgroup = group()
+	
+		for (var i = 0;  i < per_segment; i++)	{
+	
+//         # each needle is a triangle.
+//        # y_base y coordinate of the base of the triangle
+		var y_base = seg_size * y + Math.random() * seg_size
+
+//         # y_tip is the y coordinate of the tip of the triangle
+        var y_tip = y_base - Math.random() * seg_size
+
+//         # y_angle is angle (in radians) that the needle should be
+//        # rotated around the branch.
+        var y_angle = i * theta + Math.random() * theta
+//
+//        # how long is the needle?
+        var needle_length = max_length / 2 * (1 + Math.random())
+//
+//         # how much is the needle offset from the center of the branch?
+        var ofs = radius / 2
+
+//         # the three points of the triangle that form the needle
+        var p1 = point(ofs, y_base, ofs)
+       var p2 = point(-ofs, y_base, ofs)
+       var p3 = point(0.0, y_tip, needle_length)
+
+//         # create, transform, and texture the needle
+        var tri = triangle(p1, p2, p3)
+        tri.transform = m().rotation_y(y_angle)
+        tri.material = new material();
+		tri.material.color = colour(0.26, 0.36, 0.16)
+		tri.material.specular = 0.1
+
+       subgroup.addChild(tri)
+
+	}
+
+		obj.addChild(subgroup)
+	}
+
+	return obj
+}
+
 
 function cone(id2)	{
 	

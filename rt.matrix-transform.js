@@ -230,6 +230,7 @@ Array.prototype.reflect_around_axis = function(axis, scale)	{
 
 function multiply_matrix_by_tuple(m, t)	{
 	
+
 	var t2 = point(0,0,0)
 	var prod_arr = []
 	
