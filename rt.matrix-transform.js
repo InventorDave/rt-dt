@@ -1,6 +1,8 @@
 // "use strict";
 
 Array.prototype.t ={ x: 0, y: 0, z: 0, w: 1 };
+Array.prototype.m = []; // remember to populate on init()
+
 
 Array.prototype.translation = function(x, y, z)	{
 	
@@ -100,6 +102,11 @@ function rotation_x(r, dir)	{ // r is in radians units, if dir is set to 1/true,
 		m = inverse(m)
 
 	return m // returns rotation matrix, which must be multiplied with original point to get translated/rotated co-ords
+}
+
+Array.prototype.m_multiply = function(m)	{
+	
+	return m_multiply(this, m)
 }
 
 

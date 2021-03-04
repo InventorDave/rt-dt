@@ -12,10 +12,24 @@ function test(A)    { if (A.x <= 0 && A.y <= 0 && A.z >= 0)    return true; else
 
 function set(A)	{
 	
+	_log("A - x:" + A.x + ", y:" + A.y + ", z:" + A.z)
+	
 	Data.c.setCTransform(view_transform(A, point(0,0,0)));
 }
 
 function setScene()	{
+	
+			//Data.bgImage = bgImage;
+		//_log("Set bgImage to " + Data.bgImage + ".")
+		Data.SkyBox.left = Data.PPM["left.jpg"]
+		Data.SkyBox.right = Data.PPM["right.jpg"]
+		Data.SkyBox.up = Data.PPM["up.jpg"]
+		Data.SkyBox.down = Data.PPM["down.jpg"]
+		Data.SkyBox.front = Data.PPM["front.jpg"]
+		Data.SkyBox.back = Data.PPM["back.jpg"]
+		
+		_log("SkyBox walls have been set.")
+		
 	
 	var l = new point_light(point(-10,10,-10), colour(1,1,1))
 	lights(l)
@@ -43,7 +57,7 @@ function setScene()	{
 	s.material.transparency = 0.7
 	s.material.refractive_index = 1.5
 	
-	scene(cb, s)
+	scene(cb)
 	
 		Data.c.setCTransform(view_transform(
 										A = B,
@@ -55,8 +69,11 @@ function setScene()	{
 	M = m()
 	M.t = B
 	
-	M = M.rotation_y(radians(22.5)).rotation_x(radians(45)).rotation_z(radians(66))
+	//M.m = identity_matrix()
 	
+	renderImage()
+	
+	//debugger;
 }
 
 function next()	{
@@ -70,17 +87,21 @@ function next()	{
 
 function next2()	{
 
-	
+	M = M.rotation_x(Math.PI/2)
 	
 	A = multiply_matrix_by_tuple(M, A)
 	
 	A = round_t(A)
-	set(A)
 	
-	//debugger;
+	_log("A - x:" + A.x + ", y:" + A.y + ", z:" + A.z)
+	
+	Data.c.setCTransform(view_transform(A, point(0,0,0)));
+	
+	debugger;
 	
 	renderImage()
 
+	
 }
 
 /**

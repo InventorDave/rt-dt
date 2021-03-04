@@ -177,7 +177,8 @@ function Camera(hsize, vsize, fov)	{
 		var input1 = this.it_c; //inverse(this.transform);
 		var input2 = point(world_x, world_y, -1);
 		
-		//debugger;
+		if (!this.it_c)
+			debugger;
 		
 		var pixel = multiply_matrix_by_tuple(input1, input2);
 		var origin = multiply_matrix_by_tuple(input1/*inverse(this.transform)*/, point(0,0,0));
