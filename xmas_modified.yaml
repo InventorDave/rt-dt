@@ -109,36 +109,16 @@
 # ======================================================
 
 - add: light
-  at: [-10, 10, -10]
-  intensity: [0.6, 0.6, 0.6]
-- add: sphere
-  shadow: false
-  transform:
-    - [ scale, 1.5, 1.5, 1.5 ]
-    - [ translate, -10, 10, -10 ]
-  material:
-    color: [1, 1, 1]
-    ambient: 0.6
-    diffuse: 0
-    specular: 0
-
-- add: light
-  at: [10, 10, -10]
-  intensity: [0.6, 0.6, 0.6]
-- add: sphere
-  shadow: false
-  transform:
-    - [ scale, 1.5, 1.5, 1.5 ]
-    - [ translate, 10, 10, -10 ]
-  material:
-    color: [1, 1, 1]
-    ambient: 0.6
-    diffuse: 0
-    specular: 0
-
-- add: light
   at: [-2, 1, -6]
   intensity: [0.2, 0.1, 0.1]
+  
+
+
+
+
+
+
+
 - add: sphere
   shadow: false
   transform:
@@ -150,33 +130,8 @@
     diffuse: 0
     specular: 0
 
-- add: light
-  at: [-1, -2, -6]
-  intensity: [0.1, 0.2, 0.1]
-- add: sphere
-  shadow: false
-  transform:
-    - [ scale, 0.4, 0.4, 0.4 ]
-    - [ translate, -1, -2, -6 ]
-  material:
-    color: [0.5, 1, 0.5]
-    ambient: 0.6
-    diffuse: 0
-    specular: 0
 
-- add: light
-  at: [3, -1, -6]
-  intensity: [0.2, 0.2, 0.2]
-- add: sphere
-  shadow: false
-  transform:
-    - [ scale, 0.5, 0.5, 0.5 ]
-    - [ translate, 3, -1, -6 ]
-  material:
-    color: [1, 1, 1]
-    ambient: 0.6
-    diffuse: 0
-    specular: 0
+
 
 # ======================================================
 # the scene
