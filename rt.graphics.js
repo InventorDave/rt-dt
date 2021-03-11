@@ -55,7 +55,7 @@ function calcAngleVectors(vec, vec2, d_or_r)	{
 	
 	var res = Math.acos(dot(normalize(vec), normalize(vec2)))
 	
-	if(!d_or_r) // boolean: true for radians
+	if(d_or_r) // boolean: true for degs
 		return deg(res)
 		
 	return res

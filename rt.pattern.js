@@ -141,18 +141,7 @@ function my_pattern(TextureMap, owner)	{
 		var uv, col;
 		var tm;
 
-		var test;
-		try	{
-			test = this.TextureMap["left"].uv_pattern
-		}
-		catch(e)	{
-			
-			//console.log("test in my_pattern() failed.")
-		}
-		
-		if (test)	{
-			
-			var _temp = this.TextureMap;
+		if (this.owner.type=="cube")	{
 			
 			var res = this.owner.face(p);
 			
@@ -163,7 +152,6 @@ function my_pattern(TextureMap, owner)	{
 		else	{
 			
 			tm = this.TextureMap
-			var db_ = 1;
 			console.log("Shape has one surface.");
 			//debugger;
 		}
@@ -185,18 +173,7 @@ function my_pattern(TextureMap, owner)	{
 
 function TextureMap(uv_pattern, uv_map, s)	{
 	
-	var _test;
-	try	{
-		
-		_test = uv_pattern["left"].uv_pattern_at
-	}
-	catch(e)	{
-		
-		//console.log("In TextureMap(): no uv_pattern['left'].")
-		_test = 1
-	}
-	
-	if(_test!=1)	{
+	if(s.type=="cube")	{
 	
 		//console.log("Inside TextureMap() factory, IF clause.")
 		//debugger;
@@ -480,7 +457,14 @@ function SkyBox(left, right, front, back, up, down)	{
 	
 	sb.type = "SkyBox"
 		
-	sb.TextureMap = {"left": skybox_pattern(left.data, left.width, left.height), "front": skybox_pattern(front.data, front.width, front.height), "right": skybox_pattern(right.data, right.width, right.height), "back": skybox_pattern(back.data, back.width, back.height), "up": skybox_pattern(up.data, up.width, up.height), "down": skybox_pattern(down.data, down.width, down.height)}
+	sb.TextureMap = [];
+	
+	sb.TextureMap["left"] = skybox_pattern(left.data, left.width, left.height)
+	sb.TextureMap["front"] = skybox_pattern(front.data, front.width, front.height)
+	sb.TextureMap["right"] = skybox_pattern(right.data, right.width, right.height)
+	sb.TextureMap["back"] =  skybox_pattern(back.data, back.width, back.height)
+	sb.TextureMap["up"] =    skybox_pattern(up.data, up.width, up.height)
+	sb.TextureMap["down"] =  skybox_pattern(down.data, down.width, down.height)
 	
 	sb.face_from_point = function(p)	{
 	
@@ -508,7 +492,14 @@ function SkyBox(left, right, front, back, up, down)	{
 		return "back"
 	};
 	
-	sb.skybox_uv = {"front": cube_uv_front, "back": cube_uv_back, "left": cube_uv_left, "right": cube_uv_right, "up": cube_uv_up, "down": cube_uv_down}
+	sb.skybox_uv = []
+	sb.skybox_uv["front"] = cube_uv_front
+	sb.skybox_uv["back"] = cube_uv_back
+	sb.skybox_uv["left"] = cube_uv_left
+	sb.skybox_uv["right"] = cube_uv_right
+	sb.skybox_uv["up"] = cube_uv_up
+	sb.skybox_uv["down"] = cube_uv_down
+	
 	
 	sb.algorithm = function(p) {
 		

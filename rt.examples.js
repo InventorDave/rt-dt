@@ -379,8 +379,8 @@ function system()	{
 		var b = alert("Please set a 'moon' map first! (Hint: '2k_moon.ppm' is available in our PPM archive.)")
 		return false
 	}
-	tm = TextureMap(image_pattern(c), spherical_map)
-	m.material.pattern = my_pattern( tm )
+	tm = TextureMap(image_pattern(c), spherical_map, m)
+	m.material.pattern = my_pattern( tm, m )
 	m.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
 	m.material.specular = 0.0
  
@@ -409,6 +409,14 @@ function cm_cube()	{
 	
 	var cb = cube()
 	
+		Data.SkyBox.left = Data.PPM["left.jpg"]
+		Data.SkyBox.right = Data.PPM["right.jpg"]
+		Data.SkyBox.up = Data.PPM["up.jpg"]
+		Data.SkyBox.down = Data.PPM["down.jpg"]
+		Data.SkyBox.front = Data.PPM["front.jpg"]
+		Data.SkyBox.back = Data.PPM["back.jpg"]
+		
+		_log("SkyBox walls have been set.")
 	
 	var ip = [];
 	ip["left"] = image_pattern(Data.SkyBox["left"]); // { uv_pattern_at: image_uv_pattern_at, c: c, pixel_at: image_pattern_pixel_at } c == SkyBox.left
@@ -419,6 +427,8 @@ function cm_cube()	{
 	ip["back"] = image_pattern(Data.SkyBox["back"]);
 
 	var tm = {left: ip["left"], right: ip["right"], up: ip["up"], down: ip["down"], front: ip["front"], back: ip["back"]}
+	
+	//debugger;
 	
 	var cube_maps = {left: cube_uv_left, right: cube_uv_right, up: cube_uv_up, down: cube_uv_down, front: cube_uv_front, back: cube_uv_back}
 	

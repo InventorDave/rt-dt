@@ -194,9 +194,9 @@ function removeNullEntries2(arr)	{
 
 function convHexClr(hexCodeStr)	{
 	
-	var r = hexCodeStr.substring(0,2)
-	var g = hexCodeStr.substring(2,4)
-	var b = hexCodeStr.substring(4,6)
+	var r = hexCodeStr.substring(1,3)
+	var g = hexCodeStr.substring(3,5)
+	var b = hexCodeStr.substring(5,7)
 	
 	r = parseInt(r, 16)
 	g = parseInt(g, 16)

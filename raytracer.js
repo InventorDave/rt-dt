@@ -34,13 +34,12 @@ var Data = {
 				vn: [],
 				vt: [],
 				
-				g: [],
 				o: {},
 				
 				cache: [],
 				
 				c: new Camera(WIDTH, HEIGHT, (Math.PI/4)),
-				l: new point_light(point(-20, 20, 40), colour(1,1,1)),
+				l: new point_light(point(-20, 20, -40), colour(1,1,1)),
 				
 				presets: { camera: [], lights: [], scenes: [], functions: [] },
 				
@@ -66,7 +65,7 @@ var DataR = {
 Data.presets.camera.push({ str: "preset1", vt: view_transform(point(0,0,20),point(0,0,0),vector(0,1,0)) })
 Data.presets.camera.push({ str: "preset2", vt: view_transform(point(0,5,8),point(0,1,0),vector(0,1,0)) })
 Data.presets.camera.push({ str: "preset3", vt: view_transform(point(25,0, 25), // from
-								point(0,10,0),   // to
+								point(0,10,1),   // to
 								vector(0,1,0)) })
 
 /** END GLOBAL OBJECTS */
@@ -120,7 +119,7 @@ function sceneOptionSelected()	{
 		eval(fn + "()");
 	}
 	catch(e)	{
-		alert("error!")
+		alert("error! Cannot find function: " + fn)
 	}
 }
 
@@ -471,7 +470,12 @@ function render2()	{
 		pixel_count++
 		
 		var r = g_c.ray_for_pixel(g_x, g_y);
-				
+		
+		if (g_x == 0 && g_y == 0)	{
+			
+			// debugger
+		}
+		
 		var c = color_at(g_w, r, g_r)
 		
 		
@@ -497,7 +501,6 @@ function render2()	{
 		ctx.fillRect(x,y,1,1)
 				
 		g_x++
-		
 	}
 
 	//pixel_count--
@@ -551,20 +554,57 @@ function render2()	{
 	to = setTimeout(render2, 0)	
 }
 
-function render2b()	{
+function renderImageSync(l, o, d)	{
 
-	//console.log("render2b()")
-	var cond = true
+	prepCanvas()
 	
-	while(cond)	{
-			
-		g_x =0;
-		while(g_x != WIDTH) {
-			
-			pixel_count++
+	var c = Data.c
+	var w = new world()
+	
+	if(l)
+		Data.l = l
+	
+	if(o)
+		Data.o = o
+	
+	if(!d)
+		d = 1
+		
+	w.light = Data.l
+	w.objects = [Data.o]
+	
+	//debugger;
+	
+	if(Data.bgImage)
+	 Data.PPM["bgImage"] = Data.PPM[Data.bgImage]
+	 
+	//clearTimeout(loop)
+	var g_c = c;
+	var g_w = w;
+	var g_r = d;
+	var g_x = 0
+	var g_y = 0
+	
+	var bgImageSet = (!!Data.PPM["bgImage"] || false)
+	
+	var start = Date.now()
+
+	//console.log("render2()")
+	
+	for (var _x = 0; _x < WIDTH; _x++)	{
+	
+		for (var _y = 0; _y < HEIGHT; _y++)	{
+		
+			g_y = _y;
+			g_x = _x;
 			
 			var r = g_c.ray_for_pixel(g_x, g_y);
-					
+			
+			if (g_x == 0 && g_y == 0)	{
+				
+				// debugger
+			}
+			
 			var c = color_at(g_w, r, g_r)
 			
 			
@@ -588,60 +628,24 @@ function render2b()	{
 			var y = g_y + ((CANVAS_HEIGHT/2) - HEIGHT/2)
 			
 			ctx.fillRect(x,y,1,1)
-					
-			g_x++
-			
-		}
-
-		//pixel_count--
-		
-		g_y++
-				
-		if (g_y == HEIGHT)	{
-			
-			end = Date.now()
-
-			var time_sec = (end - start) / 1000
-			var time_min = time_sec / 60
-			
-			/**
-			// a funsies method for rounding a fractional number to 3dp, before I discovered .toFixed()
-			
-			var lhs_dc = 0, n = Math.round(time_min)
-			
-			while(!(n < 1))	{
-				
-				lhs_dc++
-				n /= 10
-			}
-			
-			time_min = time_min.toPrecision(lhs_dc + 3)
-			
-			lhs_dc = 0, n = Math.round(time_sec)
-			
-			while(!(n < 1))	{
-				
-				lhs_dc++
-				n /= 10
-			}
-
-			time_sec = time_sec.toPrecision(lhs_dc + 3)
-			*/
-			
-			var msg = "COMPLETED... This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "), " + pixel_count + "."
-			
-			// _log(msg);
-			
-			console.log(msg)
-			
-			pixel_count = 0
-			
-			cond = false;
 		}
 	}
+		
+	var end = Date.now()
+
+	var time_sec = (end - start) / 1000
+	var time_min = time_sec / 60
+	
+
+	var msg = "(test) COMPLETED... This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "), " + pixel_count + "."
+	
+	// _log(msg);
+	
+	console.log(msg)
 	
 	return 0;
 }
+
 
 
 

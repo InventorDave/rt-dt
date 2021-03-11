@@ -742,15 +742,15 @@ function cm_plane()	{
 	
 	prepCanvas()
 	
-	var l = new point_light(point(-10, 10, 10), colour(1,1,1)) 
-	Data.c.setCTransform(view_transform(point(0,150,0), point(0,0,0), vector(-1,0,0)));
+	var l = new point_light(point(-10, 10, 10), colour(1,0.3,0.3)) 
+	Data.c.setCTransform(view_transform(point(0,30,-10), point(0,0,0), vector(0,0,-1)));
 	
 	var main = colour(1,1,1), ul = colour(1,0,0), ur = colour(1,1,0), bl = colour(0,1,0), br = colour(0,1,1)
 	var p =  align_check_pattern(main, ul, ur, bl, br)
 	
-	var tm = TextureMap(p, planar_map)
 	var pl = plane()
-	var pat = my_pattern( tm )
+	var tm = TextureMap(p, planar_map, pl)
+	var pat = my_pattern( tm, pl )
 	pat.transform = identity_matrix().scaling(2,2,2)
 	pl.material.pattern = pat
 	
@@ -792,6 +792,28 @@ function cm_2()	{
 }
 
 
+function testScene()	{
+	
+	Data.c.setCTransform(view_transform(point(0,0,-10),point(0,0,0)))
+	
+	var l = new point_light(point(10,10,-10), colour(1,1,1))
+	
+	lights(l)
+	
+	var cb = cube()
+	cb.transform = m()//.rotation_y(Math.PI/4)
+	cb.material.color = convHexClr("#ff5555")
+	
+	var s = sphere()
+	s.transform = m().translation(4,0,0)
+	s.material.color = convHexClr("#55ff55")
+	
+	scene(cb, s)
+	
+	//debugger;
+}
+
+
 /* */
 function linetest1()	{
 	
@@ -804,5 +826,4 @@ function linetest1()	{
 	var d2 = new Line2d(p1,p2).length
 	
 	debugger
-	
 }

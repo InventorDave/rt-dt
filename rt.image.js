@@ -64,3 +64,29 @@ function convertToPPM(data, width, height, fn)	{
 	
 	//_log("Converted Image To PPM.")
 }
+
+function processPPMArray(ppmData)	{
+	
+	var data = [];
+	
+	for (var i = 0; i < ppmData.length; i+=3)	{
+	
+		data.push(ppmData[i])
+		data.push(ppmData[i+1])
+		data.push(ppmData[i+2])
+		data.push(Number(255))
+	}
+	
+	return new Uint8ClampedArray(data);
+}
+
+
+function loadToCanvasFromPPM(fn)	{
+	
+	var ppmObj = Data.PPM[fn];
+	
+	var data = processPPMArray(ppmObj.data)
+	var imageData = new ImageData(data, ppmObj.width, ppmObj.height);
+	
+	ctx.putImageData(imageData, 0, 0);
+}

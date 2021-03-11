@@ -15,6 +15,8 @@ Array.prototype.translation = function(x, y, z)	{
 	m[1][3] = y;
 	m[2][3] = z;
 	
+	//debugger;
+	
 	return m_multiply(this, m)
 }
 
@@ -196,43 +198,30 @@ function shearing(xy, xz, yx, yz, zx, zy)	{ // p53. returns shearing matrix for 
 	return m
 }
 
-function reflect_around_axis(p, axis, scale)	{
-	
-	if (!scale)
-		scale = 1
+function reflect_around_axis(p, axis)	{
 
-	if (!axis)
-		axis = "x"
+	var _m;
 	
-	var x = scale
-	var y = scale
-	var z = scale
+	switch(axis)	{
+		
+		case 'x':
+			_m = m().rotation_x(Math.PI)
+			break;
+			
+		case 'y':
+			_m = m().rotation_y(Math.PI)
+			break;
+		
+		case 'z':
+			_m = m().rotation_z(Math.PI)
+			break;
+			
+		default:
+			_m = m();
+			break;
+	}
 	
-	axis == "x" ? x = -x : axis == "y" ? y = -y : axis == "z" ? z = -z : x = -x ;
-	
-	return multiply_matrix_by_tuple(scaling(x, y, z), p)
-}
-
-Array.prototype.reflect_around_axis = function(axis, scale)	{
-	
-	if (!scale)
-		scale = 1
-
-	if (!axis)
-		axis = "x"
-	
-	var x = scale
-	var y = scale
-	var z = scale
-	
-	axis == "x" ? x = -x : axis == "y" ? y = -y : axis == "z" ? z = -z : x = -x ;
-	
-	var p = multiply_matrix_by_tuple(scaling(x, y, z), this.t)
-	
-	// this.t = p; // superfluous op.
-	
-	return this.translation(p.x,p.y,p.z)
-
+	return multiply_matrix_by_tuple(_m, p)
 }
 
 function multiply_matrix_by_tuple(m, t)	{

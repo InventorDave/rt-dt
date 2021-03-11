@@ -8,7 +8,7 @@ function ray(origin, direction)	{
 
 function fir_branch(id2)	{
 	
-	var fb = new Shape("fir_branch", id2 || 0)
+	var fb = new Shape("fir_branch", id2)
 	
 	var length = 2.0
     var radius = 0.025
@@ -40,38 +40,38 @@ function fir_branch(id2)	{
 	
 		for (var i = 0;  i < per_segment; i++)	{
 	
-//         # each needle is a triangle.
-//        # y_base y coordinate of the base of the triangle
-		var y_base = seg_size * y + Math.random() * seg_size
+	//         # each needle is a triangle.
+	//        # y_base y coordinate of the base of the triangle
+			var y_base = seg_size * y + Math.random() * seg_size
 
-//         # y_tip is the y coordinate of the tip of the triangle
-        var y_tip = y_base - Math.random() * seg_size
+	//         # y_tip is the y coordinate of the tip of the triangle
+			var y_tip = y_base - Math.random() * seg_size
 
-//         # y_angle is angle (in radians) that the needle should be
-//        # rotated around the branch.
-        var y_angle = i * theta + Math.random() * theta
-//
-//        # how long is the needle?
-        var needle_length = max_length / 2 * (1 + Math.random())
-//
-//         # how much is the needle offset from the center of the branch?
-        var ofs = radius / 2
+	//         # y_angle is angle (in radians) that the needle should be
+	//        # rotated around the branch.
+			var y_angle = i * theta + Math.random() * theta
+	//
+	//        # how long is the needle?
+			var needle_length = max_length / 2 * (1 + Math.random())
+	//
+	//         # how much is the needle offset from the center of the branch?
+			var ofs = radius / 2
 
-//         # the three points of the triangle that form the needle
-        var p1 = point(ofs, y_base, ofs)
-       var p2 = point(-ofs, y_base, ofs)
-       var p3 = point(0.0, y_tip, needle_length)
+	//         # the three points of the triangle that form the needle
+			var p1 = point(ofs, y_base, ofs)
+		   var p2 = point(-ofs, y_base, ofs)
+		   var p3 = point(0.0, y_tip, needle_length)
 
-//         # create, transform, and texture the needle
-        var tri = triangle(p1, p2, p3)
-        tri.transform = m().rotation_y(y_angle)
-        tri.material = new material();
-		tri.material.color = colour(0.26, 0.36, 0.16)
-		tri.material.specular = 0.1
+	//         # create, transform, and texture the needle
+			var tri = triangle(p1, p2, p3)
+			tri.transform = m().rotation_y(y_angle)
+			
+			tri.material.color = colour(0.26, 0.36, 0.16)
+			tri.material.specular = 0.1
 
-       subgroup.addChild(tri)
+		   subgroup.addChild(tri)
 
-	}
+		}
 
 		obj.addChild(subgroup)
 	}
@@ -663,12 +663,11 @@ function plane(id2)	{
 	return pl
 }
 
-
 function group(id2)	{
 	
 	var g = new Shape("group", id2)
 	
-	Data.g[g.id] = g
+	//Data.g[g.id] = g
 	
 	g.s=[];
 	
@@ -986,7 +985,7 @@ function Shape(type, id2)	{
 	
 	this.getSidesKeys = function()	{
 		
-		var _keys = [], i = 0
+		var _keys = [], i=0;
 		for (var key in this.sides)	{
 			_keys[i++] = key
 		}
@@ -1052,7 +1051,6 @@ function Shape(type, id2)	{
 	this.local_normal_at = function(p)	{ /* default impl. */ return vector(p.x,p.y,p.z); };
 }
 
-
 function test_shape()	{
 	
 	var ts = new Shape("test")
@@ -1062,14 +1060,13 @@ function test_shape()	{
 	return ts;
 }
 
-function glass_sphere()	{
+function glass_sphere(id2)	{
 	
-	var s = sphere()
+	var s = sphere(id2)
 	s.material.transparency = 1.0
 	s.material.refractive_index = 1.5
 	
 	return s
-	
 }
 
 function set_transform(s, t, flag)	{
@@ -1083,11 +1080,11 @@ function set_transform(s, t, flag)	{
 	s.transform = t;
 }
 
-
 function intersection(s, t, u, v)	{
 	
 	this.t = t;
+	s.u = u || s.u
+	s.v = v || s.v
 	this.object = s;
-	this.object.u = u
-	this.object.v = v
+
 }
