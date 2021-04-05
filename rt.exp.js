@@ -67,7 +67,7 @@ function setScene()	{
 	s.material.transparency = 0.7
 	s.material.refractive_index = 1.5
 	
-	scene(cb)
+	scene(cb, s)
 	
 	Data.c.setCTransform(view_transform(
 									A = B,
@@ -76,7 +76,7 @@ function setScene()	{
 									)
 	);
 						
-	M = m().rotation_y(radians(10))// .rotation_z(radians(10))
+	//M = m().rotation_y(radians(10))// .rotation_z(radians(10))
 	M.t = B
 	
 	//M.m = identity_matrix()
@@ -95,15 +95,18 @@ function next()	{
 }
 
 
+
 function genFrames()	{
 
 	Data.frame = 0;
 	
-	for (var i = 0; i < 36; i++)	{
+	for (var i = 0; i < 361; i+=10)	{
 		
-		//M = M.rotation_x(Math.PI/2)
+		var i2 = radians(i)
+		
+		M = m().rotation_x(i2).rotation_y(i2)//.rotation_z(i2)
 
-		A = multiply_matrix_by_tuple(M, A)
+		A = multiply_matrix_by_tuple(M, B)
 		
 		A = round_t(A)
 		

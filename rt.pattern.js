@@ -120,7 +120,7 @@ function stripe_pattern(c1, c2, scale)	{
 }
 
 // USAGE var tm = TextureMap(checkers_pattern(2, 2, colour(1,1,1), colour(0.4,0.4,0.4)), spherical_map)
-// shape.material.pattern = my_pattern(tm)
+// shape.material.pattern = my_pattern(tm, [ref to owner shape, a js var/object ref])
 function my_pattern(TextureMap, owner)	{
 	
 	var tp = new Pattern()

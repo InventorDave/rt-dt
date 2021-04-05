@@ -543,7 +543,7 @@ function eCh5()	{
 			if(hit(xs))	{
 				
 				var c = convert(color_)
-				ctx.fillStyle = "#" + c.x + c.y + c.z
+				ctx.fillStyle = c
 				ctx.fillRect(x,y,1,1)
 			}
 			
