@@ -3,10 +3,22 @@ Javascript implementation of Jamis Buck's Raytracer Challenge.
 
 Once you have downloaded the project files, simply load "raytracer.html" into your browser. *This program is a work in progress.* 
 
-The best way to start is to go to "File->Load PPM File", and load 2 PPM files consecutively. 1) "earth.ppm", and 2) any PPM file you have (GIMP converts image files to .PPM - you MUST export as ASCII not RAW!). Then go to "Options->Set/Unset BG Image", click the button that it tells you to, then select your 2nd PPM file from the dropdown menu. Finally, having exited the menu by clicking on the "x", click the "earth()" button on the right of the App window. And marvel.
+On loading the app (loading the raytracer.html page in a browser with a local web server), the app will try to load a bunch of helper image files. It doesn't take more than a couple of seconds, I guess. These files will be useful to take advantage of the raytracer.
+
+Toward the upper-left is a drop-down box with some pre-loaded sample scenes. Try them out, they're fun. Especially "Earth & Moon"...
+
+After you've enjoyed that rather edifying experience, load the dev console and run the following 3 functions:
+
+setScene()
+genFrames() // takes a long time, generates ~36 frames
+animate()
+
+The last function, "animate()", will display an animation of the generated frames.
+
+Note: In Firefox, after each frame is generated, the output confirmation is *NOT* printed in the dev console (it should be), but in Chrome it *IS* printed - at least on MY (rather crappy, entry level) rig.  On my (crap) rig, each frame takes on average 9-10 seconds to render.
 
 
-Included are some .obj mesh files you can load into the program by selecting the "Load Mesh (.obj) File" File menu option. Then,
+Load a (hopefully compatible - no promises) .obj mesh file by selecting the "Load Mesh (.obj) File" File menu option. Then,
 
 Select "Render->Generate BVH" (unless you want the rendering to take forever - BVH stands for Bounding Volume Heirarchy, and it is an optimisation technique).
 

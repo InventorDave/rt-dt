@@ -1,5 +1,3 @@
-// "use strict";
-
 Array.prototype.t ={ x: 0, y: 0, z: 0, w: 1 };
 Array.prototype.m = []; // remember to populate on init()
 
@@ -8,7 +6,7 @@ Array.prototype.translation = function(x, y, z)	{
 	
 	var m = identity_matrix();
 	
-	var p = point(x || this.t.x, y || this.t.y, z || this.t.z)
+	var p = point(x || this.t.x || 0, y || this.t.y || 0, z || this.t.z || 0)
 	this.t = p
 	
 	m[0][3] = x;

@@ -540,6 +540,7 @@ function check_axis2(origin, direction, p)	{
 }
 
 function cube(id2)	{
+	
 	var c = new Shape("cube", id2)
 	
 	c.bbMin = point(-1,-1,-1)
@@ -964,7 +965,8 @@ function BB(min,max)	{
 		
 		return { left: left, right: right }
 
-	};		
+	};	
+	
 }
 
 function Shape(type, id2)	{
@@ -1083,8 +1085,7 @@ function set_transform(s, t, flag)	{
 function intersection(s, t, u, v)	{
 	
 	this.t = t;
-	s.u = u || s.u
-	s.v = v || s.v
+	s.u = u || s.u || 0
+	s.v = v || s.v || 0
 	this.object = s;
-
 }

@@ -302,7 +302,7 @@ function preLoadResources()	{
 			img_arr[i].style = "display: none;"
 		
 			document.body.appendChild(img_arr[i])
-			_log("Loading Image File: " + img_arr[i].fn)
+			//_log("Loading Image File: " + img_arr[i].fn)
 		}
 		
 		//Data.Maps["earth"] = maps.earth
@@ -540,7 +540,7 @@ function render2()	{
 		time_sec = time_sec.toPrecision(lhs_dc + 3)
 		*/
 		
-		var msg = "(test) COMPLETED... This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "), " + pixel_count + "."
+		var msg = "(test) COMPLETED... This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + ")."
 		
 		// _log(msg);
 		
