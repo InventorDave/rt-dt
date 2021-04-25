@@ -33,6 +33,7 @@ var Data = {
 				v: [],
 				vn: [],
 				vt: [],
+				g: [],
 				
 				o: {},
 				
@@ -637,7 +638,7 @@ function renderImageSync(l, o, d)	{
 	var time_min = time_sec / 60
 	
 
-	var msg = "(test) COMPLETED... This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "), " + pixel_count + "."
+	var msg = "(test) COMPLETED... This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "."
 	
 	// _log(msg);
 	

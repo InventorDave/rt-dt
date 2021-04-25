@@ -78,15 +78,15 @@ function setScene()	{
 	//debugger;
 }
 
-function genFrames()	{
+function genFrames(step)	{
 
 	Data.frame = 0;
 	
-	for (var i = 0; i < 361; i+=10)	{
+	for (var i = 0; i < 361; i+=step || 10)	{
 		
 		var i2 = radians(i)
 		
-		M = m().rotation_x(i2).rotation_y(i2)//.rotation_z(i2)
+		M = m().rotation_x(i2).rotation_y(i2).rotation_z(i2)
 
 		A = multiply_matrix_by_tuple(M, B)
 		
@@ -100,7 +100,7 @@ function genFrames()	{
 		
 		renderImageSync()
 		
-		saveImage()
+		saveImage(null, step)
 	}
 }
 
@@ -136,8 +136,11 @@ function wait(s)	{
 }
 
 Data.frame = 0;
-function saveImage(fn)	{
+function saveImage(fn, step)	{
 	
+	if (!step)
+		step = 10
+		
 	var img = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 	
 	var width = img.width
@@ -145,7 +148,7 @@ function saveImage(fn)	{
 	var pix = img.data;
 	
 	if(!fn)
-		console.log("Saved frame (" + String(Data.frame+1) + " of " + Math.floor(360/10) + ")")
+		console.log("Saved frame (" + String(Data.frame+1) + " of " + Math.floor(360/step) + ")")
 	else
 		console.log("Saved image as " + fn)
 		

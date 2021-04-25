@@ -10,7 +10,7 @@ Toward the upper-left is a drop-down box with some pre-loaded sample scenes. Try
 After you've enjoyed that rather edifying experience, load the dev console and run the following 3 functions:
 
 setScene()
-genFrames() // takes a long time, generates ~36 frames
+genFrames() // takes a long time, generates ~36 frames, or if you wish, add the parameter 36 ("genFrames(36)"), to gen 10 frames rather than 36 (360/36). You know, you could even try "genFrames(20)", this would produce 18 (360/20) frames...
 animate()
 
 The last function, "animate()", will display an animation of the generated frames.

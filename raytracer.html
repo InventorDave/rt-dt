@@ -232,12 +232,13 @@
     </button>
     <div class="dropdown-content" style="right: 0px;" id="myDropdownHelp">
       
-      <a onclick="option('help'); return false;">Help Contents</a>
-      <a onclick="option('selec-elem'); return false;">Select UI Element</a>
+      <a onclick="option('help'); return false;">FAQ</a>
+      <a onclick="option('quick-tips'); return false;">Quick Tips</a>
 	  <!--
 	  <a style="color:#cc0000;" onclick="option('jamis'); return false;">Buy Jamis Buck's Book!</a>
-	  -->
+	  
 	  <a onclick="option('report-bug'); return false;">Report a Bug</a>
+	  -->
 	  <a onclick="option('about'); return false;">About</a>
     </div>
   </div>
@@ -779,9 +780,9 @@ function option(opt)	{
 	
 	if (opt=="gen-bvh")
 		if(doDivide())
-			log("Scene divided into BVH.")
+			_log("Scene divided into BVH.")
 		else
-			log("Failed to generate BVH. Have you loaded any objects into the scene?")
+			_log("Failed to generate BVH. Have you loaded any objects into the scene?")
 	
 	if (opt=="cameraOptions")	{
 	
