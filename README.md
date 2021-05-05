@@ -30,7 +30,7 @@ Alternately, define a collection of primitives (look in "rt.p+e.js" to see the o
 
 	renderImage(lights(lightObj), scene(shape1, shape2, ...))
 	
-Or,
+Or, something like:
 
 	scene(shape1, shape2, ...)
 	lights(new point_light(positionPoint, intensityColour))
@@ -45,9 +45,10 @@ Or,
 Then, the scene can be rendered from menu option "Render->Render!". Note, whether you choose to manually call renderImage() or not, if you want to define the camera, you must do the lower 3 lines of code above before you call renderImage()/exit your function.
 
 
-(Note, any primitives that have a .min and .max property - see their definition function - needs to have those values set upon creation, it should be intuitive if you have any experience working with primitives in a raytracer...)
+(Note, any primitives that have a .min and .max property - see their definition function - needs to have those values set upon creation, its basically 'Shape.min = -1, Shape.max = 1;' for example)
 
 rt/dt stands for raytracer/distance-tracer because I am developing it as a quasi-rasterisation-and-raytracing app.
 
 Some optimisations have been performed, but the code largely has not been refactored yet, as like I said, the program is still under development.
 
+Look at 'directtracer.js' and 'rt.graphics.js' for some basic functions available to the dev console for raster-based (rather than raytraced) rendering. So far it's just some basic shapes.
