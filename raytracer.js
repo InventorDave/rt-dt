@@ -281,7 +281,7 @@ function populateSceneFunctionSelection()	{
 function preLoadResources()	{
 
 		var url = "img/"
-		var files = ["earthmap1k.jpg", "starfield.jpg", "2k_moon.jpg", "left.jpg", "right.jpg", "front.jpg", "back.jpg", "up.jpg", "down.jpg"];
+		var files = ["earthmap1k.jpg", "starfield.jpg", "2k_moon.jpg", "left.jpg", "right.jpg", "front.jpg", "back.jpg", "up.jpg", "down.jpg", "normalMap.jpg"];
 		var maps =  {earth: "earthmap1k.jpg", moon: "2k_moon.jpg"}
 		var bgImage = "starfield.jpg"
 		//var sb_cube_img = "earthmap1k.jpg"

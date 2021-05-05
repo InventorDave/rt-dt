@@ -402,50 +402,99 @@ function CubeMap(cr, c1, c2, c3, c4, c5, c6, c7, c8)	{
 	return cm
 }
 
-function cube_uv_front(p)	{
+
+function cube_uv_front(p, owner)	{
 	
 	var u = ((p.x + 1) % 2.0) / 2.0
 	var v = ((p.y + 1) % 2.0) / 2.0
+	
+		if((owner) && (owner.id))	{
+		
+		owner.material.u = u
+		owner.material.v = v
+		
+		//console.log("Set u, v.")
+	}
 
 	return {u: u, v: v}
 }
 
-function cube_uv_back(p)	{
+function cube_uv_back(p, owner)	{
 	
 	var u = ((1 - p.x) % 2.0) / 2.0
 	var v = ((p.y + 1) % 2.0) / 2.0
+	
+		if((owner) && (owner.id))	{
+		
+		owner.material.u = u
+		owner.material.v = v
+		
+		//console.log("Set u, v.")
+	}
 
 	return {u: u, v: v}
 }
 
-function cube_uv_up(p)	{
+function cube_uv_up(p, owner)	{
 	
 	var u = ((p.x + 1) % 2.0) / 2.0
 	var v = 1 - (((1 - p.z) % 2.0) / 2.0) // ((1 - p.z) % 2.0) / 2.0
+	
+	if((owner) && (owner.id))	{
+		
+		owner.material.u = u
+		owner.material.v = v
+		
+		//console.log("Set u, v.")
+	}
 
 	return {u: u, v: v}
 }
 
-function cube_uv_down(p)	{
+function cube_uv_down(p, owner)	{
 	
 	var u = ((p.x + 1) % 2.0) / 2.0
 	var v = 1 - (((p.z + 1) % 2.0) / 2.0) // ((p.z + 1) % 2.0) / 2.0
+	
+		if((owner) && (owner.id))	{
+		
+		owner.material.u = u
+		owner.material.v = v
+		
+		//console.log("Set u, v.")
+	}
 
 	return {u: u, v: v}
 }
 
-function cube_uv_left(p)	{
+function cube_uv_left(p, owner)	{
 	
 	var u = 1 - (((p.z + 1) % 2.0) / 2.0) // ((p.z + 1) % 2.0) / 2.0
 	var v = ((p.y + 1) % 2.0) / 2.0
 
+		if((owner) && (owner.id))	{
+		
+		owner.material.u = u
+		owner.material.v = v
+		
+		//console.log("Set u, v.")
+	}
+	
 	return {u: u, v: v}
 }
 
-function cube_uv_right(p)	{
+function cube_uv_right(p, owner)	{
 	
 	var u = 1 - (((1 - p.z) % 2.0) / 2.0) // ((1 - p.z) % 2.0) / 2.0
 	var v = ((p.y + 1) % 2.0) / 2.0
+	
+		if((owner) && (owner.id))	{
+		
+		owner.material.u = u
+		owner.material.v = v
+		
+		//console.log("Set u, v.")
+	}
 
 	return {u: u, v: v}
 }

@@ -460,6 +460,78 @@ function cm_cube()	{
 
 addFunction("Cube", "cm_cube")
 
+function cm_cube2()	{
+	
+	prepCanvas()
+	
+	var l = new point_light(point(-10, 0, -10), colour(1,1,1)) 
+	Data.c.setCTransform(view_transform(point(0,10,-30), point(0,0,0), vector(0,1,0)));
+	
+	var c1 = colour(1,0,0), c2 = colour(1,1,0), c3 = colour(1,0.5,0), c4 = colour(0,1,0), c5 = colour(0,1,1), c6 = colour(0,0,1), c7 = colour(1,0,1), c8 = colour(1,1,1)
+	
+	var cb = cube()
+	cb.material.normalMap = Data.PPM["normalMap"]
+	if(!cb.material.normalMap)	{
+		
+		alert("Please set a Normal Map first! (Hint: 'normalMap.ppm' is available in our PPM archive - remember to go to Options->Set/Unset Normal Map, and select the 'normalMap.ppm' entry AFTER it has loaded!!)")
+		
+		return false
+	}
+	
+
+
+		Data.SkyBox.left = Data.PPM["earthmap1k.jpg"]
+		Data.SkyBox.right = Data.PPM["earthmap1k.jpg"]
+		Data.SkyBox.up = Data.PPM["earthmap1k.jpg"]
+		Data.SkyBox.down = Data.PPM["earthmap1k.jpg"]
+		Data.SkyBox.front = Data.PPM["earthmap1k.jpg"]
+		Data.SkyBox.back = Data.PPM["earthmap1k.jpg"]
+		
+		_log("SkyBox walls have been set.")
+	
+	var ip = [];
+	ip["left"] = image_pattern(Data.SkyBox["left"]); // { uv_pattern_at: image_uv_pattern_at, c: c, pixel_at: image_pattern_pixel_at } c == SkyBox.left
+	ip["right"] = image_pattern(Data.SkyBox["right"]);
+	ip["up"] = image_pattern(Data.SkyBox["up"]);
+	ip["down"] = image_pattern(Data.SkyBox["down"]);
+	ip["front"] = image_pattern(Data.SkyBox["front"]);
+	ip["back"] = image_pattern(Data.SkyBox["back"]);
+
+	var tm = {left: ip["left"], right: ip["right"], up: ip["up"], down: ip["down"], front: ip["front"], back: ip["back"]}
+	
+	//debugger;
+	
+	var cube_maps = {left: cube_uv_left, right: cube_uv_right, up: cube_uv_up, down: cube_uv_down, front: cube_uv_front, back: cube_uv_back}
+	
+	//console.log("cm_cube(): before TextureMap() call")
+	//debugger;
+
+	var tm2 = TextureMap(tm, cube_maps, cb)
+	
+	//console.log("cm_cube(): after tm2")
+	//debugger;
+	
+	cb.material.pattern = my_pattern( tm2, cb )
+	//console.log("cm_cube(): after pattern assign")
+	
+	//debugger;
+	
+	// cb.material.pattern = CubeMap(cb, c1,c2,c3,c4,c5,c6,c7,c8)
+	
+	cb.transform = m().scaling(2,2,2).rotation_y(Math.PI / 4, 1)
+	
+	var o = group()
+	o.addChild(cb)
+	
+	Data.o = o
+	Data.l = l
+	
+	renderImage()
+}
+
+
+addFunction("Cube2", "cm_cube2")
+
 
 function sceneBump()	{
 	
