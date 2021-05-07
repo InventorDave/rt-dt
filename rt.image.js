@@ -62,7 +62,7 @@ function convertToPPM(data, width, height, fn)	{
 	Data.PPM[fn] = output;
 	Data.PPM_refs.push(fn);
 	
-	//_log("Converted Image To PPM.")
+	console.log("Converted Image To PPM.")
 }
 
 function processPPMArray(ppmData)	{

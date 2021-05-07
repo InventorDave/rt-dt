@@ -1,6 +1,8 @@
 var A = B = point(0,0,-20);
 var M = m();
-
+var ogFROM;
+var FROM = ogFROM = point(0,0,-20);
+var UP = normalize(vector(0,1,0))
 
 function set(A)	{
 	
@@ -10,63 +12,56 @@ function set(A)	{
 }
 
 function setScene()	{
-	
-			//Data.bgImage = bgImage;
-		//_log("Set bgImage to " + Data.bgImage + ".")
-		
-		/*
-		Data.SkyBox.left = Data.PPM["left.jpg"]
-		Data.SkyBox.right = Data.PPM["right.jpg"]
-		Data.SkyBox.up = Data.PPM["up.jpg"]
-		Data.SkyBox.down = Data.PPM["down.jpg"]
-		Data.SkyBox.front = Data.PPM["front.jpg"]
-		Data.SkyBox.back = Data.PPM["back.jpg"]
-		*/
-		
-		Data.SkyBox.left = Data.PPM["earthmap1k.jpg"]
-		Data.SkyBox.right = Data.PPM["earthmap1k.jpg"]
-		Data.SkyBox.up = Data.PPM["earthmap1k.jpg"]
-		Data.SkyBox.down = Data.PPM["earthmap1k.jpg"]
-		Data.SkyBox.front = Data.PPM["front.jpg"]
-		Data.SkyBox.back = Data.PPM["earthmap1k.jpg"]
-		
-		//_log("SkyBox walls have been set.")
-		
-	
+
 	var l = new point_light(point(-10,10,-10), colour(1,1,1))
 	lights(l)
 	
-	var cb = cube()
-	cb.material.color = colour(135/255,206/255,250/255)
-	cb.transform = m().translation(0, 0, 0)
+	var s = sphere()
+	s.transform = m().scaling(2,2,2).translation(0,0,0).rotation_y(Math.PI).rotation_x(Math.PI/4)
+	//s.material.transform = m().rotation_x(Math.PI/2).rotation_y((Math.PI) * 0.7)
 	
-	var skyBox = getSkyBoxObject()
-	if (!verify_SkyBoxObj(skyBox))	{
+	s.material.casts_shadow = false;
+	
+	/**
+	s.material.normalMap = Data.PPM["normalMap"]
+	if(!s.material.normalMap)	{
 		
-		alert("SkyBox obj is not populated! Please fix.")
+		alert("Please set a Normal Map first! (Hint: 'normalMap.ppm' is available in our PPM archive - remember to go to Options->Set/Unset Normal Map, and select the 'normalMap.ppm' entry AFTER it has loaded!!)")
+		
+		return false
+	}	
+	*/
+	s.material.specular = 0.0
+	
+	var c = Data.PPM["earthmap1k.jpg"];
+	if(!c)	{
+		
+		alert("Please set an 'earth' map first! (Hint: 'earthmap1k.jpg' is available!)")
 		return false
 	}
+	var tm = TextureMap(image_pattern(c), spherical_map, s)
+	s.material.pattern = my_pattern( tm, s )
+	s.material.ambient = 1.0
+	s.material.diffuse = 1.0
 	
-	cb.material = SkyBoxMaterial(SkyBox(skyBox.left, skyBox.right, skyBox.front, skyBox.back, skyBox.up, skyBox.down))
+	var ss = sphere("SKYSPHERE")
 	
+	ss.transform = m().translation(0,0,0).scaling(40,40,40)
+	c = Data.PPM["skysphere.jpg"];
+	if(!c)	{
+		
+		alert("Please set a skysphere map first! (Hint: 'skysphere.jpg' is expected.)")
+		return false
+	}
+	tm = TextureMap(image_pattern(c), spherical_map, ss)
+	ss.material.pattern = my_pattern( tm, ss )
+	ss.material.specular = 0.0
 	
+
 	
+	scene(s/*, ss*/)
 	
-	
-	var s = sphere()
-	s.transform = m().translation(2,2,2).scaling(2,2,2)
-	s.material.color = convHexClr("88ff55")
-	s.material.transparency = 0.7
-	s.material.refractive_index = 1.5
-	
-	scene(cb, s)
-	
-	Data.c.setCTransform(view_transform(
-									A = B,
-									point(0,0,0) /**,
-									vector(0,1,0) */
-									)
-	);
+	setCamera();
 						
 	//M = m().rotation_y(radians(10))// .rotation_z(radians(10))
 	M.t = B
@@ -74,53 +69,140 @@ function setScene()	{
 	//M.m = identity_matrix()
 	
 	renderImage()
+	console.log("Scene generated.")
+	//console.log(FROM)
 	
 	//debugger;
 }
 
+function setCamera()	{
+	
+		
+		/**
+		if( eq( Math.abs(dot(normalize(FROM), point(0,1,0))), 1, 1/179) )
+			FROM.x = 20 / 45  // multiply_matrix_by_tuple( m().rotation_z(radians(1)), FROM)
+		else
+			FROM.x = 0
+		*/
+		
+		var test = 270 // to keep "up" always in the world +y direction, test = round(FROM.z) > 0 && FROM.y > 0 ? 45 : 270;
+		// i suppose when rotating around y-axis, test = FROM.z > 0 && FROM.x < 0 ? 45 : 270'
+		// when rotating around z-axis, test = FROM.x < 0 &&  FROM.y > 0 ? 45 : 270;
+		var r = radians(test)
+		//UP = round_t(multiply_matrix_by_tuple(m().rotation_x(r), normalize(subtract(point(0,0,0), FROM))))
+
+		UP = vector(0,1,0)
+		
+		console.log("FROM: ")
+		console.log(FROM)
+		console.log("UP: ")
+		console.log(UP)
+		console.log("dot : = " + round(dot(FROM, UP)))
+		
+		Data.c.setCTransform(view_transform(FROM, point(0,0,0), UP));
+		
+		if(!Data.c.it_c)	{
+			
+			console.log("Inverse is 0! type unroll to stop function.");
+			debugger;
+		}
+}
+
+var unroll = 0;
 function genFrames(step)	{
 
+	var fn;
+	var _m = m().scaling(2,2,2)
+	
+	for (var j = 0; j < Data.PPM_refs.length; j++)	{
+		
+		if ((fn = Data.PPM_refs[j]).substring(0,"frame".length)=="frame")	{
+			
+			Data.PPM[fn] = null;
+			Data.PPM_refs.splice(j, 1);
+			j--;
+			console.log("Deleted frame: ", fn);
+		}
+	}
+	
 	Data.frame = 0;
 	
-	for (var i = 0; i < 361; i+=step || 10)	{
+	saveImage(null, 0);
+	
+	Data.frame = 1;
+	
+	for (i = step || 10; i < 361 - step; i+=step || 10)	{
 		
+		if(unroll)
+			break;
+			
 		var i2 = radians(i)
 		
-		M = m().rotation_x(i2).rotation_y(i2).rotation_z(i2)
-
-		A = multiply_matrix_by_tuple(M, B)
+		//M = _m.rotation_y(i2)
 		
-		A = round_t(A)
+		//Data.o.s[0].transform = M;
 		
-		//_log("A - x:" + A.x + ", y:" + A.y + ", z:" + A.z)
+		//console.log("w = " + FROM.w);
+		FROM.w = 1
 		
-		Data.c.setCTransform(view_transform(A, point(0,0,0)));
+		FROM = round_t(multiply_matrix_by_tuple(m().rotation_y(i2, true), ogFROM))
+		//console.log(FROM)
+		setCamera()
 		
 		//debugger;
 		
-		renderImageSync()
+		renderImageSync(null, null, null, 1)
 		
-		saveImage(null, step)
+		convertToPPM(_nonCanvasArr, WIDTH, HEIGHT, "frame" + (Data.frame++));
+		
+		console.log("Saved frame " + (Data.frame-1) + ".");
+		//saveImage(null, step)
 	}
+	
+	//_nonCanvasArr = []
 }
 
-var to_a, _f = 0;
+var to_a, _f = 0, _loopCounts = 0;
 
-function animate()	{
+function stop()	{
+
+		_f = -1;
+}
+
+function animate(cycles)	{
 	
+	if (cycles>0)	{
+		
+		_loopCounts = cycles;
+		
+	}
 	
+	if(_loopCounts<1)	{
+		
+		_f = -1
+	}
+	
+	if (_f == -1)	{
+		
+		_f = 0;
+		_loopCounts = 0;
+		return;
+	}
+		
 	loadToCanvasFromPPM("frame" + _f)
 	
 	_f++
 	
 	if (_f < Data.frame)	{
-		to_a = setTimeout(animate, 100)
+		to_a = setTimeout(animate, 1000/24)
 		return
 	}
 	
 	_f = 0
 	
-	console.log("Animation complete.")
+	console.log("Completed a revolution of the animation.")
+	
+	animate(--_loopCounts)
 }
 
 function wait(s)	{

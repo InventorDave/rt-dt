@@ -146,13 +146,13 @@ function my_pattern(TextureMap, owner)	{
 			var res = this.owner.face(p);
 			
 			tm = this.TextureMap[res] // 
-			console.log("There is a bug in Chrome I can't quite isolate. This message will continue to print long after the image has apparently rendered. That by definition is because the algorithm/handler for Cube/SkyBox patterns is still being repeatedly called by the raytracer engine. It does not happen in Firefox.");
+			//console.log("There is a bug in Chrome I can't quite isolate. This message will continue to print long after the image has apparently rendered. That by definition is because the algorithm/handler for Cube/SkyBox patterns is still being repeatedly called by the raytracer engine. It does not happen in Firefox.");
 			//debugger;
 		}
 		else	{
 			
 			tm = this.TextureMap
-			console.log("Shape has one surface.");
+			//console.log("Shape has one surface.");
 			//debugger;
 		}
 		

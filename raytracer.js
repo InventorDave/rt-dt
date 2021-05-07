@@ -251,6 +251,8 @@ function rtdtinit()	{
 	populateSceneFunctionSelection();
 	
 	preLoadResources();
+	
+
 }
 
 function populateSceneFunctionSelection()	{
@@ -281,7 +283,7 @@ function populateSceneFunctionSelection()	{
 function preLoadResources()	{
 
 		var url = "img/"
-		var files = ["earthmap1k.jpg", "starfield.jpg", "2k_moon.jpg", "left.jpg", "right.jpg", "front.jpg", "back.jpg", "up.jpg", "down.jpg", "normalMap.jpg"];
+		var files = ["earthmap1k.jpg", "starfield.jpg", "2k_moon.jpg", "left.jpg", "right.jpg", "front.jpg", "back.jpg", "up.jpg", "down.jpg", "normalMap.jpg", "skysphere.jpg"];
 		var maps =  {earth: "earthmap1k.jpg", moon: "2k_moon.jpg"}
 		var bgImage = "starfield.jpg"
 		//var sb_cube_img = "earthmap1k.jpg"
@@ -340,7 +342,12 @@ function preLoadResourcesStage2(fn, i)	{
 	_log("Image File loaded: "  + fn)
 	convertToPPM(pix, width, height, fn);
 	
-	//document.removeChild(img);
+	if(fn=="normalMap.jpg")	{
+		Data.PPM["normalMap"] = Data.PPM["normalMap.jpg"]
+		_log("Set normal map to 'normalMap.jpg'.\n");
+	}
+	
+	document.body.removeChild(img);
 	//debugger;
 
 }
@@ -555,7 +562,9 @@ function render2()	{
 	to = setTimeout(render2, 0)	
 }
 
-function renderImageSync(l, o, d)	{
+var _nonCanvasArr = []
+
+function renderImageSync(l, o, d, flag)	{
 
 	prepCanvas()
 	
@@ -588,13 +597,15 @@ function renderImageSync(l, o, d)	{
 	
 	var bgImageSet = (!!Data.PPM["bgImage"] || false)
 	
+	var i = 0;
+	
 	var start = Date.now()
 
 	//console.log("render2()")
 	
-	for (var _x = 0; _x < WIDTH; _x++)	{
+	for (var _y = 0; _y < HEIGHT; _y++)	{
 	
-		for (var _y = 0; _y < HEIGHT; _y++)	{
+		for (var _x = 0; _x < WIDTH; _x++)	{
 		
 			g_y = _y;
 			g_x = _x;
@@ -623,12 +634,24 @@ function renderImageSync(l, o, d)	{
 				
 			}
 			
-			ctx.fillStyle = convert(c)
-			
 			var x = g_x + ((CANVAS_WIDTH/2) - WIDTH/2)
 			var y = g_y + ((CANVAS_HEIGHT/2) - HEIGHT/2)
 			
-			ctx.fillRect(x,y,1,1)
+			
+			if (flag)	{ // bypass canvas object
+			
+				_nonCanvasArr[i++] = Math.floor(255*c.x)
+				_nonCanvasArr[i++] = Math.floor(255*c.y);
+				_nonCanvasArr[i++] = Math.floor(255*c.z);
+				_nonCanvasArr[i++] = 255
+				
+			}
+			
+			else	{
+			
+				ctx.fillStyle = convert(c)
+				ctx.fillRect(x,y,1,1)
+			}
 		}
 	}
 		
@@ -637,12 +660,9 @@ function renderImageSync(l, o, d)	{
 	var time_sec = (end - start) / 1000
 	var time_min = time_sec / 60
 	
-
-	var msg = "(test) COMPLETED... This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins. PIXEL COUNT = (" + WIDTH + " x " + HEIGHT + "."
-	
 	// _log(msg);
 	
-	console.log(msg)
+	console.log("COMPLETED. This render took " + time_sec.toFixed(3) + " secs, " + time_min.toFixed(3) + " mins.")
 	
 	return 0;
 }

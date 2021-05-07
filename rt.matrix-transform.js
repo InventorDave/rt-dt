@@ -81,6 +81,8 @@ Array.prototype.rotation_x = function(r, dir)	{
 	m[2][1] = sin
 	m[2][2] = cos
 	
+	//m[3][3] = 0
+	
 	if (dir)
 		m = inverse(m)
 

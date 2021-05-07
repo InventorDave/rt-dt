@@ -557,8 +557,8 @@ function sceneBump()	{
 	s.material.normalMap = Data.PPM["normalMap"]
 	if(!s.material.normalMap)	{
 		
-		var b = alert("Please set a Normal Map first! (Hint: 'normalMap.ppm' is available in our PPM archive - remember to go to Options->Set/Unset Normal Map, and select the 'normalMap.ppm' entry AFTER it has loaded!!)")
-		var a = 1+2;
+		alert("Please set a Normal Map first! (Hint: 'normalMap.ppm' is available in our PPM archive - remember to go to Options->Set/Unset Normal Map, and select the 'normalMap.ppm' entry AFTER it has loaded!!)")
+		
 		return false
 	}	
 	
@@ -567,8 +567,7 @@ function sceneBump()	{
 	var c = Data.PPM[Data.Maps["earth"]];
 	if(!c)	{
 		
-		var b = alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
-		var a = 1+2;
+		alert("Please set an 'earth' map first! (Hint: 'earth.ppm' is available in our PPM archive.)")
 		return false
 	}
 	var tm = TextureMap(image_pattern(c), spherical_map, s)
@@ -648,5 +647,33 @@ function mySkyBox()	{
 
 addFunction("Sky Box 2", "mySkyBox")
 
+function skySphere()	{
+
+	var l = new point_light(point(-10, 0, 0), colour(1,1,1)) 
+	Data.c = new Camera(WIDTH, HEIGHT, (Math.PI/4))
+	Data.c.setCTransform(view_transform(point(0,0,0), point(0,0,60), vector(0,1,0)));
+	
+	var ss = sphere("SKYSPHERE")
+	
+	ss.transform = m().translation(0,0,0).scaling(60,60,60)
+	var c = Data.PPM["skysphere.jpg"];
+	if(!c)	{
+		
+		alert("Please set a skysphere map first! (Hint: 'skysphere.jpg' is expected.)")
+		return false
+	}
+	var tm = TextureMap(image_pattern(c), spherical_map, ss)
+	ss.material.pattern = my_pattern( tm, ss )
+	
+	var o = group()
+	o.addChild(ss)
+	
+	Data.o = o
+	Data.l = l
+	
+	renderImage()
+}
+
+addFunction("SkySphere 1", "skySphere")
 
 addFunction("mandelbrot", "mandelbrot")
