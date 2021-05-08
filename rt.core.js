@@ -110,7 +110,7 @@ function prepare_computations(i, r, xs)	{
 	comps.t = i.t;
 	comps.object = i.object;
 	
-	comps.point = _position(r, comps.t)//add(r.origin, multiplyInt(r.direction, comps.t))
+	comps.point = _position(r, comps.t)//add(r.origin, multiplyScalar(r.direction, comps.t))
 	
 	comps.eyev  = negate(r.direction);
 	comps.normalv = normal_at(comps.object, comps.point);
@@ -122,11 +122,11 @@ function prepare_computations(i, r, xs)	{
 		comps.normalv = invert(comps.normalv);
 	}
 	
-	comps.over_point = add(comps.point, multiplyInt(comps.normalv, EPSILON)) // p115
+	comps.over_point = add(comps.point, multiplyScalar(comps.normalv, EPSILON)) // p115
 	
 	//debugger;
 	
-	comps.under_point = subtract(comps.point, multiplyInt(comps.normalv, EPSILON)) // p155
+	comps.under_point = subtract(comps.point, multiplyScalar(comps.normalv, EPSILON)) // p155
 	
 	// p152
 	/*

@@ -37,7 +37,7 @@ function lighting(_material, _light, obj, _point, eyev, normalv, in_shadow, f)	{
 	var lightv = normalize(subtract(_light.position, _point));
 	
 	// compute the ambient contribution
-	var ambient = multiplyInt(effective_color, _material.ambient);
+	var ambient = multiplyScalar(effective_color, _material.ambient);
 	
 	/* light_dot_normal represents the cosine of the angle between the
 	   light vector and the normal vector. A negative number means the 
@@ -58,7 +58,7 @@ function lighting(_material, _light, obj, _point, eyev, normalv, in_shadow, f)	{
 
 		//console.log("Compute diffuse & specular: obj = " + obj.id)
 		// compute the diffuse contribution
-		diffuse = multiplyInt(effective_color, _material.diffuse * light_dot_normal);
+		diffuse = multiplyScalar(effective_color, _material.diffuse * light_dot_normal);
 		
 		
 		/* reflect_dot_eye represents the cosine of the angle between the
@@ -81,8 +81,8 @@ function lighting(_material, _light, obj, _point, eyev, normalv, in_shadow, f)	{
 			var factor =  Math.pow(reflect_dot_eye, _material.shininess);
 			
 			//var res = _material.specular * factor;
-			specular = multiplyInt(_light.intensity, _material.specular);
-			specular = multiplyInt(specular, factor);
+			specular = multiplyScalar(_light.intensity, _material.specular);
+			specular = multiplyScalar(specular, factor);
 			
 			//console.log("computed specular contribution");
 			// the component values for specular printed are very low, negligble (<EPSILON)

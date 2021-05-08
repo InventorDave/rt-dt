@@ -55,7 +55,7 @@ function gradient_pattern(c1, c2)	{
 		var dist = subtract(this.colours[1], this.colours[0])
 		var fract = p.x - Math.floor(p.x)
 		
-		var res = multiplyInt(dist, fract)
+		var res = multiplyScalar(dist, fract)
 		res = add(this.colours[0], res)
 		
 		return res;

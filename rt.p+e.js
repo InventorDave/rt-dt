@@ -201,9 +201,9 @@ function smooth_triangle(p1, p2, p3, id2, vn1, vn2, vn3)	{
 	
 	st.local_normal_at = function(p)	{
 		
-		return 	add(multiplyInt(this.vn2, this.u),
-					add(multiplyInt(this.vn3, this.v),
-						multiplyInt(this.vn1, (1 - this.u - this.v))
+		return 	add(multiplyScalar(this.vn2, this.u),
+					add(multiplyScalar(this.vn3, this.v),
+						multiplyScalar(this.vn1, (1 - this.u - this.v))
 					)
 				)
 	};
@@ -454,12 +454,12 @@ function sphere(id2)	{
 		var t1 = (-b + Math.sqrt(discriminant)) / (2 * a)
 		
 		 
-		//var P2 = add(local_ray.origin, multiplyInt(local_ray.direction, t1)) // point on surface
+		//var P2 = add(local_ray.origin, multiplyScalar(local_ray.direction, t1)) // point on surface
 
 		if((t0<0)||(t0>t1))
-			this.P = add(local_ray.origin, multiplyInt(local_ray.direction, t1))
+			this.P = add(local_ray.origin, multiplyScalar(local_ray.direction, t1))
 		else
-			this.P = add(local_ray.origin, multiplyInt(local_ray.direction, t0))
+			this.P = add(local_ray.origin, multiplyScalar(local_ray.direction, t0))
 		
 		xs[0] = new intersection(this, t0);
 		xs[1] = new intersection(this, t1);

@@ -2,7 +2,7 @@
 
 function _position(ray, t)	{
 	
-	return add(ray.origin, multiplyInt(ray.direction, t));
+	return add(ray.origin, multiplyScalar(ray.direction, t));
 }
 
 function intersections()	{
@@ -127,7 +127,7 @@ function normal_at(s, world_point)	{
 		
 		var _n = normalize(vector(s.material.normalMap.data[ppos], s.material.normalMap.data[ppos+1], s.material.normalMap.data[ppos+2]))
 		
-		_n = multiplyInt(subtractInt(_n, 0.5), 2) // // Expand the range-compressed vector to [-1, 1] from [0,1]((*255).round())
+		_n = multiplyScalar(subtractInt(_n, 0.5), 2) // // Expand the range-compressed vector to [-1, 1] from [0,1]((*255).round())
 													// https://developer.download.nvidia.com/CgTutorial/cg_tutorial_chapter08.html
 		
 		ln = subtract(ln, _n)	
@@ -202,13 +202,13 @@ function hit(xs)	{ // xs = [] of intersection objects. Return the lowest nonnega
 function reflect(_in, normal)	{
 	
 	
-	var res = multiplyInt(normal, 2);
-	res = multiplyInt(res, dot(_in, normal));
+	var res = multiplyScalar(normal, 2);
+	res = multiplyScalar(res, dot(_in, normal));
 	res = subtract(_in, res);
 	
 	return res
 	
-	//return subtract(_in, multiplyInt(normal, 2 * dot(_in, normal)))
+	//return subtract(_in, multiplyScalar(normal, 2 * dot(_in, normal)))
 }
 
 function invert(v)	{

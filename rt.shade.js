@@ -21,8 +21,8 @@ function shade_hit(w, comps, obj, remaining)	{
 		var reflectance = schlick(comps)
 		
 		// return surface + reflected * reflectance + refracted * (1 - reflectance)
-		var res = multiplyInt(refracted, 1 - reflectance)
-		res = add(multiplyInt(reflected, reflectance), res)
+		var res = multiplyScalar(refracted, 1 - reflectance)
+		res = add(multiplyScalar(reflected, reflectance), res)
 		res = add(s, res)
 		
 		return res;
@@ -87,7 +87,7 @@ function reflected_color(w, comps, remaining)	{
 	var rr = new ray(comps.over_point, comps.reflectv)
 	var col = color_at(w, rr, remaining - 1)
 	
-	return multiplyInt(col, comps.object.material.reflective)
+	return multiplyScalar(col, comps.object.material.reflective)
 }
 
 function refracted_color(w, comps, remaining)	{
@@ -115,11 +115,11 @@ function refracted_color(w, comps, remaining)	{
 	var cos_t = Math.sqrt(1.0 - sin2_t)
 	
 	// compute the dir of the refracted ray
-	var direction = subtract(multiplyInt(comps.normalv, (n_ratio * cos_i - cos_t)), multiplyInt(comps.eyev, n_ratio))
+	var direction = subtract(multiplyScalar(comps.normalv, (n_ratio * cos_i - cos_t)), multiplyScalar(comps.eyev, n_ratio))
 	
 	var refracted_ray = new ray(comps.under_point, direction)
 	
-	var col = multiplyInt(color_at(w, refracted_ray, remaining-1), comps.object.material.transparency)
+	var col = multiplyScalar(color_at(w, refracted_ray, remaining-1), comps.object.material.transparency)
 	
 	return col
 }

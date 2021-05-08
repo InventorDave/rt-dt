@@ -105,7 +105,7 @@ function multiply(a, b)	{	// multiply 2 tuples
 	return new tuple(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
 }
 
-function multiplyInt(_tuple, int)	{
+function multiplyScalar(_tuple, int)	{
 	
 	var t = new tuple(_tuple.x, _tuple.y, _tuple.z, _tuple.w);
 	
