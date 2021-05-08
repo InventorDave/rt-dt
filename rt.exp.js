@@ -13,7 +13,7 @@ function set(A)	{
 
 function setScene()	{
 
-	var l = new point_light(point(-10,10,-10), colour(1,1,1))
+	var l = new point_light(point(-10,0,-10), colour(1,1,1))
 	lights(l)
 	
 	var s = sphere()
@@ -57,9 +57,20 @@ function setScene()	{
 	ss.material.pattern = my_pattern( tm, ss )
 	ss.material.specular = 0.0
 	
-
+	var m_ = sphere("moon")
+	m_.transform = identity_matrix().translation(4,0,0)
 	
-	scene(s/*, ss*/)
+	if (!(c = Data.PPM[Data.Maps["moon"]]))	{
+		
+		var b = alert("Please set a 'moon' map first! (Hint: '2k_moon.ppm' is available in our PPM archive.)")
+		return false
+	}
+	tm = TextureMap(image_pattern(c), spherical_map, m_)
+	m_.material.pattern = my_pattern( tm, m_ )
+	m_.material.pattern.transform = identity_matrix().rotation_y(Math.PI)
+	m_.material.specular = 0.0
+	
+	scene(s, m_/*, ss*/)
 	
 	setCamera();
 						
@@ -85,32 +96,40 @@ function setCamera()	{
 			FROM.x = 0
 		*/
 		
-		var test = 270 // to keep "up" always in the world +y direction, test = round(FROM.z) > 0 && FROM.y > 0 ? 45 : 270;
+		//var test = 270 // to keep "up" always in the world +y direction, test = round(FROM.z) > 0 && FROM.y > 0 ? 45 : 270;
 		// i suppose when rotating around y-axis, test = FROM.z > 0 && FROM.x < 0 ? 45 : 270'
 		// when rotating around z-axis, test = FROM.x < 0 &&  FROM.y > 0 ? 45 : 270;
-		var r = radians(test)
+		//var r = radians(test)
 		//UP = round_t(multiply_matrix_by_tuple(m().rotation_x(r), normalize(subtract(point(0,0,0), FROM))))
 
 		UP = vector(0,1,0)
 		
+		/*
 		console.log("FROM: ")
 		console.log(FROM)
 		console.log("UP: ")
 		console.log(UP)
 		console.log("dot : = " + round(dot(FROM, UP)))
-		
+		*/
 		Data.c.setCTransform(view_transform(FROM, point(0,0,0), UP));
 		
 		if(!Data.c.it_c)	{
 			
-			console.log("Inverse is 0! type unroll to stop function.");
+			console.log("Inverse is 0! type unroll = 1 to stop function.");
 			debugger;
 		}
 }
 
 var unroll = 0;
-function genFrames(step)	{
+var new_ = point(0,0,0)
+var start_ = point(4,0,0)
 
+function genFrames(fc, revs)	{
+
+	revs = revs || 1;
+	fc = fc || 10;
+	var step = 360 / fc;
+	
 	var fn;
 	var _m = m().scaling(2,2,2)
 	
@@ -127,42 +146,76 @@ function genFrames(step)	{
 	
 	Data.frame = 0;
 	
-	saveImage(null, 0);
+	
+	saveImage(null, fc, revs);
 	
 	Data.frame = 1;
 	
-	for (i = step || 10; i < 361 - step; i+=step || 10)	{
+	for (i = step; i < (360*revs+1) - step; i+=step)	{
 		
 		if(unroll)
 			break;
 			
 		var i2 = radians(i)
+		//console.log("i = " + i)
 		
 		//M = _m.rotation_y(i2)
 		
 		//Data.o.s[0].transform = M;
 		
 		//console.log("w = " + FROM.w);
-		FROM.w = 1
+		//FROM.w = 1
 		
-		FROM = round_t(multiply_matrix_by_tuple(m().rotation_y(i2, true), ogFROM))
-		//console.log(FROM)
-		setCamera()
+		Data.o.s[0].transform = m().rotation_y(i2);
+		
+		new_ = multiply_matrix_by_tuple(m().rotation_y(i2), start_);
+		//console.log(new_)
+		Data.o.s[1].transform = m().translation(new_.x, new_.y, new_.z)
+		ist[Data.o.s[1].id] = null;
 		
 		//debugger;
 		
 		renderImageSync(null, null, null, 1)
 		
 		convertToPPM(_nonCanvasArr, WIDTH, HEIGHT, "frame" + (Data.frame++));
-		
-		console.log("Saved frame " + (Data.frame-1) + ".");
-		//saveImage(null, step)
+		console.log("Saved frame " + (Data.frame) + ".");
 	}
 	
 	//_nonCanvasArr = []
 }
 
 var to_a, _f = 0, _loopCounts = 0;
+
+function quadrant(from)	{
+	
+	var q = 0
+	
+	if(from.z < 0)
+		if(from.y > 0)
+			if(from.x>0)
+				q = 1
+			else
+				q = 4
+		else
+			if(from.x>0)
+				q = 5
+			else
+				q = 8
+	else
+		if(from.y > 0)
+			if(from.x>0)
+				q = 2
+			else
+				q = 3
+		else
+			if(from.x>0)
+				q = 6
+			else
+				q = 7
+				
+	return q
+			
+}
 
 function stop()	{
 
@@ -218,10 +271,7 @@ function wait(s)	{
 }
 
 Data.frame = 0;
-function saveImage(fn, step)	{
-	
-	if (!step)
-		step = 10
+function saveImage(fn, fc, revs)	{
 		
 	var img = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 	
@@ -230,7 +280,7 @@ function saveImage(fn, step)	{
 	var pix = img.data;
 	
 	if(!fn)
-		console.log("Saved frame (" + String(Data.frame+1) + " of " + Math.floor(360/step) + ")")
+		console.log("Saved frame (" + String(Data.frame+1) + " of " + Math.floor(fc*revs) + ")")
 	else
 		console.log("Saved image as " + fn)
 		
