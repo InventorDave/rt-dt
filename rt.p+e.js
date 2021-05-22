@@ -1053,6 +1053,14 @@ function Shape(type, id2)	{
 	this.local_normal_at = function(p)	{ /* default impl. */ return vector(p.x,p.y,p.z); };
 }
 
+function translateShape(sh, m)	{
+	
+	ist[sh.id] = null
+	
+	sh.transform = m
+	
+}
+
 function test_shape()	{
 	
 	var ts = new Shape("test")

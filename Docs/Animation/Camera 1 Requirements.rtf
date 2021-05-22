@@ -1,5 +1,5 @@
-{\rtf1\ansi\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset161 Calibri;}{\f2\fnil\fcharset1 Cambria Math;}}
-{\*\generator Riched20 10.0.18362}{\*\mmathPr\mmathFont2\mwrapIndent1440 }\viewkind4\uc1 
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset161 Calibri;}{\f2\fnil\fcharset1 Cambria Math;}}
+{\*\generator Riched20 10.0.19041}{\*\mmathPr\mmathFont2\mwrapIndent1440 }\viewkind4\uc1 
 \pard\sa200\sl276\slmult1\f0\fs22\lang9 Tracer: Animation\par
 Phase 1: Camera\par
 \par
@@ -13,7 +13,7 @@ Note that for nonlinear flight-paths, a new interim pair of (Camera\sub from\nos
 As an example, any path expression such as:  y-change == y\sub end\nosupersub  := (y\sub start\nosupersub  * a) + b, every time y\sub start\nosupersub  is set to a new value, a new interim Camera pair would need to be generated, as the rate of change would shift each time; y-change would shift.\par
 \par
 For non-linear paths, the change in the y-component is := Y[q] , where Y[q] is the accumulated step-changes in the y-component since t=0, which are specific for each iteration of stepping through the path, and thus must be accumulated.\par
-With non-linear paths, such as sinusoidal or algebraic paths, an end-point cannot be set in advance, although a threshold can be defined.\par
+With non-linear paths, such as algebraic paths, an end-point cannot be set in advance (although arbitrary step-counts can always be calculated), although a threshold can be defined.\par
 \par
 The above assumes the distance (vector length) between the camera and the origin stays the same as we step from P2 to P3. For a camera path that moves closer to, or further away from the "to" (the origin of the sphere), this implies the diameter of the sphere shrinks or grows. This being the case, a 2nd sphere representing the new camera-origin sphere requires a 2nd triangle between sphere\sub prev,start\nosupersub  , sphere\sub prev,end\nosupersub  and sphere\sub next,p\nosupersub  , which involves the new triangle's opp\sub length\nosupersub  being:\par
  max(diameter(sphere\sub prev\nosupersub ), diameter(sphere\sub next\nosupersub )) - min(diameter(sphere\sub prev\nosupersub ), diameter(sphere\sub next\nosupersub )). \par
@@ -56,7 +56,7 @@ function spherical_map(p)\par
   # 0 <= u < 1\par
   # here's also where we fix the direction of u. Subtract it from 1,\par
   # so that it increases counterclockwise as viewed from above.\par
-  let u \f2\u8592?\f0  1 - ((arctan2(p.x, p.z) / (2 * \f1\lang1032\'f0)\f0 ) + 0.5)\par
+  let u \f2\u8592?\f0  1 - ((arctan2(p.x, p.z) / (2 * \f1\lang1032\'f0)\f0\lang2057 ) + 0.5)\par
 \par
   # we want v to be 0 at the south pole of the sphere,\par
   # and 1 at the north pole, so we have to "flip it over"\par

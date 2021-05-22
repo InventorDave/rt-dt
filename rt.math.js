@@ -153,5 +153,6 @@ function radians(deg)	{
 
 function deg(radians)	{
 	
+	// deg = radians * (180/Math.PI)
 	return (radians / Math.PI) * 180
 }

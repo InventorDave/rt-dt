@@ -1,0 +1,33 @@
+Gambit: A full-fledged orbit-based animation subsystem, with testing suite, for example if the user intends the final output to be 36 frames, during the design/testing phase, they could perhaps choose to render frames 24-28. Shapes, meshes (in essence, groups) and the camera can all be animated, independently and/or interdependently.
+
+Scenario: An animation of the Earth orbiting the Sun, while the Moon orbits the Earth, to scale. The camera would itself be animated seperately, making the final output animation sensible to view (if the camera were static, for most of the orbit, we'd mostly only see the Sun). A fun surprise partway through the animation, Russel's teapot would fly past the camera, apparently in orbit around the Earth. Bonus: 1. multiple light sources that can be dynamically turned on and off throughout the animation, and 2) The 2001 theme plays over the background, hitting the classic crescendo just as the teapot unexpectedly flies into view. Perhaps, at that exact moment, when the teapot is mid-frame, the crescendo can continue to play, but the animation momentarily "pauses"/slows down, for fun dramatic effect.
+
+Analysis:
+
+The basic functionality for animating (translating & rotating) the various shapes (Sun, Earth, Moon, and teapot) are already in the raytracer.
+There is not currently support for multiple lights, or turning them on/off, but that is straightforward.
+There is not currently support for playing audio.
+There is not currently explicit support for "anchoring" the animating of each shape interdependently to other shapes.
+There is not currently support for selecting a frame range (subset) to render.
+There is not currently support for saving frames to file on the server.
+Support for adjusting pitch, yaw, and roll (rather than simply radian-based rotation across the 3 axes), should be straightforward, and this could give rise to a rich definition of a flightpath for the camera.
+
+multiple lights:
+
+Identify the function that accepts the light object, and uses it in the shading calculation for an intersection of the shapes in the scene. a) check the light.on property is set to "on" (the default, so as not to break existing sample scenes). 2. Pass an array of light objects, and iterate through them, adding the output colour values together.
+
+audio: html 5 has built-in support for playing audio.
+
+anchoring:
+
+If the Earth travels an orbit around the sun in 364.25 days, that is a rotation_y (ignoring elliptical orbit) of 360/364.25 for each 24hr period. During a lunar month, the Moon travels a full orbit around the Earth (at a different tangent) every 27.3 days (a sidereal period), which means it takes the Earth travelling ((360/364.25) * 27.3) degrees along it's orbital path) before the Moon completes a full orbit around the Earth. How might we anchor the Moon's orbit around the Earth to the Earth's orbit around the Sun? Well, an obvious solution is make the Moon's orbital path every 24hrs (if a single frame is 24hrs) 1/27.3 the orbit of the Earth's relative orbit around the Sun. So, if we rotate the Earth relative to the Sun N radians during any step, we simultaneously orbit the Moon around the Earth N/27.3 radians.
+
+How might we expose that functionality? Well, if we want to get specific with our interface, we can define a full orbit of the Earth to Sun a "year" (defined as 364.25 24hr periods), and a full orbit of the Moon to Earth 27.3 24hr periods. The implication is that time is divided into units of 24hrs, but that is arbitrary, we could easily subdivide to 1hr (1 day/24), or even minutes (1 hr/60).
+
+A second issue is that the Earth and Moon both rotate "independently" (technically, the Moon's rotation is interdependent to the axial rotation of the Earth - a 1-to-1 mapping, hence the phenomenom of "the dark side of the moon" - the orbit of the moon around the earth is the same rate as the moon's axial orbit). We also need to accurately render the "clockwiseness" of the rotation of each of the Earth & Moon. Does the Earth rotate around the Sun clockwise? Does the Moon then rotate around the Earth anti-clockwise?
+
+After extensive research, I have established that "When viewed from the north celestial pole (i.e., from the approximate direction of the star Polaris) the Moon orbits Earth anticlockwise and Earth orbits the Sun anticlockwise, and the Moon and Earth rotate on their own axes anticlockwise. ... There are no rearward loops in the Moon's solar orbit."
+
+Which has led me to the thought, we need to define (what is an arbitrary) "up" direction (travelling from the south pole through and out from the north pole), in order to properly render the anti-clockwise rotations. So, if the camera "up" is actually pointed "downward" (upside-down), the rotational directions update from our point of view accordingly.
+
+If the moon's axial orbit is the same as it's rotational orbit around the earth, we must anchor them, so they are the same for each "step". How might we do this?

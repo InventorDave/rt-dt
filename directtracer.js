@@ -96,15 +96,15 @@ function drawCircle(xc, yc, x, y, _color, thickness)	{
     setPixel(xc-y, yc-x, _color, thickness);
 }
 
-function dtcircle(xs,ys,radius,_color, thickness)	{
+function dtcircle(xs,ys,radius,_color, thickness, fill)	{
 
 	//var radius = 0.5 * (xf-xs) // dist2d({x: xs, y: ys}, {x: xf, y: yf}) / 2;
-	circleBres(xs+radius,ys+radius, radius, _color, thickness)	
+	circleBres(xs+radius,ys+radius, radius, _color, thickness, fill)	
 }
 
 // Function for circle-generation
 // using Bresenham's algorithm
-function circleBres(xc, yc, r, _color, thickness)	{
+function circleBres(xc, yc, r, _color, thickness, fill)	{
 	
 	// _color = "#ffffff"
 	
@@ -135,4 +135,10 @@ function circleBres(xc, yc, r, _color, thickness)	{
 
     }
 	
+	var i = 1
+	
+	if(fill)
+		while((r -= thickness*(i++))>=0)
+			circleBres(xc, yc, r, _color, thickness, fill)
+		
 }

@@ -73,6 +73,20 @@ function cross(a, b)	{ // THE ORDER OF THE OPERANDS MATTERS
 					a.x * b.y - a.y * b.x);
 }
 
+function getNormal(p, origin)	{
+
+	if (!origin)
+		origin = point(0,0,0)
+		
+		
+	return normalize(subtract(p, origin))
+}
+
+function getNormalDir(n)	{
+	
+	return quadrant(n)
+}
+
 var UID = 1
 function GetUID()	{
 

@@ -58,7 +58,7 @@ function setScene()	{
 	ss.material.specular = 0.0
 	
 	var m_ = sphere("moon")
-	m_.transform = identity_matrix().translation(4,0,0)
+	m_.transform = identity_matrix().translation(-4,0,0)
 	
 	if (!(c = Data.PPM[Data.Maps["moon"]]))	{
 		
@@ -122,7 +122,7 @@ function setCamera()	{
 
 var unroll = 0;
 var new_ = point(0,0,0)
-var start_ = point(4,0,0)
+var start_ = point(-4,0,0)
 
 function genFrames(fc, revs)	{
 
@@ -286,6 +286,28 @@ function saveImage(fn, fc, revs)	{
 		
 	convertToPPM(pix, width, height, fn || String("frame" + String(Data.frame++)));
 }
+
+function getObject(id)	{
+	
+	var c = Data.o.s
+	// 1. check 'id2', 2. check shape-type. 3. check 'id'.
+	var i;
+	for(i = 0; i < c.length; i++)	{
+		
+		if(c[i].id2==id)
+			return { sh: c[i], i: i }
+		
+		if(c[i].type==id)
+			return { sh: c[i], i: i }
+		
+		if(c[i].id==id)
+			return { sh: c[i], i: i }
+	}
+	
+	return 'NOT_FOUND';
+	
+}
+
 
 function checkShape(obj)	{
 	

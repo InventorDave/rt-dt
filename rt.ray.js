@@ -20,23 +20,95 @@ function intersections()	{
 var ist = [];
 var indice = -1;
 
+var r_x_cache_s = point(0,0,0);
+var _norm_s = vector(0,0,0);
+var __shape__s;
 
-function intersect(shape, ray)	{
-	
-	var sh = shape
-	
-	if (!ist[sh.id])
-		ist[sh.id] = inverse(sh.transform)
+var r_x_cache_l = point(0,0,0);
+var _norm_l = vector(0,0,0);
+var __shape__l;
 
-	var local_ray = transform(ray, ist[sh.id]); // p119
+function intersect(shape, ray_)	{
+	
+	if (!ist[shape.id])
+		ist[shape.id] = inverse(shape.transform)
+
+	var local_ray = transform(ray_, ist[shape.id]); // p119
 	
 	//debugger;
 	
-	return shape.local_intersect(local_ray);
+	var res = shape.local_intersect(local_ray);
 	
+	if(res.length>0)	{
+		
+		var t;
+		
+		if(res.length==2)
+			if((res[0].t<0)||(res[0].t>res[1].t))
+				t = res[1].t
+			else
+				t = res[0].t
+		else
+			t = res[0].t
+			
+		
+		if(shape.type!="group")	{
+		
+			var w_origin = object_to_world(shape, _position(local_ray, t))
+
+			if (Math.abs(magnitude(w_origin)) > Math.abs(magnitude(r_x_cache_l)))	{ // 
+					
+					r_x_cache_l = w_origin;
+					_norm_l = normal_at(shape, _position(ray_, t))
+					__shape__l = shape.id
+			}
+			/*
+			else if (Math.abs(magnitude(w_origin)) < Math.abs(magnitude(r_x_cache_s)))	{
+					
+					r_x_cache_s = w_origin;
+					_norm_s = normal_at(shape, _position(ray_, t))
+					__shape__s = shape.id
+			}*/
+		}
+	}
+
+	return res;
 	// NOTE: p120 says the local_intersect() method of a shape should set shape.saved_ray to the ray parameter.
 	// Which one? local_ray, or the ray passed to intersect?? Apparently, local_ray....
 }
+
+/**
+function world_to_object(s, p)	{
+	
+	if (s.parent)
+		p = world_to_object(s.parent, p)
+
+	if(!wto_ic[s.id])
+		wto_ic[s.id] = inverse(s.transform)
+	
+
+	var res = mul(wto_ic[s.id], p)
+	
+	/*
+	tick1++
+	if((tick1 % 500) == 0)
+		console.log("p = (" + p.x + ", " + p.y + ", " + p.z + ")")
+	
+	return res
+}
+*/
+
+function object_to_world(sh, p)	{
+		
+	p = mul(sh.transform, p)
+	
+	if (sh.parent)
+		p = object_to_world(sh.parent, p)
+	
+	return p;
+}
+
+
 
 function transform(r_in, m)	{ // p69
 	
@@ -53,6 +125,7 @@ function normal_at(s, world_point)	{
 	
 	var lp = world_to_object(s, world_point)
 	var ln = s.local_normal_at(lp)
+	s.lp = lp;
 	
 	if(s.material.normalMap)	{
 
