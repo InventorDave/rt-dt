@@ -1,6 +1,8 @@
 // TEST (mint, vscode)
 // TEST 2
 
+// setSBParam( reminds me the methods for setting textures, maps, normals is inconsistent. Use PPM_refs!!
+
 
 var CANVAS_WIDTH = 750, CANVAS_HEIGHT = 422;
 var WIDTH = CANVAS_WIDTH;
